@@ -19,7 +19,6 @@
     --card: #ffffff;
     --line: #ddd7ca;
     --green: #2f6b4f;
-    --green-soft: #dcead f;
     --amber: #b5772e;
     --red: #9c3a26;
     --blue: #2e5a8f;
@@ -31,7 +30,7 @@
     background: var(--paper);
     color: var(--ink);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    padding-bottom: 70px;
+    padding-bottom: 80px;
   }
   .wrap { max-width: 680px; margin: 0 auto; padding: 0 14px; }
 
@@ -40,111 +39,102 @@
     background: var(--ink);
     color: var(--paper);
     padding: max(18px, env(safe-area-inset-top)) 14px 16px;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
   }
   header .wrap { padding: 0; }
   .hd-title { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.01em; }
-  .hd-sub { font-size: 0.74rem; opacity: 0.65; margin-top: 2px; }
-
-  /* stat grid */
-  .stats {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-    margin-top: 14px;
-  }
-  .stat {
-    background: var(--ink2);
-    border-radius: 10px;
-    padding: 10px 8px;
-    text-align: center;
-  }
+  .hd-sub { font-size: 0.72rem; opacity: 0.65; margin-top: 2px; }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 14px; }
+  .stat { background: var(--ink2); border-radius: 10px; padding: 10px 8px; text-align: center; }
   .stat .v { font-size: 1.05rem; font-weight: 700; font-variant-numeric: tabular-nums; }
-  .stat .l { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.6; margin-top: 2px; }
+  .stat .l { font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.6; margin-top: 2px; }
   .stat .v.ok { color: #9fd0ae; }
   .stat .v.warn { color: #e8b46a; }
   .stat .v.bad { color: #e88a6a; }
-
-  .readiness-bar-track {
-    height: 8px; background: rgba(244,242,236,0.12);
-    border-radius: 6px; overflow: hidden; margin-top: 12px;
-  }
-  .readiness-bar {
-    height: 100%; border-radius: 6px;
-    background: linear-gradient(90deg,#7fa88a,#cfe0b8);
-    transition: width 0.4s ease;
-  }
-  .readiness-label { font-size: 0.68rem; opacity: 0.6; margin-top: 5px; }
+  .readiness-bar-track { height: 8px; background: rgba(244,242,236,0.12); border-radius: 6px; overflow: hidden; margin-top: 12px; }
+  .readiness-bar { height: 100%; border-radius: 6px; background: linear-gradient(90deg,#7fa88a,#cfe0b8); transition: width 0.4s ease; }
+  .readiness-label { font-size: 0.66rem; opacity: 0.6; margin-top: 5px; }
 
   /* ---------- tabs ---------- */
-  .tabs {
-    display: flex; gap: 6px; margin-bottom: 14px;
-    position: sticky; top: 0; z-index: 10;
-    background: var(--paper); padding: 8px 0;
-  }
+  .tabs { display: flex; gap: 6px; margin-bottom: 12px; position: sticky; top: 0; z-index: 10; background: var(--paper); padding: 8px 0; }
   .tab {
-    flex: 1; text-align: center; font-size: 0.76rem; font-weight: 700;
-    padding: 9px 4px; border-radius: 20px; border: 1px solid var(--line);
-    background: var(--card); color: var(--mut); cursor: pointer;
+    flex: 1; text-align: center; font-size: 0.74rem; font-weight: 700;
+    padding: 9px 2px; border-radius: 20px; border: 1px solid var(--line);
+    background: var(--card); color: var(--mut); cursor: pointer; position: relative;
   }
   .tab.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .tab .n {
+    position: absolute; top: -4px; right: 2px;
+    background: var(--amber); color: #fff; font-size: 0.58rem;
+    min-width: 15px; height: 15px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; padding: 0 3px;
+  }
 
   .panel { display: none; }
-  .panel.active { display: block; }
+  .panel.active { display: block; animation: fadeIn 0.18s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: none; } }
 
-  /* ---------- term / course cards ---------- */
+  /* ---------- cards ---------- */
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 15px; margin-bottom: 12px; }
+  .card h3 { margin: 0 0 4px; font-size: 0.9rem; }
+  .card .hint { font-size: 0.74rem; color: var(--mut); line-height: 1.5; }
+
   .term { margin-bottom: 18px; }
   .term-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 7px; }
   .term-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--mut); font-weight: 700; }
-  .term-units { font-size: 0.68rem; color: #9a937f; font-variant-numeric: tabular-nums; }
+  .term-units { font-size: 0.66rem; color: #9a937f; font-variant-numeric: tabular-nums; }
 
-  .course {
-    background: var(--card); border: 1px solid var(--line);
-    border-radius: 11px; padding: 12px; margin-bottom: 8px;
-  }
-  .course.flag { border-color: var(--red); }
+  .course { background: var(--card); border: 1px solid var(--line); border-radius: 11px; padding: 12px; margin-bottom: 8px; transition: border-color 0.15s; }
+  .course.taking { border-left: 4px solid var(--amber); }
   .c-top { display: flex; justify-content: space-between; gap: 8px; align-items: flex-start; }
   .c-name { font-weight: 650; font-size: 0.9rem; line-height: 1.25; }
-  .c-name .uci { color: var(--blue); font-weight: 600; font-size: 0.74rem; }
-  .c-meta { font-size: 0.72rem; color: var(--mut); margin-top: 3px; line-height: 1.35; }
-  .c-warn { font-size: 0.72rem; color: var(--red); margin-top: 5px; font-weight: 600; }
-  .c-del {
-    border: none; background: none; color: #b3ab99; font-size: 1rem;
-    padding: 0 2px; cursor: pointer; line-height: 1;
-  }
-  .c-controls { display: flex; gap: 6px; margin-top: 9px; flex-wrap: wrap; align-items: center; }
-  .status-chip {
-    font-size: 0.7rem; font-weight: 700; padding: 6px 12px;
-    border-radius: 16px; border: 1px solid var(--line); cursor: pointer;
-    background: #f1eee6; color: var(--mut);
-  }
-  .status-chip.planned { background: #f1eee6; color: var(--mut); }
-  .status-chip.progress { background: #f4e3cc; color: var(--amber); border-color: #e2c79c; }
-  .status-chip.done { background: #dcead4; color: var(--green); border-color: #b7d1ac; }
-  .grade-sel {
-    font-size: 0.74rem; font-weight: 700; padding: 5px 8px;
-    border-radius: 8px; border: 1px solid var(--line); background: #fff; color: var(--ink);
-  }
-  .cat-pill {
-    font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
-    padding: 3px 7px; border-radius: 12px; margin-top: 2px; flex-shrink: 0;
-  }
+  .c-name .uci { color: var(--blue); font-weight: 600; font-size: 0.72rem; }
+  .c-meta { font-size: 0.7rem; color: var(--mut); margin-top: 3px; }
+  .c-side { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex-shrink: 0; }
+  .cat-pill { font-size: 0.58rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; padding: 3px 7px; border-radius: 12px; }
   .cat-major { background: #f2dbd4; color: var(--red); }
   .cat-english { background: #dbe4f0; color: var(--blue); }
   .cat-ge { background: #e5e2d8; color: var(--mut); }
   .cat-opt { background: #efe9db; color: #8a7f5e; }
+  .icon-btn { border: none; background: none; color: #b3ab99; font-size: 0.95rem; cursor: pointer; padding: 0 2px; line-height: 1; }
+
+  /* segmented status control */
+  .seg { display: flex; background: #efece3; border-radius: 10px; padding: 3px; margin-top: 10px; }
+  .seg button {
+    flex: 1; border: none; background: none; padding: 8px 4px;
+    font-size: 0.72rem; font-weight: 700; color: var(--mut);
+    border-radius: 8px; cursor: pointer; transition: all 0.12s;
+  }
+  .seg button.on-planned { background: var(--card); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .seg button.on-taking { background: #f4e3cc; color: var(--amber); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .seg button.on-grade { background: #dcead4; color: var(--green); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+
+  /* grade submit row */
+  .submit-row { display: flex; gap: 8px; margin-top: 10px; animation: fadeIn 0.15s ease; }
+  .grade-sel {
+    flex: 1; font-size: 0.84rem; font-weight: 700; padding: 9px 10px;
+    border-radius: 9px; border: 1px solid var(--line); background: #fff; color: var(--ink);
+  }
+  .submit-btn {
+    flex: 1.2; border: none; border-radius: 9px; background: var(--green); color: #fff;
+    font-size: 0.8rem; font-weight: 700; cursor: pointer; padding: 9px;
+  }
+  .submit-btn:disabled { background: #b7c9b0; cursor: default; }
+
+  /* notes */
+  .note-area {
+    width: 100%; margin-top: 9px; padding: 8px 10px; border-radius: 8px;
+    border: 1px solid var(--line); font-size: 0.78rem; font-family: inherit;
+    color: var(--ink); background: #fdfcf9; resize: vertical; min-height: 40px;
+  }
+  .note-preview { font-size: 0.72rem; color: #8a7f5e; margin-top: 7px; font-style: italic; }
 
   .add-btn {
     width: 100%; padding: 11px; border-radius: 11px;
     border: 1px dashed #b3ab99; background: none; color: var(--mut);
     font-size: 0.8rem; font-weight: 600; cursor: pointer; margin-top: 2px;
   }
-
-  /* add form */
-  .add-form {
-    background: var(--card); border: 1px solid var(--line); border-radius: 11px;
-    padding: 12px; margin-top: 8px; display: none;
-  }
+  .add-form { background: var(--card); border: 1px solid var(--line); border-radius: 11px; padding: 12px; margin-top: 8px; display: none; }
   .add-form.open { display: block; }
   .add-form input, .add-form select {
     width: 100%; padding: 9px 10px; border-radius: 8px; border: 1px solid var(--line);
@@ -152,37 +142,52 @@
   }
   .af-row { display: flex; gap: 8px; }
   .af-row > * { flex: 1; }
-  .af-save {
-    width: 100%; padding: 10px; border-radius: 9px; border: none;
-    background: var(--ink); color: var(--paper); font-weight: 700; font-size: 0.82rem; cursor: pointer;
-  }
+  .af-save { width: 100%; padding: 10px; border-radius: 9px; border: none; background: var(--ink); color: var(--paper); font-weight: 700; font-size: 0.82rem; cursor: pointer; }
 
-  /* ---------- GPA panel ---------- */
-  .card {
-    background: var(--card); border: 1px solid var(--line);
-    border-radius: 12px; padding: 15px; margin-bottom: 12px;
+  .empty { text-align: center; color: var(--mut); font-size: 0.82rem; padding: 30px 10px; line-height: 1.5; }
+
+  /* ---------- Finished tab ---------- */
+  .done-course { display: flex; align-items: center; gap: 10px; background: var(--card); border: 1px solid var(--line); border-radius: 11px; padding: 11px 12px; margin-bottom: 7px; }
+  .grade-badge {
+    width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 0.95rem; color: #fff;
   }
-  .card h3 { margin: 0 0 4px; font-size: 0.9rem; }
-  .card .hint { font-size: 0.74rem; color: var(--mut); line-height: 1.45; }
-  .big-gpa { font-size: 2.4rem; font-weight: 700; font-variant-numeric: tabular-nums; margin: 6px 0 2px; }
+  .g-a { background: var(--green); }
+  .g-b { background: var(--blue); }
+  .g-c { background: var(--amber); }
+  .g-df { background: var(--red); }
+  .dc-body { flex: 1; min-width: 0; }
+  .dc-name { font-weight: 650; font-size: 0.86rem; }
+  .dc-meta { font-size: 0.7rem; color: var(--mut); margin-top: 2px; }
+  .dc-warn { font-size: 0.7rem; color: var(--red); font-weight: 600; margin-top: 2px; }
+  .dc-actions { display: flex; flex-direction: column; gap: 4px; }
+  .mini-btn { border: 1px solid var(--line); background: #f7f5ef; border-radius: 8px; font-size: 0.64rem; font-weight: 700; padding: 5px 8px; color: var(--mut); cursor: pointer; white-space: nowrap; }
+
+  .dist { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+  .dist-chip { font-size: 0.7rem; font-weight: 700; padding: 5px 10px; border-radius: 14px; background: #efece3; color: var(--mut); }
+
+  .stat-grid2 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 10px; }
+  .sg-cell { background: #f7f5ef; border-radius: 9px; padding: 9px; text-align: center; }
+  .sg-cell .v { font-weight: 800; font-size: 1rem; font-variant-numeric: tabular-nums; }
+  .sg-cell .l { font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--mut); margin-top: 2px; }
+
+  .big-gpa { font-size: 2.4rem; font-weight: 700; font-variant-numeric: tabular-nums; margin: 4px 0 0; }
   .big-gpa.ok { color: var(--green); }
   .big-gpa.warn { color: var(--amber); }
   .big-gpa.bad { color: var(--red); }
-  .gpa-scale { position: relative; height: 26px; margin: 12px 0 4px; }
+  .gpa-scale { position: relative; height: 26px; margin: 10px 0 4px; }
   .gpa-scale .track { position: absolute; top: 11px; left: 0; right: 0; height: 5px; border-radius: 4px;
     background: linear-gradient(90deg, #d9a08e 0%, #d9a08e 50%, #e2c79c 50%, #e2c79c 70%, #a8c9a0 70%); }
-  .gpa-scale .marker {
-    position: absolute; top: 3px; width: 3px; height: 20px; background: var(--ink); border-radius: 2px;
-    transition: left 0.3s ease;
-  }
+  .gpa-scale .marker { position: absolute; top: 3px; width: 3px; height: 20px; background: var(--ink); border-radius: 2px; transition: left 0.3s ease; }
   .gpa-ticks { display: flex; justify-content: space-between; font-size: 0.62rem; color: #9a937f; }
-  .whatif-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+
+  .whatif-row { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
   .whatif-row label { font-size: 0.76rem; color: var(--mut); flex: 1; }
   .whatif-row select { padding: 7px 9px; border-radius: 8px; border: 1px solid var(--line); font-size: 0.8rem; font-weight: 700; }
   .whatif-out { font-size: 0.8rem; margin-top: 10px; line-height: 1.5; }
-  .whatif-out b { font-variant-numeric: tabular-nums; }
 
-  /* requirement checklist rows */
+  /* reqs */
   .req-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #efece3; }
   .req-row:last-child { border-bottom: none; }
   .req-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
@@ -192,30 +197,39 @@
   .req-text { font-size: 0.8rem; flex: 1; }
   .req-stat { font-size: 0.74rem; color: var(--mut); font-variant-numeric: tabular-nums; }
 
-  /* ---------- timeline ---------- */
-  .tl-item { display: flex; gap: 12px; margin-bottom: 2px; }
+  /* timeline */
+  .tl-item { display: flex; gap: 12px; }
   .tl-rail { display: flex; flex-direction: column; align-items: center; }
   .tl-dot { width: 12px; height: 12px; border-radius: 50%; background: #ccc4b1; flex-shrink: 0; margin-top: 4px; }
   .tl-dot.next { background: var(--amber); box-shadow: 0 0 0 4px #f4e3cc; }
   .tl-dot.past { background: var(--green); }
   .tl-line { width: 2px; flex: 1; background: #e2ddd0; min-height: 26px; }
   .tl-body { padding-bottom: 16px; flex: 1; }
-  .tl-date { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--mut); }
+  .tl-date { font-size: 0.66rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--mut); }
   .tl-what { font-size: 0.86rem; font-weight: 650; margin: 2px 0; }
-  .tl-note { font-size: 0.74rem; color: var(--mut); line-height: 1.4; }
-  .countdown-strip {
-    background: var(--ink); color: var(--paper); border-radius: 12px;
-    padding: 13px 15px; margin-bottom: 14px;
-    display: flex; justify-content: space-between; align-items: center;
-  }
-  .cd-label { font-size: 0.72rem; opacity: 0.7; }
+  .tl-note { font-size: 0.73rem; color: var(--mut); line-height: 1.4; }
+  .countdown-strip { background: var(--ink); color: var(--paper); border-radius: 12px; padding: 13px 15px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; }
+  .cd-label { font-size: 0.7rem; opacity: 0.7; }
   .cd-days { font-size: 1.3rem; font-weight: 700; font-variant-numeric: tabular-nums; }
 
-  .reset-btn {
-    display: block; margin: 22px auto 0; background: none;
-    border: 1px solid var(--line); color: var(--mut);
-    font-size: 0.76rem; padding: 9px 18px; border-radius: 20px; cursor: pointer;
+  /* backup */
+  .bk-row { display: flex; gap: 8px; margin-top: 8px; }
+  .bk-btn { flex: 1; padding: 9px; border-radius: 9px; border: 1px solid var(--line); background: #f7f5ef; font-size: 0.76rem; font-weight: 700; color: var(--ink); cursor: pointer; }
+  .bk-area { width: 100%; margin-top: 8px; padding: 8px; border-radius: 8px; border: 1px solid var(--line); font-size: 0.68rem; font-family: monospace; min-height: 60px; display: none; }
+  .bk-area.open { display: block; }
+
+  .reset-btn { display: block; margin: 22px auto 0; background: none; border: 1px solid var(--line); color: var(--mut); font-size: 0.76rem; padding: 9px 18px; border-radius: 20px; cursor: pointer; }
+
+  /* toast */
+  #toast {
+    position: fixed; bottom: max(20px, env(safe-area-inset-bottom)); left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--ink); color: var(--paper);
+    font-size: 0.8rem; font-weight: 600; padding: 11px 18px; border-radius: 22px;
+    opacity: 0; pointer-events: none; transition: all 0.25s ease; z-index: 50;
+    box-shadow: 0 8px 24px rgba(20,27,40,0.3); white-space: nowrap;
   }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
@@ -223,7 +237,7 @@
 <header>
   <div class="wrap">
     <div class="hd-title">SMC → UCI Business Admin</div>
-    <div class="hd-sub">Merage School · no TAG for this major · competitive admission</div>
+    <div class="hd-sub">Merage School · no TAG · competitive review · target 3.4+</div>
     <div class="stats">
       <div class="stat"><div class="v" id="stGpa">–</div><div class="l">UC GPA</div></div>
       <div class="stat"><div class="v" id="stUnits">0</div><div class="l">Units / 60</div></div>
@@ -237,8 +251,8 @@
 
 <div class="wrap">
   <div class="tabs">
-    <div class="tab active" data-panel="plan">Plan</div>
-    <div class="tab" data-panel="gpa">GPA</div>
+    <div class="tab active" data-panel="plan">Plan<span class="n" id="nPlan" style="display:none"></span></div>
+    <div class="tab" data-panel="done">Finished<span class="n" id="nDone" style="display:none"></span></div>
     <div class="tab" data-panel="reqs">Reqs</div>
     <div class="tab" data-panel="dates">Dates</div>
   </div>
@@ -264,11 +278,10 @@
     <button class="reset-btn" id="resetBtn">Reset everything</button>
   </div>
 
-  <!-- ============ GPA ============ -->
-  <div class="panel" id="panel-gpa">
+  <!-- ============ FINISHED ============ -->
+  <div class="panel" id="panel-done">
     <div class="card">
       <h3>UC-transferable GPA</h3>
-      <div class="hint">Calculated from graded courses on your Plan tab. Set a course to Done and pick a grade to include it.</div>
       <div class="big-gpa" id="gpaBig">–</div>
       <div class="gpa-scale">
         <div class="track"></div>
@@ -276,6 +289,12 @@
       </div>
       <div class="gpa-ticks"><span>2.0</span><span>3.0 min</span><span>3.4</span><span>4.0</span></div>
       <div class="hint" id="gpaVerdict" style="margin-top:8px"></div>
+      <div class="stat-grid2">
+        <div class="sg-cell"><div class="v" id="sgUnits">0</div><div class="l">Graded units</div></div>
+        <div class="sg-cell"><div class="v" id="sgPrepGpa">–</div><div class="l">Major prep GPA</div></div>
+        <div class="sg-cell"><div class="v" id="sgCount">0</div><div class="l">Courses done</div></div>
+      </div>
+      <div class="dist" id="gradeDist"></div>
     </div>
 
     <div class="card">
@@ -290,16 +309,19 @@
           <option value="3.8">3.8</option>
         </select>
       </div>
-      <div class="whatif-out" id="whatifOut">Add some grades first.</div>
+      <div class="whatif-out" id="whatifOut"></div>
     </div>
 
+    <div id="doneList"></div>
+
     <div class="card">
-      <h3>Grade rules that matter</h3>
-      <div class="hint">
-        • Every major prep course needs a <b>C or better</b> — below that it doesn't count and you'd retake.<br>
-        • 3.0 is the stated minimum, but admission is competitive; treat <b>3.4+</b> as the real target.<br>
-        • The app asks for grades through fall before transfer, then a Transfer Academic Update in January.
+      <h3>Backup & restore</h3>
+      <div class="hint">Saves live on this device only. Export before switching phones or clearing browser data.</div>
+      <div class="bk-row">
+        <button class="bk-btn" id="bkExport">Export data</button>
+        <button class="bk-btn" id="bkImport">Import data</button>
       </div>
+      <textarea class="bk-area" id="bkArea" placeholder="Paste exported data here, then tap Import again."></textarea>
     </div>
   </div>
 
@@ -323,9 +345,9 @@
       <h3>Ask your counselor</h3>
       <div class="hint">
         1. Is ECON C2001 micro or macro under the new numbering — and which second econ course do I take?<br>
-        2. Should I do full IGETC/Cal-GETC or minimum GE + major prep for Merage?<br>
-        3. Which second English comp course counts, and can I fit it in Winter 2027?<br>
-        4. Am I on track for 60 UC-transferable units by Spring 2028?
+        2. Full IGETC/Cal-GETC or minimum GE + major prep for Merage?<br>
+        3. Which second English comp course counts, and does it fit Winter 2027?<br>
+        4. On track for 60 UC-transferable units by Spring 2028?
       </div>
     </div>
   </div>
@@ -346,29 +368,27 @@
   </div>
 </div>
 
+<div id="toast"></div>
+
 <script>
 /* ================= data ================= */
 const GRADES = { "A": 4.0, "A-": 3.7, "B+": 3.3, "B": 3.0, "B-": 2.7, "C+": 2.3, "C": 2.0, "C-": 1.7, "D": 1.0, "F": 0 };
 const GRADE_LIST = Object.keys(GRADES);
 
 const DEFAULT_COURSES = [
-  { id: "acctg1",  name: "ACCTG 1 — Intro Financial Accounting", uci: "MGMT 30A", units: 5, cat: "major", term: "fall26", status: "progress", grade: null },
-  { id: "econ1",   name: "ECON C2001 (confirm micro/macro)",     uci: "ECON 20A/B", units: 3, cat: "major", term: "fall26", status: "progress", grade: null },
-  { id: "engl1",   name: "ENGL C1000",                            uci: "English comp 1/2", units: 3, cat: "english", term: "fall26", status: "progress", grade: null },
-  { id: "ahis11",  name: "AHIS 11",                               uci: "GE only", units: 3, cat: "ge", term: "fall26", status: "progress", grade: null },
-
-  { id: "engl2",   name: "Second English comp course",            uci: "English comp 2/2", units: 3, cat: "english", term: "win27", status: "planned", grade: null },
-
-  { id: "math7",   name: "MATH 7 — Calculus 1",                   uci: "MATH 2A", units: 5, cat: "major", term: "spr27", status: "planned", grade: null },
-  { id: "acctg2",  name: "ACCTG 2 — Corp Fin & Managerial Acctg", uci: "MGMT 30B", units: 5, cat: "major", term: "spr27", status: "planned", grade: null },
-  { id: "econ2",   name: "Second ECON (micro or macro)",          uci: "ECON 20A/B", units: 3, cat: "major", term: "spr27", status: "planned", grade: null },
-
-  { id: "math8",   name: "MATH 8 — Calculus 2",                   uci: "MATH 2B", units: 5, cat: "major", term: "fall27", status: "planned", grade: null },
-  { id: "stat",    name: "STAT C1000 — Intro Statistics",         uci: "MGMT 7", units: 4, cat: "major", term: "fall27", status: "planned", grade: null },
-
-  { id: "ge1",     name: "GE / elective (pick w/ counselor)",     uci: "units toward 60", units: 3, cat: "ge", term: "win28", status: "planned", grade: null },
-  { id: "ge2",     name: "Remaining GE / electives",              uci: "units toward 60", units: 6, cat: "ge", term: "spr28", status: "planned", grade: null },
-  { id: "bus1",    name: "BUS 1 — Intro to Business",             uci: "MGMT 1 (optional)", units: 3, cat: "opt", term: "spr28", status: "planned", grade: null },
+  { id: "acctg1",  name: "ACCTG 1 — Intro Financial Accounting", uci: "MGMT 30A", units: 5, cat: "major", term: "fall26", status: "progress", grade: null, note: "" },
+  { id: "econ1",   name: "ECON C2001 (confirm micro/macro)",     uci: "ECON 20A/B", units: 3, cat: "major", term: "fall26", status: "progress", grade: null, note: "" },
+  { id: "engl1",   name: "ENGL C1000",                            uci: "English comp 1/2", units: 3, cat: "english", term: "fall26", status: "progress", grade: null, note: "" },
+  { id: "ahis11",  name: "AHIS 11",                               uci: "GE only", units: 3, cat: "ge", term: "fall26", status: "progress", grade: null, note: "" },
+  { id: "engl2",   name: "Second English comp course",            uci: "English comp 2/2", units: 3, cat: "english", term: "win27", status: "planned", grade: null, note: "" },
+  { id: "math7",   name: "MATH 7 — Calculus 1",                   uci: "MATH 2A", units: 5, cat: "major", term: "spr27", status: "planned", grade: null, note: "" },
+  { id: "acctg2",  name: "ACCTG 2 — Corp Fin & Managerial Acctg", uci: "MGMT 30B", units: 5, cat: "major", term: "spr27", status: "planned", grade: null, note: "" },
+  { id: "econ2",   name: "Second ECON (micro or macro)",          uci: "ECON 20A/B", units: 3, cat: "major", term: "spr27", status: "planned", grade: null, note: "" },
+  { id: "math8",   name: "MATH 8 — Calculus 2",                   uci: "MATH 2B", units: 5, cat: "major", term: "fall27", status: "planned", grade: null, note: "" },
+  { id: "stat",    name: "STAT C1000 — Intro Statistics",         uci: "MGMT 7", units: 4, cat: "major", term: "fall27", status: "planned", grade: null, note: "" },
+  { id: "ge1",     name: "GE / elective (pick w/ counselor)",     uci: "units toward 60", units: 3, cat: "ge", term: "win28", status: "planned", grade: null, note: "" },
+  { id: "ge2",     name: "Remaining GE / electives",              uci: "units toward 60", units: 6, cat: "ge", term: "spr28", status: "planned", grade: null, note: "" },
+  { id: "bus1",    name: "BUS 1 — Intro to Business",             uci: "MGMT 1 (optional)", units: 3, cat: "opt", term: "spr28", status: "planned", grade: null, note: "" },
 ];
 
 const TERMS = [
@@ -380,12 +400,13 @@ const TERMS = [
   { id: "win28",  label: "Winter 2028" },
   { id: "spr28",  label: "Spring 2028" },
 ];
+const termLabel = id => (TERMS.find(t => t.id === id) || {}).label || id;
 
 const TIMELINE = [
   { date: new Date("2026-09-13"), label: "Sep 13, 2026", what: "Fall refund deadline", note: "Last day to drop fall classes with refund." },
-  { date: new Date("2026-12-22"), label: "Dec 2026", what: "Fall 2026 grades post", note: "First 4 grades enter your UC GPA. Log them in the Plan tab." },
-  { date: new Date("2027-06-07"), label: "Jun 2027", what: "Merage transfer advising window (typical)", note: "Merage runs its own advising sessions + google form in early June — watch merage.uci.edu and get on their radar." },
-  { date: new Date("2027-08-01"), label: "Aug 2027", what: "UC app opens for editing", note: "Start drafting your application + Personal Insight Questions. Your SMMZOLO/Mikye Media story is strong PIQ material." },
+  { date: new Date("2026-12-22"), label: "Dec 2026", what: "Fall 2026 grades post", note: "First 4 grades enter your UC GPA. Submit them from the Plan tab." },
+  { date: new Date("2027-06-07"), label: "Jun 2027", what: "Merage transfer advising window (typical)", note: "Merage runs its own advising sessions + google form in early June — watch merage.uci.edu." },
+  { date: new Date("2027-08-01"), label: "Aug 2027", what: "UC app opens for editing", note: "Start drafting Personal Insight Questions. Your SMMZOLO/Mikye Media story is strong PIQ material." },
   { date: new Date("2027-10-01"), label: "Oct 1, 2027", what: "UC application submission opens", note: "Submit window: Oct 1 – Nov 30." },
   { date: new Date("2027-11-30"), label: "Nov 30, 2027", what: "UC APPLICATION DEADLINE", note: "Hard deadline for Fall 2028 transfer. Don't submit on the last day." },
   { date: new Date("2028-01-31"), label: "Jan 31, 2028", what: "Transfer Academic Update", note: "Report fall grades + planned spring courses in your UC app." },
@@ -394,13 +415,25 @@ const TIMELINE = [
 
 /* ================= state ================= */
 let courses = [];
-const KEY = "uci-transfer-dashboard-v1";
+let pendingGrade = {};   // courseId -> currently selected grade before submit (not persisted)
+let gradeOpen = {};      // courseId -> submit row visible
+let noteOpen = {};       // courseId -> note editor visible
+const KEY = "uci-transfer-dashboard-v2";
+const OLD_KEY = "uci-transfer-dashboard-v1";
 
 function load() {
   try {
-    const r = localStorage.getItem(KEY);
-    if (r) courses = JSON.parse(r);
-    else courses = JSON.parse(JSON.stringify(DEFAULT_COURSES));
+    let r = localStorage.getItem(KEY);
+    if (!r) {
+      const old = localStorage.getItem(OLD_KEY);
+      if (old) {
+        courses = JSON.parse(old).map(c => ({ note: "", ...c }));
+        save();
+        renderAll();
+        return;
+      }
+    }
+    courses = r ? JSON.parse(r) : JSON.parse(JSON.stringify(DEFAULT_COURSES));
   } catch (e) {
     courses = JSON.parse(JSON.stringify(DEFAULT_COURSES));
   }
@@ -408,14 +441,22 @@ function load() {
 }
 function save() {
   try { localStorage.setItem(KEY, JSON.stringify(courses)); }
-  catch (e) { console.error("save failed", e); }
+  catch (e) { console.error("save failed", e); toast("Couldn't save — storage blocked?"); }
+}
+
+function toast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(t._h);
+  t._h = setTimeout(() => t.classList.remove("show"), 2200);
 }
 
 /* ================= computations ================= */
-function gpaData() {
+function gpaData(filterCat) {
   let pts = 0, units = 0;
   courses.forEach(c => {
-    if (c.status === "done" && c.grade && GRADES[c.grade] !== undefined) {
+    if (c.status === "done" && c.grade && GRADES[c.grade] !== undefined && (!filterCat || c.cat === filterCat)) {
       pts += GRADES[c.grade] * c.units;
       units += c.units;
     }
@@ -423,24 +464,25 @@ function gpaData() {
   return { gpa: units ? pts / units : null, gradedUnits: units, points: pts };
 }
 function completedUnits() {
-  return courses.filter(c => c.status === "done" && (!c.grade || GRADES[c.grade] >= 2.0 || c.grade === null))
-                .reduce((s, c) => s + c.units, 0);
+  return courses.filter(c => c.status === "done" && c.grade !== "F").reduce((s, c) => s + c.units, 0);
 }
 function majorPrepDone() {
   const major = courses.filter(c => c.cat === "major");
-  const done = major.filter(c => c.status === "done" && (!c.grade || GRADES[c.grade] >= 2.0));
+  const done = major.filter(c => c.status === "done" && c.grade && GRADES[c.grade] >= 2.0);
   return { done: done.length, total: Math.max(major.length, 7) };
 }
 function englishDone() {
   const eng = courses.filter(c => c.cat === "english");
-  return { done: eng.filter(c => c.status === "done").length, total: Math.max(eng.length, 2) };
+  return { done: eng.filter(c => c.status === "done" && c.grade !== "F").length, total: Math.max(eng.length, 2) };
 }
-function daysUntil(d) {
-  return Math.ceil((d - new Date()) / 86400000);
+function daysUntil(d) { return Math.ceil((d - new Date()) / 86400000); }
+function gradeClass(g) {
+  const v = GRADES[g];
+  return v >= 3.7 ? "g-a" : v >= 2.7 ? "g-b" : v >= 1.7 ? "g-c" : "g-df";
 }
 
 /* ================= render ================= */
-function renderAll() { renderHeader(); renderPlan(); renderGpa(); renderReqs(); renderDates(); }
+function renderAll() { renderHeader(); renderPlan(); renderDone(); renderReqs(); renderDates(); }
 
 function renderHeader() {
   const { gpa } = gpaData();
@@ -460,7 +502,6 @@ function renderHeader() {
   const dApp = daysUntil(new Date("2027-11-30"));
   document.getElementById("stDays").textContent = dApp > 0 ? dApp : "0";
 
-  // readiness composite
   const eng = englishDone();
   const prepPct = prep.done / prep.total;
   const unitPct = Math.min(units / 60, 1);
@@ -472,34 +513,45 @@ function renderHeader() {
   const pct = Math.round(ready * 100);
   document.getElementById("readyBar").style.width = pct + "%";
   document.getElementById("readyLabel").textContent = "Transfer readiness: " + pct + "%";
+
+  // tab counters
+  const active = courses.filter(c => c.status !== "done").length;
+  const finished = courses.filter(c => c.status === "done").length;
+  const nP = document.getElementById("nPlan"), nD = document.getElementById("nDone");
+  nP.style.display = active ? "flex" : "none"; nP.textContent = active;
+  nD.style.display = finished ? "flex" : "none"; nD.textContent = finished;
 }
 
 function renderPlan() {
   const container = document.getElementById("termsContainer");
   container.innerHTML = "";
-  TERMS.forEach(term => {
-    const list = courses.filter(c => c.term === term.id);
-    if (!list.length) return;
-    const totUnits = list.reduce((s, c) => s + c.units, 0);
-    const wrap = document.createElement("div");
-    wrap.className = "term";
-    wrap.innerHTML = `<div class="term-head">
-      <div class="term-title">${term.label}</div>
-      <div class="term-units">${totUnits} units</div></div>`;
-    list.forEach(c => wrap.appendChild(courseCard(c)));
-    container.appendChild(wrap);
-  });
-  // populate add-form term selector
+  const activeCourses = courses.filter(c => c.status !== "done");
+
+  if (!activeCourses.length) {
+    container.innerHTML = `<div class="empty">Everything's submitted. 🎓<br>Check the Finished tab for your stats.</div>`;
+  } else {
+    TERMS.forEach(term => {
+      const list = activeCourses.filter(c => c.term === term.id);
+      if (!list.length) return;
+      const totUnits = list.reduce((s, c) => s + c.units, 0);
+      const wrap = document.createElement("div");
+      wrap.className = "term";
+      wrap.innerHTML = `<div class="term-head">
+        <div class="term-title">${term.label}</div>
+        <div class="term-units">${totUnits} units</div></div>`;
+      list.forEach(c => wrap.appendChild(courseCard(c)));
+      container.appendChild(wrap);
+    });
+  }
   const sel = document.getElementById("afTerm");
   sel.innerHTML = TERMS.map(t => `<option value="${t.id}">${t.label}</option>`).join("");
 }
 
 function courseCard(c) {
   const el = document.createElement("div");
-  const belowC = c.status === "done" && c.grade && GRADES[c.grade] < 2.0 && c.cat === "major";
-  el.className = "course" + (belowC ? " flag" : "");
+  el.className = "course" + (c.status === "progress" ? " taking" : "");
   const catPill = { major: ["cat-major","Major"], english: ["cat-english","English"], ge: ["cat-ge","GE"], opt: ["cat-opt","Opt"] }[c.cat];
-  const statusLabel = { planned: "Planned", progress: "In progress", done: "Done" }[c.status];
+  const showSubmit = gradeOpen[c.id];
 
   el.innerHTML = `
     <div class="c-top">
@@ -507,76 +559,176 @@ function courseCard(c) {
         <div class="c-name">${c.name} <span class="uci">→ ${c.uci}</span></div>
         <div class="c-meta">${c.units} units</div>
       </div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+      <div class="c-side">
         <span class="cat-pill ${catPill[0]}">${catPill[1]}</span>
-        ${c.custom ? '<button class="c-del" title="Remove">✕</button>' : ""}
+        <div>
+          <button class="icon-btn note-toggle" title="Note">✎</button>
+          ${c.custom ? '<button class="icon-btn c-del" title="Remove">✕</button>' : ""}
+        </div>
       </div>
     </div>
-    <div class="c-controls">
-      <button class="status-chip ${c.status}">${statusLabel}</button>
-      ${c.status === "done" ? gradeSelect(c) : ""}
+    <div class="seg">
+      <button class="${c.status === "planned" && !showSubmit ? "on-planned" : ""}" data-s="planned">Planned</button>
+      <button class="${c.status === "progress" && !showSubmit ? "on-taking" : ""}" data-s="progress">Taking</button>
+      <button class="${showSubmit ? "on-grade" : ""}" data-s="grade">Enter grade</button>
     </div>
-    ${belowC ? '<div class="c-warn">⚠ Below C — doesn\'t satisfy UCI major prep. Plan a retake.</div>' : ""}
+    ${showSubmit ? `
+    <div class="submit-row">
+      <select class="grade-sel">
+        <option value="">Grade…</option>
+        ${GRADE_LIST.map(g => `<option value="${g}" ${pendingGrade[c.id] === g ? "selected" : ""}>${g}</option>`).join("")}
+      </select>
+      <button class="submit-btn" ${pendingGrade[c.id] ? "" : "disabled"}>Submit ✓</button>
+    </div>` : ""}
+    ${noteOpen[c.id] ? `<textarea class="note-area" placeholder="Notes — professor, section #, reminders…">${c.note || ""}</textarea>`
+      : (c.note ? `<div class="note-preview">✎ ${c.note}</div>` : "")}
   `;
 
-  el.querySelector(".status-chip").addEventListener("click", () => {
-    c.status = c.status === "planned" ? "progress" : c.status === "progress" ? "done" : "planned";
-    if (c.status !== "done") c.grade = null;
-    save(); renderAll();
+  el.querySelectorAll(".seg button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const s = btn.dataset.s;
+      if (s === "grade") {
+        gradeOpen[c.id] = !gradeOpen[c.id];
+      } else {
+        gradeOpen[c.id] = false;
+        delete pendingGrade[c.id];
+        c.status = s;
+        save();
+      }
+      renderAll();
+    });
   });
   const gs = el.querySelector(".grade-sel");
-  if (gs) gs.addEventListener("change", e => { c.grade = e.target.value || null; save(); renderAll(); });
+  if (gs) gs.addEventListener("change", e => { pendingGrade[c.id] = e.target.value || null; renderAll(); });
+  const sb = el.querySelector(".submit-btn");
+  if (sb) sb.addEventListener("click", () => {
+    if (!pendingGrade[c.id]) return;
+    c.grade = pendingGrade[c.id];
+    c.status = "done";
+    delete pendingGrade[c.id];
+    delete gradeOpen[c.id];
+    save();
+    renderAll();
+    toast(`${c.name.split(" — ")[0]} submitted · ${c.grade}`);
+  });
+  el.querySelector(".note-toggle").addEventListener("click", () => {
+    noteOpen[c.id] = !noteOpen[c.id];
+    renderAll();
+  });
+  const na = el.querySelector(".note-area");
+  if (na) na.addEventListener("change", e => { c.note = e.target.value; save(); });
   const del = el.querySelector(".c-del");
   if (del) del.addEventListener("click", () => {
+    if (!confirm(`Remove ${c.name}?`)) return;
     courses = courses.filter(x => x.id !== c.id);
     save(); renderAll();
   });
   return el;
 }
 
-function gradeSelect(c) {
-  const opts = GRADE_LIST.map(g => `<option value="${g}" ${c.grade === g ? "selected" : ""}>${g}</option>`).join("");
-  return `<select class="grade-sel"><option value="">Grade…</option>${opts}</select>`;
-}
-
-/* ================= GPA panel ================= */
-function renderGpa() {
+/* ================= Finished tab ================= */
+function renderDone() {
   const { gpa, gradedUnits } = gpaData();
+  const prepGpa = gpaData("major").gpa;
+  const doneCourses = courses.filter(c => c.status === "done");
+
   const big = document.getElementById("gpaBig");
   const verdict = document.getElementById("gpaVerdict");
   const marker = document.getElementById("gpaMarker");
-
   if (gpa === null) {
     big.textContent = "–";
     big.className = "big-gpa";
-    verdict.textContent = "No graded courses yet. When fall grades post, mark each course Done + pick the grade.";
+    verdict.textContent = "Nothing graded yet. When grades post, hit \"Enter grade\" on the Plan tab and submit.";
     marker.style.left = "0%";
   } else {
     big.textContent = gpa.toFixed(2);
     big.className = "big-gpa " + (gpa >= 3.4 ? "ok" : gpa >= 3.0 ? "warn" : "bad");
     const pos = Math.max(0, Math.min(1, (gpa - 2.0) / 2.0)) * 100;
     marker.style.left = "calc(" + pos + "% - 1px)";
-    verdict.innerHTML = gpa >= 3.4
-      ? `In the competitive range for Merage. Keep it here — ${gradedUnits} graded units so far.`
+    verdict.textContent = gpa >= 3.4
+      ? "In the competitive range for Merage. Keep it here."
       : gpa >= 3.0
-      ? `Above the 3.0 minimum but below the competitive 3.4 target. ${gradedUnits} graded units so far — still very fixable.`
-      : `Below the 3.0 minimum right now. ${gradedUnits} graded units — every remaining course moves this a lot.`;
+      ? "Above the 3.0 minimum, below the competitive 3.4 target — still very fixable."
+      : "Below the 3.0 minimum right now. Every remaining course moves this a lot.";
   }
+  document.getElementById("sgUnits").textContent = gradedUnits;
+  document.getElementById("sgPrepGpa").textContent = prepGpa === null ? "–" : prepGpa.toFixed(2);
+  document.getElementById("sgCount").textContent = doneCourses.length;
+
+  // grade distribution
+  const dist = {};
+  doneCourses.forEach(c => { if (c.grade) dist[c.grade] = (dist[c.grade] || 0) + 1; });
+  document.getElementById("gradeDist").innerHTML = GRADE_LIST
+    .filter(g => dist[g])
+    .map(g => `<span class="dist-chip">${g} × ${dist[g]}</span>`).join("");
+
   renderWhatif();
+
+  // course list grouped by term with per-term GPA
+  const listEl = document.getElementById("doneList");
+  if (!doneCourses.length) {
+    listEl.innerHTML = `<div class="empty">No finished courses yet.<br>Submit grades from the Plan tab and they land here.</div>`;
+    return;
+  }
+  listEl.innerHTML = "";
+  TERMS.forEach(term => {
+    const list = doneCourses.filter(c => c.term === term.id);
+    if (!list.length) return;
+    let pts = 0, un = 0;
+    list.forEach(c => { if (c.grade) { pts += GRADES[c.grade] * c.units; un += c.units; } });
+    const tGpa = un ? (pts / un).toFixed(2) : "–";
+    const wrap = document.createElement("div");
+    wrap.className = "term";
+    wrap.innerHTML = `<div class="term-head">
+      <div class="term-title">${term.label.replace(" — current","")}</div>
+      <div class="term-units">term GPA ${tGpa}</div></div>`;
+    list.forEach(c => {
+      const belowC = c.cat === "major" && c.grade && GRADES[c.grade] < 2.0;
+      const row = document.createElement("div");
+      row.className = "done-course";
+      row.innerHTML = `
+        <div class="grade-badge ${gradeClass(c.grade)}">${c.grade || "–"}</div>
+        <div class="dc-body">
+          <div class="dc-name">${c.name}</div>
+          <div class="dc-meta">${c.units} units · → ${c.uci}</div>
+          ${belowC ? '<div class="dc-warn">⚠ Below C — doesn\'t satisfy major prep. Plan a retake.</div>' : ""}
+        </div>
+        <div class="dc-actions">
+          <button class="mini-btn edit">Edit grade</button>
+          <button class="mini-btn back">↩ To plan</button>
+        </div>`;
+      row.querySelector(".edit").addEventListener("click", () => {
+        const g = prompt("New grade for " + c.name + " (A, A-, B+, B, B-, C+, C, C-, D, F):", c.grade || "");
+        if (g === null) return;
+        const clean = g.trim().toUpperCase().replace("＋","+");
+        if (GRADES[clean] === undefined) { toast("Not a valid grade"); return; }
+        c.grade = clean;
+        save(); renderAll();
+        toast("Grade updated · " + clean);
+      });
+      row.querySelector(".back").addEventListener("click", () => {
+        c.status = "progress";
+        c.grade = null;
+        save(); renderAll();
+        toast("Moved back to plan");
+      });
+      wrap.appendChild(row);
+    });
+    listEl.appendChild(wrap);
+  });
 }
 
 function renderWhatif() {
   const out = document.getElementById("whatifOut");
   const target = parseFloat(document.getElementById("targetGpa").value);
   const { gradedUnits, points } = gpaData();
-  const remaining = courses.filter(c => c.status !== "done" && c.cat !== "opt")
-                           .reduce((s, c) => s + c.units, 0);
-  if (!gradedUnits) { out.textContent = "Add some grades first — then this shows the average you need in remaining courses to hit your target."; return; }
+  const remaining = courses.filter(c => c.status !== "done" && c.cat !== "opt").reduce((s, c) => s + c.units, 0);
+  if (!gradedUnits) { out.textContent = "Submit some grades first — then this shows the average you need across remaining courses to hit your target."; return; }
   if (!remaining) { out.textContent = "No remaining planned courses."; return; }
   const needed = (target * (gradedUnits + remaining) - points) / remaining;
   let msg;
   if (needed <= 0) msg = `You've already locked in a ${target.toFixed(1)}. Anything passing keeps you there.`;
-  else if (needed > 4) msg = `A ${target.toFixed(1)} isn't reachable with your current planned units alone — you'd need above a 4.0 average. Consider adding units or adjusting the target.`;
+  else if (needed > 4) msg = `A ${target.toFixed(1)} isn't reachable with current planned units alone — you'd need above a 4.0 average. Add units or adjust the target.`;
   else {
     const letter = needed >= 3.85 ? "straight A's" : needed >= 3.5 ? "A-/A average" : needed >= 3.15 ? "B+/A- average" : needed >= 2.85 ? "B/B+ average" : needed >= 2.5 ? "B-/B average" : "C+/B- average";
     msg = `To finish at <b>${target.toFixed(1)}</b>, you need a <b>${needed.toFixed(2)}</b> average (${letter}) across your remaining <b>${remaining} units</b>.`;
@@ -584,13 +736,12 @@ function renderWhatif() {
   out.innerHTML = msg;
 }
 
-/* ================= reqs panel ================= */
+/* ================= reqs / dates ================= */
 function renderReqs() {
   const prep = majorPrepDone();
   const eng = englishDone();
   const units = completedUnits();
   const { gpa } = gpaData();
-
   const rows = [
     { text: "7 major prep courses, C or better each", stat: prep.done + "/" + prep.total, state: prep.done >= prep.total ? "done" : prep.done > 0 ? "part" : "no" },
     { text: "2 English composition courses (by spring before transfer)", stat: eng.done + "/" + eng.total, state: eng.done >= eng.total ? "done" : eng.done > 0 ? "part" : "no" },
@@ -607,14 +758,12 @@ function renderReqs() {
     </div>`).join("");
 }
 
-/* ================= dates panel ================= */
 function renderDates() {
   const now = new Date();
   const open = daysUntil(new Date("2027-10-01"));
   const dl = daysUntil(new Date("2027-11-30"));
   document.getElementById("cdApp").textContent = open > 0 ? open + " days" : "Open";
   document.getElementById("cdDeadline").textContent = dl > 0 ? dl + " days" : "Passed";
-
   let nextFound = false;
   document.getElementById("timeline").innerHTML = TIMELINE.map((t, i) => {
     const past = t.date < now;
@@ -640,7 +789,6 @@ document.querySelectorAll(".tab").forEach(tab => {
     document.getElementById("panel-" + tab.dataset.panel).classList.add("active");
   });
 });
-
 document.getElementById("openAdd").addEventListener("click", () => {
   document.getElementById("addForm").classList.toggle("open");
 });
@@ -648,25 +796,45 @@ document.getElementById("afSave").addEventListener("click", () => {
   const name = document.getElementById("afName").value.trim();
   if (!name) return;
   courses.push({
-    id: "c" + Date.now(),
-    name,
-    uci: "custom",
+    id: "c" + Date.now(), name, uci: "custom",
     units: parseInt(document.getElementById("afUnits").value) || 3,
     cat: document.getElementById("afCat").value,
     term: document.getElementById("afTerm").value,
-    status: "planned",
-    grade: null,
-    custom: true,
+    status: "planned", grade: null, note: "", custom: true,
   });
   document.getElementById("afName").value = "";
   document.getElementById("addForm").classList.remove("open");
   save(); renderAll();
+  toast("Course added");
 });
 document.getElementById("targetGpa").addEventListener("change", renderWhatif);
-document.getElementById("resetBtn").addEventListener("click", async () => {
-  if (!confirm("Reset all courses, statuses, and grades back to the default plan?")) return;
+document.getElementById("resetBtn").addEventListener("click", () => {
+  if (!confirm("Reset all courses, statuses, grades, and notes back to the default plan?")) return;
   courses = JSON.parse(JSON.stringify(DEFAULT_COURSES));
+  pendingGrade = {}; gradeOpen = {}; noteOpen = {};
   save(); renderAll();
+});
+
+/* backup / restore */
+document.getElementById("bkExport").addEventListener("click", () => {
+  const area = document.getElementById("bkArea");
+  area.classList.add("open");
+  area.value = JSON.stringify(courses);
+  area.select();
+  try { document.execCommand("copy"); toast("Copied to clipboard"); }
+  catch (e) { toast("Copy manually from the box"); }
+});
+document.getElementById("bkImport").addEventListener("click", () => {
+  const area = document.getElementById("bkArea");
+  if (!area.classList.contains("open")) { area.classList.add("open"); area.value = ""; area.focus(); return; }
+  try {
+    const data = JSON.parse(area.value);
+    if (!Array.isArray(data) || !data.every(c => c.id && c.name)) throw new Error("bad shape");
+    courses = data.map(c => ({ note: "", ...c }));
+    save(); renderAll();
+    area.classList.remove("open");
+    toast("Data imported");
+  } catch (e) { toast("Invalid data — paste an export"); }
 });
 
 load();
