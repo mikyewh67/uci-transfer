@@ -1,10 +1,11 @@
 {
-  "name": "UCI Transfer HQ",
-  "short_name": "UCI Transfer",
-  "start_url": ".",
+  "name": "405 South — SMC to UCI",
+  "short_name": "405 South",
+  "description": "Road to UCI Business Admin, Fall 2028",
+  "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#141b28",
-  "theme_color": "#141b28",
+  "background_color": "#101418",
+  "theme_color": "#101418",
   "icons": [
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
     { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
