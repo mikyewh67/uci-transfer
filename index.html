@@ -5,83 +5,79 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="UCI Transfer">
-<meta name="theme-color" content="#141b28">
+<meta name="apple-mobile-web-app-title" content="405 South">
+<meta name="theme-color" content="#101418">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-<title>UCI Transfer HQ</title>
+<title>405 South — SMC → UCI</title>
 <style>
   :root {
-    --ink: #141b28; --ink2: #232e42;
-    --paper: #f4f2ec; --card: #ffffff; --card2: #f7f5ef;
-    --line: #ddd7ca; --line2: #efece3;
-    --green: #2f6b4f; --amber: #b5772e; --red: #9c3a26; --blue: #2e5a8f;
-    --mut: #756f60; --mut2: #9a937f;
+    --asphalt: #101418; --asphalt2: #1a2129;
+    --sign: #0d6b45; --sign2: #0a5636; --signtext: #f4f6f3;
+    --paper: #f2f1ec; --card: #ffffff; --card2: #f6f5f0;
+    --line: #ddd8cc; --line2: #edeae1;
+    --ink: #171d26;
+    --green: #187a4b; --amber: #b5772e; --red: #a13a24; --blue: #2e5a8f;
+    --mut: #726c5e; --mut2: #9a937f;
+    --lane: #e8c04a;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --ink: #eef0f4; --ink2: #1c2536;
-      --paper: #10161f; --card: #1a2230; --card2: #212b3c;
-      --line: #2d3950; --line2: #232e42;
-      --green: #6fae8b; --amber: #d99c52; --red: #d3765c; --blue: #7ba3d0;
-      --mut: #93a0b5; --mut2: #6b7891;
+      --paper: #12161c; --card: #1b212a; --card2: #222a35;
+      --line: #2e3846; --line2: #242d39;
+      --ink: #edf0f4;
+      --green: #6fbd92; --amber: #d99c52; --red: #d4795f; --blue: #7ba3d0;
+      --mut: #97a2b3; --mut2: #6d7889;
+      --sign: #0e5c3d; --sign2: #0a4a32;
     }
-    header { background: #0b0f16 !important; }
-    .tabs { background: var(--paper) !important; }
-    .tab { background: var(--card); }
-    .tab.active { background: var(--ink2) !important; color: #eef0f4 !important; border-color: var(--ink2) !important; }
-    .seg { background: var(--card2); }
-    .seg button.on-planned { background: var(--card); color: var(--ink); }
     input, select, textarea { background: var(--card2) !important; color: var(--ink) !important; border-color: var(--line) !important; }
-    #searchOverlay { background: rgba(10,14,20,0.96) !important; }
+    .tab { background: var(--card); }
+    .tab.active { background: var(--sign) !important; border-color: var(--sign) !important; color: #f4f6f3 !important; }
+    #searchOverlay { background: rgba(10,13,17,0.97) !important; }
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body { margin: 0; }
-  body {
-    background: var(--paper); color: var(--ink);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    padding-bottom: 80px;
-  }
+  body { background: var(--paper); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; padding-bottom: 84px; }
   .wrap { max-width: 680px; margin: 0 auto; padding: 0 14px; }
 
-  /* ---------- header ---------- */
-  header { background: #141b28; color: #f4f2ec; padding: max(18px, env(safe-area-inset-top)) 14px 16px; margin-bottom: 12px; }
-  header .wrap { padding: 0; }
-  .hd-row { display: flex; justify-content: space-between; align-items: flex-start; }
-  .hd-title { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.01em; }
-  .hd-sub { font-size: 0.72rem; opacity: 0.65; margin-top: 2px; }
+  /* ================= header: the highway ================= */
+  header { background: var(--asphalt); color: #f4f6f3; padding: max(16px, env(safe-area-inset-top)) 14px 18px; position: relative; overflow: hidden; }
+  header .wrap { padding: 0; position: relative; }
+  .hd-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .route-shield { display: flex; align-items: center; gap: 9px; }
+  .shield { width: 40px; height: 40px; background: #fff; color: #101418; border-radius: 50% 50% 45% 45%; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 900; line-height: 1; box-shadow: inset 0 0 0 2.5px #101418; }
+  .shield small { font-size: 0.4rem; letter-spacing: 0.05em; }
+  .shield b { font-size: 0.95rem; }
+  .route-name { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em; opacity: 0.85; }
+  .route-name span { display: block; font-size: 0.58rem; font-weight: 600; letter-spacing: 0.06em; opacity: 0.6; text-transform: none; margin-top: 2px; }
   .hd-tools { display: flex; gap: 6px; }
-  .tool-btn {
-    border: 1px solid rgba(244,242,236,0.25); background: rgba(244,242,236,0.08);
-    color: #f4f2ec; border-radius: 16px; font-size: 0.68rem; font-weight: 700;
-    padding: 6px 11px; cursor: pointer; white-space: nowrap;
-  }
-  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 14px; }
-  .stat { background: #232e42; border-radius: 10px; padding: 10px 8px; text-align: center; cursor: pointer; }
-  .stat .v { font-size: 1.05rem; font-weight: 700; font-variant-numeric: tabular-nums; }
-  .stat .l { font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.6; margin-top: 2px; }
-  .stat .v.ok { color: #9fd0ae; } .stat .v.warn { color: #e8b46a; } .stat .v.bad { color: #e88a6a; }
+  .tool-btn { border: 1px solid rgba(244,246,243,0.25); background: rgba(244,246,243,0.07); color: #f4f6f3; border-radius: 16px; font-size: 0.68rem; font-weight: 700; padding: 6px 11px; cursor: pointer; white-space: nowrap; }
 
-  .rings { display: flex; gap: 14px; margin-top: 14px; align-items: center; }
-  .ring { position: relative; width: 54px; height: 54px; flex-shrink: 0; }
-  .ring svg { transform: rotate(-90deg); }
-  .ring .bg { stroke: rgba(244,242,236,0.12); }
-  .ring .fg { stroke: #7fa88a; stroke-linecap: round; transition: stroke-dashoffset 0.5s ease; }
-  .ring.r2 .fg { stroke: #7ba3d0; }
-  .ring.r3 .fg { stroke: #e8b46a; }
-  .ring .rv { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-  .ring .rv b { font-size: 0.72rem; font-variant-numeric: tabular-nums; }
-  .ring .rv span { font-size: 0.44rem; text-transform: uppercase; letter-spacing: 0.04em; opacity: 0.6; }
-  .ready-side { flex: 1; }
-  .readiness-bar-track { height: 8px; background: rgba(244,242,236,0.12); border-radius: 6px; overflow: hidden; }
-  .readiness-bar { height: 100%; border-radius: 6px; background: linear-gradient(90deg,#7fa88a,#cfe0b8); transition: width 0.4s ease; }
-  .readiness-label { font-size: 0.66rem; opacity: 0.6; margin-top: 5px; }
+  /* destination guide sign */
+  .guide-sign { background: var(--sign); border: 2.5px solid var(--signtext); border-radius: 12px; padding: 13px 15px 12px; box-shadow: 0 6px 18px rgba(0,0,0,0.35); }
+  .gs-row { display: flex; justify-content: space-between; align-items: baseline; }
+  .gs-dest { font-size: 1.35rem; font-weight: 800; letter-spacing: 0.015em; }
+  .gs-dest small { display: block; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.75; margin-top: 1px; }
+  .gs-miles { text-align: right; }
+  .gs-miles b { font-size: 1.5rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .gs-miles span { display: block; font-size: 0.56rem; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.75; }
+  .lane { height: 9px; border-radius: 5px; background: var(--asphalt2); margin-top: 11px; position: relative; overflow: hidden; }
+  .lane::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, transparent 0 14px, rgba(232,192,74,0.55) 14px 24px); mix-blend-mode: screen; }
+  .lane .gone { position: absolute; top: 0; bottom: 0; left: 0; background: linear-gradient(90deg, #2f8f5f, #7fd0a3); border-radius: 5px; transition: width 0.45s ease; z-index: 1; }
+  .lane-caption { display: flex; justify-content: space-between; font-size: 0.6rem; opacity: 0.7; margin-top: 5px; letter-spacing: 0.04em; }
 
-  /* ---------- tabs ---------- */
-  .tabs { display: flex; gap: 5px; margin-bottom: 12px; position: sticky; top: 0; z-index: 10; background: var(--paper); padding: 8px 0; }
-  .tab { flex: 1; text-align: center; font-size: 0.72rem; font-weight: 700; padding: 9px 1px; border-radius: 18px; border: 1px solid var(--line); background: var(--card); color: var(--mut); cursor: pointer; position: relative; }
-  .tab.active { background: #141b28; color: #f4f2ec; border-color: #141b28; }
+  /* mini sign stats */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; }
+  .stat { background: var(--asphalt2); border: 1.5px solid rgba(244,246,243,0.18); border-radius: 9px; padding: 8px 6px; text-align: center; cursor: pointer; }
+  .stat .v { font-size: 1rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .stat .l { font-size: 0.54rem; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.6; margin-top: 2px; }
+  .stat .v.ok { color: #8fd6ae; } .stat .v.warn { color: #ecc07a; } .stat .v.bad { color: #ec9a7a; }
+
+  /* ================= tabs ================= */
+  .tabs { display: flex; gap: 5px; margin: 12px 0; position: sticky; top: 0; z-index: 10; background: var(--paper); padding: 8px 0; }
+  .tab { flex: 1; text-align: center; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.02em; padding: 9px 1px; border-radius: 18px; border: 1.5px solid var(--line); background: var(--card); color: var(--mut); cursor: pointer; position: relative; }
+  .tab.active { background: var(--sign); color: #f4f6f3; border-color: var(--sign); }
   .tab .n { position: absolute; top: -4px; right: 1px; background: var(--amber); color: #fff; font-size: 0.56rem; min-width: 15px; height: 15px; border-radius: 8px; display: flex; align-items: center; justify-content: center; padding: 0 3px; }
   .tab .n.red { background: var(--red); }
 
@@ -89,10 +85,10 @@
   .panel.active { display: block; animation: fadeIn 0.18s ease; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: none; } }
 
-  /* ---------- cards ---------- */
+  /* ================= cards ================= */
   .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 15px; margin-bottom: 12px; }
   .card h3 { margin: 0 0 4px; font-size: 0.9rem; display: flex; justify-content: space-between; align-items: center; }
-  .card .hint { font-size: 0.74rem; color: var(--mut); line-height: 1.5; }
+  .card .hint { font-size: 0.74rem; color: var(--mut); line-height: 1.55; }
   .card .hint b { color: var(--ink); }
   .card.clps h3 { cursor: pointer; }
   .card.clps h3::after { content: "▾"; font-size: 0.8rem; color: var(--mut2); transition: transform 0.15s; }
@@ -100,29 +96,70 @@
   .card.clps.closed h3 { margin-bottom: 0; }
   .card.clps.closed .clps-body { display: none; }
 
-  /* ---------- insights ---------- */
+  /* ================= hero action ================= */
+  .hero { border-radius: 14px; padding: 15px; margin-bottom: 14px; color: #fff; box-shadow: 0 8px 22px rgba(0,0,0,0.18); cursor: pointer; }
+  .hero.red { background: linear-gradient(135deg, #a13a24, #7d2b18); }
+  .hero.amber { background: linear-gradient(135deg, #b5772e, #8e5a1e); }
+  .hero.blue { background: linear-gradient(135deg, #2e5a8f, #234識); background: linear-gradient(135deg, #2e5a8f, #23446b); }
+  .hero.green { background: linear-gradient(135deg, #187a4b, #0f5d38); }
+  .hero-kicker { font-size: 0.58rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.14em; opacity: 0.8; }
+  .hero-text { font-size: 0.95rem; font-weight: 700; line-height: 1.4; margin-top: 5px; }
+  .hero-fix { font-size: 0.74rem; opacity: 0.85; margin-top: 5px; line-height: 1.45; }
+  .hero-go { display: inline-block; margin-top: 9px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; border: 1.5px solid rgba(255,255,255,0.5); border-radius: 14px; padding: 5px 12px; }
+
+  /* ================= insights ================= */
   .insight { display: flex; gap: 10px; align-items: flex-start; padding: 9px 0; border-bottom: 1px solid var(--line2); }
   .insight:last-child { border-bottom: none; padding-bottom: 0; }
   .insight:first-child { padding-top: 0; }
   .ins-dot { width: 9px; height: 9px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
-  .ins-dot.red { background: var(--red); box-shadow: 0 0 0 3px rgba(156,58,38,0.15); }
+  .ins-dot.red { background: var(--red); box-shadow: 0 0 0 3px rgba(161,58,36,0.15); }
   .ins-dot.amber { background: var(--amber); }
   .ins-dot.blue { background: var(--blue); }
   .ins-dot.green { background: var(--green); }
   .ins-text { font-size: 0.79rem; line-height: 1.45; flex: 1; }
   .ins-text .fix { display: block; font-size: 0.71rem; color: var(--mut); margin-top: 1px; }
 
-  /* ---------- plan ---------- */
-  .term { margin-bottom: 18px; }
-  .term-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px; gap: 8px; }
-  .term-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--mut); font-weight: 700; flex: 1; }
-  .term-units { font-size: 0.66rem; color: var(--mut2); font-variant-numeric: tabular-nums; }
-  .load-pill { font-size: 0.58rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; padding: 3px 8px; border-radius: 10px; }
-  .load-light { background: #e5e2d8; color: #756f60; }
-  .load-solid { background: #dcead4; color: #2f6b4f; }
-  .load-heavy { background: #f4e3cc; color: #b5772e; }
-  .load-over { background: #f2dbd4; color: #9c3a26; }
+  /* ================= THE ROAD ================= */
+  .road { position: relative; padding-left: 34px; }
+  .road::before { content: ""; position: absolute; left: 10px; top: 0; bottom: 0; width: 14px; background: var(--asphalt); border-radius: 8px; }
+  .road::after { content: ""; position: absolute; left: 16px; top: 6px; bottom: 6px; width: 2px; background: repeating-linear-gradient(180deg, var(--lane) 0 12px, transparent 12px 24px); border-radius: 2px; }
 
+  .youarehere { position: relative; margin: 2px 0 14px; display: flex; align-items: center; gap: 9px; }
+  .yah-pin { position: absolute; left: -32px; width: 22px; height: 22px; background: #e8484a; border: 3px solid #fff; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); box-shadow: 0 2px 8px rgba(0,0,0,0.35); z-index: 2; }
+  .yah-label { background: #e8484a; color: #fff; font-size: 0.6rem; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; padding: 5px 11px; border-radius: 12px; }
+  .yah-sub { font-size: 0.68rem; color: var(--mut); }
+
+  .exit { position: relative; margin-bottom: 18px; }
+  .exit-dot { position: absolute; left: -30px; top: 14px; width: 12px; height: 12px; background: var(--paper); border: 3px solid var(--lane); border-radius: 50%; z-index: 2; }
+  .exit.past .exit-dot { border-color: var(--green); background: var(--green); }
+
+  .exit-sign { background: var(--sign); color: var(--signtext); border: 2.5px solid var(--signtext); border-radius: 11px; padding: 11px 13px; box-shadow: 0 4px 14px rgba(0,0,0,0.2); }
+  .exit.past .exit-sign { background: var(--sign2); opacity: 0.85; }
+  .es-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .es-exitno { font-size: 0.54rem; font-weight: 900; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.75; }
+  .es-name { font-size: 1.02rem; font-weight: 800; letter-spacing: 0.01em; margin-top: 1px; }
+  .es-dates { font-size: 0.64rem; opacity: 0.8; margin-top: 3px; }
+  .es-right { display: flex; align-items: center; gap: 9px; }
+  .es-ring { position: relative; width: 38px; height: 38px; flex-shrink: 0; }
+  .es-ring svg { transform: rotate(-90deg); }
+  .es-ring .bg { stroke: rgba(244,246,243,0.25); }
+  .es-ring .fg { stroke: #fff; stroke-linecap: round; }
+  .es-ring b { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 0.56rem; font-weight: 800; }
+  .load-pill { font-size: 0.54rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.06em; padding: 3px 8px; border-radius: 10px; background: rgba(244,246,243,0.16); border: 1px solid rgba(244,246,243,0.35); }
+  .load-pill.over { background: rgba(232,72,74,0.35); border-color: rgba(255,255,255,0.5); }
+  .es-focus { font-size: 0.66rem; opacity: 0.85; margin-top: 7px; padding-top: 7px; border-top: 1px dashed rgba(244,246,243,0.3); line-height: 1.45; }
+  .es-enroll { font-size: 0.64rem; margin-top: 6px; background: rgba(232,192,74,0.18); border: 1px dashed rgba(232,192,74,0.6); border-radius: 8px; padding: 6px 9px; line-height: 1.4; }
+
+  .exit-courses { padding: 10px 0 0 2px; }
+
+  .dest { position: relative; margin-top: 4px; }
+  .dest-dot { position: absolute; left: -30px; top: 20px; width: 12px; height: 12px; background: var(--lane); border: 3px solid var(--lane); border-radius: 50%; z-index: 2; }
+  .dest-sign { background: linear-gradient(150deg, #123f6b, #0e2f50); color: #fff; border: 2.5px solid #f4f6f3; border-radius: 12px; padding: 16px; text-align: center; box-shadow: 0 6px 18px rgba(0,0,0,0.25); }
+  .dest-sign .d1 { font-size: 0.58rem; font-weight: 900; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.75; }
+  .dest-sign .d2 { font-size: 1.4rem; font-weight: 800; margin-top: 3px; }
+  .dest-sign .d3 { font-size: 0.68rem; opacity: 0.8; margin-top: 4px; line-height: 1.4; }
+
+  /* course cards */
   .course { background: var(--card); border: 1px solid var(--line); border-radius: 11px; padding: 12px; margin-bottom: 8px; }
   .course.taking { border-left: 4px solid var(--amber); }
   .c-top { display: flex; justify-content: space-between; gap: 8px; align-items: flex-start; }
@@ -131,73 +168,68 @@
   .c-meta { font-size: 0.7rem; color: var(--mut); margin-top: 3px; }
   .c-side { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex-shrink: 0; }
   .cat-pill { font-size: 0.58rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; padding: 3px 7px; border-radius: 12px; }
-  .cat-major { background: #f2dbd4; color: #9c3a26; }
+  .cat-major { background: #f2ddd6; color: #a13a24; }
   .cat-english { background: #dbe4f0; color: #2e5a8f; }
-  .cat-ge { background: #e5e2d8; color: #756f60; }
+  .cat-ge { background: #e5e2d8; color: #726c5e; }
   .cat-opt { background: #efe9db; color: #8a7f5e; }
   .icon-btn { border: none; background: none; color: var(--mut2); font-size: 0.95rem; cursor: pointer; padding: 0 2px; line-height: 1; }
-
   .seg { display: flex; background: var(--line2); border-radius: 10px; padding: 3px; margin-top: 10px; }
   .seg button { flex: 1; border: none; background: none; padding: 8px 4px; font-size: 0.72rem; font-weight: 700; color: var(--mut); border-radius: 8px; cursor: pointer; transition: all 0.12s; }
   .seg button.on-planned { background: var(--card); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
   .seg button.on-taking { background: #f4e3cc; color: #b5772e; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
-  .seg button.on-grade { background: #dcead4; color: #2f6b4f; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
-
+  .seg button.on-grade { background: #d9ead9; color: #187a4b; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
   .submit-row { display: flex; gap: 8px; margin-top: 10px; animation: fadeIn 0.15s ease; }
   .grade-sel { flex: 1; font-size: 0.84rem; font-weight: 700; padding: 9px 10px; border-radius: 9px; border: 1px solid var(--line); background: var(--card); color: var(--ink); }
-  .submit-btn { flex: 1.2; border: none; border-radius: 9px; background: #2f6b4f; color: #fff; font-size: 0.8rem; font-weight: 700; cursor: pointer; padding: 9px; }
+  .submit-btn { flex: 1.2; border: none; border-radius: 9px; background: var(--sign); color: #fff; font-size: 0.8rem; font-weight: 700; cursor: pointer; padding: 9px; }
   .submit-btn:disabled { background: #9db8a4; cursor: default; }
   .note-area { width: 100%; margin-top: 9px; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--line); font-size: 0.78rem; font-family: inherit; color: var(--ink); background: var(--card2); resize: vertical; min-height: 40px; }
   .note-preview { font-size: 0.72rem; color: #8a7f5e; margin-top: 7px; font-style: italic; }
+  .why { margin-top: 8px; }
+  .why-t { font-size: 0.66rem; font-weight: 700; color: var(--blue); cursor: pointer; }
+  .why-b { display: none; font-size: 0.72rem; color: var(--mut); line-height: 1.5; margin-top: 4px; background: var(--card2); border-radius: 8px; padding: 8px 10px; }
+  .why.open .why-b { display: block; }
 
-  .add-btn { width: 100%; padding: 11px; border-radius: 11px; border: 1px dashed var(--mut2); background: none; color: var(--mut); font-size: 0.8rem; font-weight: 600; cursor: pointer; margin-top: 2px; }
+  .add-btn { width: 100%; padding: 11px; border-radius: 11px; border: 1.5px dashed var(--mut2); background: none; color: var(--mut); font-size: 0.8rem; font-weight: 700; cursor: pointer; margin-top: 2px; }
   .add-form { background: var(--card); border: 1px solid var(--line); border-radius: 11px; padding: 12px; margin-top: 8px; display: none; }
   .add-form.open { display: block; }
   .add-form input, .add-form select, .add-form textarea { width: 100%; padding: 9px 10px; border-radius: 8px; border: 1px solid var(--line); font-size: 0.85rem; margin-bottom: 8px; background: var(--card); color: var(--ink); font-family: inherit; }
   .af-row { display: flex; gap: 8px; }
   .af-row > * { flex: 1; }
-  .af-save { width: 100%; padding: 10px; border-radius: 9px; border: none; background: #141b28; color: #f4f2ec; font-weight: 700; font-size: 0.82rem; cursor: pointer; }
+  .af-save { width: 100%; padding: 10px; border-radius: 9px; border: none; background: var(--sign); color: #f4f6f3; font-weight: 800; font-size: 0.82rem; cursor: pointer; }
   .empty { text-align: center; color: var(--mut); font-size: 0.82rem; padding: 30px 10px; line-height: 1.5; }
 
-  /* ---------- strength / score ---------- */
+  /* ================= stats tab pieces ================= */
   .strength-band { display: flex; align-items: center; gap: 12px; margin-top: 6px; }
   .strength-label { font-size: 1.3rem; font-weight: 800; }
-  .s-strong { color: var(--green); } .s-comp { color: #4e8a68; } .s-build { color: var(--amber); } .s-risk { color: var(--red); } .s-early { color: var(--mut); }
+  .s-strong { color: var(--green); } .s-comp { color: #3d8a63; } .s-build { color: var(--amber); } .s-risk { color: var(--red); } .s-early { color: var(--mut); }
   .strength-meter { flex: 1; height: 10px; border-radius: 6px; background: linear-gradient(90deg,#d9a08e,#e2c79c,#a8c9a0); position: relative; }
   .strength-pin { position: absolute; top: -4px; width: 4px; height: 18px; border-radius: 3px; background: var(--ink); transition: left 0.4s ease; }
   .reasons { margin-top: 10px; }
   .reason { font-size: 0.76rem; color: var(--mut); line-height: 1.5; display: flex; gap: 7px; }
   .reason::before { content: "·"; font-weight: 900; }
-
   .score-total { font-size: 2rem; font-weight: 800; font-variant-numeric: tabular-nums; }
   .score-total small { font-size: 0.9rem; color: var(--mut); font-weight: 700; }
   .score-row { margin-top: 9px; }
   .score-head { display: flex; justify-content: space-between; font-size: 0.72rem; font-weight: 700; margin-bottom: 3px; }
   .score-head span:last-child { color: var(--mut); font-variant-numeric: tabular-nums; }
   .score-track { height: 6px; border-radius: 4px; background: var(--line2); overflow: hidden; }
-  .score-fill { height: 100%; border-radius: 4px; background: #7fa88a; transition: width 0.4s ease; }
-
-  /* ---------- simulator ---------- */
+  .score-fill { height: 100%; border-radius: 4px; background: #4d9e74; transition: width 0.4s ease; }
   .sim-row { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--line2); }
   .sim-row:last-child { border-bottom: none; }
   .sim-name { font-size: 0.76rem; font-weight: 600; flex: 1; min-width: 0; }
   .sim-chips { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
   .sim-chip { border: 1px solid var(--line); background: var(--card2); border-radius: 8px; font-size: 0.66rem; font-weight: 800; padding: 5px 7px; color: var(--mut); cursor: pointer; }
-  .sim-chip.on { background: #2e5a8f; border-color: #2e5a8f; color: #fff; }
+  .sim-chip.on { background: var(--blue); border-color: var(--blue); color: #fff; }
   .sim-proj { display: flex; align-items: baseline; gap: 10px; margin-top: 4px; }
   .sim-proj .pv { font-size: 1.6rem; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--blue); }
   .sim-proj .pd { font-size: 0.8rem; font-weight: 700; }
   .pd.up { color: var(--green); } .pd.down { color: var(--red); }
-
-  /* ---------- chart ---------- */
   #gpaChart { width: 100%; height: 190px; display: block; }
   .chart-legend { display: flex; gap: 14px; font-size: 0.66rem; color: var(--mut); margin-top: 6px; }
   .chart-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 4px; vertical-align: -1px; }
-
-  /* ---------- Done ---------- */
   .done-course { display: flex; align-items: center; gap: 10px; background: var(--card); border: 1px solid var(--line); border-radius: 11px; padding: 11px 12px; margin-bottom: 7px; }
   .grade-badge { width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.95rem; color: #fff; }
-  .g-a { background: #2f6b4f; } .g-b { background: #2e5a8f; } .g-c { background: #b5772e; } .g-df { background: #9c3a26; }
+  .g-a { background: #187a4b; } .g-b { background: #2e5a8f; } .g-c { background: #b5772e; } .g-df { background: #a13a24; }
   .dc-body { flex: 1; min-width: 0; }
   .dc-name { font-weight: 650; font-size: 0.86rem; }
   .dc-meta { font-size: 0.7rem; color: var(--mut); margin-top: 2px; }
@@ -210,7 +242,7 @@
   .sg-cell { background: var(--card2); border-radius: 9px; padding: 9px; text-align: center; }
   .sg-cell .v { font-weight: 800; font-size: 1rem; font-variant-numeric: tabular-nums; }
   .sg-cell .l { font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--mut); margin-top: 2px; }
-  .big-gpa { font-size: 2.4rem; font-weight: 700; font-variant-numeric: tabular-nums; margin: 4px 0 0; }
+  .big-gpa { font-size: 2.4rem; font-weight: 800; font-variant-numeric: tabular-nums; margin: 4px 0 0; }
   .big-gpa.ok { color: var(--green); } .big-gpa.warn { color: var(--amber); } .big-gpa.bad { color: var(--red); }
   .gpa-scale { position: relative; height: 26px; margin: 10px 0 4px; }
   .gpa-scale .track { position: absolute; top: 11px; left: 0; right: 0; height: 5px; border-radius: 4px; background: linear-gradient(90deg, #d9a08e 0%, #d9a08e 50%, #e2c79c 50%, #e2c79c 70%, #a8c9a0 70%); }
@@ -220,8 +252,22 @@
   .whatif-row label { font-size: 0.76rem; color: var(--mut); flex: 1; }
   .whatif-row select { padding: 7px 9px; border-radius: 8px; border: 1px solid var(--line); font-size: 0.8rem; font-weight: 700; background: var(--card); color: var(--ink); }
   .whatif-out { font-size: 0.8rem; margin-top: 10px; line-height: 1.5; }
+  .goal { padding: 9px 0; border-bottom: 1px solid var(--line2); }
+  .goal:last-child { border-bottom: none; }
+  .goal-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .goal-title { font-size: 0.82rem; font-weight: 650; flex: 1; }
+  .goal-title.done { text-decoration: line-through; color: var(--mut); }
+  .goal-pct { font-size: 0.7rem; color: var(--mut); font-variant-numeric: tabular-nums; }
+  .goal input[type=range] { width: 100%; margin-top: 6px; accent-color: #187a4b; }
+  .goal-presets { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+  .preset { border: 1.5px dashed var(--mut2); background: none; border-radius: 12px; font-size: 0.64rem; font-weight: 700; color: var(--mut); padding: 5px 9px; cursor: pointer; }
+  .bk-row { display: flex; gap: 8px; margin-top: 8px; }
+  .bk-btn { flex: 1; padding: 9px; border-radius: 9px; border: 1px solid var(--line); background: var(--card2); font-size: 0.76rem; font-weight: 700; color: var(--ink); cursor: pointer; }
+  .bk-area { width: 100%; margin-top: 8px; padding: 8px; border-radius: 8px; border: 1px solid var(--line); font-size: 0.68rem; font-family: monospace; min-height: 60px; display: none; background: var(--card2); color: var(--ink); }
+  .bk-area.open { display: block; }
+  .reset-btn { display: block; margin: 22px auto 0; background: none; border: 1px solid var(--line); color: var(--mut); font-size: 0.76rem; padding: 9px 18px; border-radius: 20px; cursor: pointer; }
 
-  /* ---------- GE ---------- */
+  /* ================= GE ================= */
   .ge-area { background: var(--card); border: 1px solid var(--line); border-radius: 11px; padding: 12px; margin-bottom: 8px; }
   .ge-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
   .ge-name { font-weight: 650; font-size: 0.86rem; }
@@ -229,26 +275,25 @@
   .ge-hint { font-size: 0.7rem; color: var(--mut); margin-top: 3px; line-height: 1.4; }
   .ge-boxes { display: flex; gap: 8px; margin-top: 9px; }
   .ge-box { width: 34px; height: 34px; border-radius: 9px; border: 2px solid var(--line); background: var(--card2); cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: 800; color: transparent; transition: all 0.12s; font-size: 0.9rem; }
-  .ge-box.on { background: #2f6b4f; border-color: #2f6b4f; color: #fff; }
+  .ge-box.on { background: var(--sign); border-color: var(--sign); color: #fff; }
   .ge-progress { height: 6px; background: var(--line2); border-radius: 4px; overflow: hidden; margin-bottom: 14px; }
-  .ge-progress .f { height: 100%; background: linear-gradient(90deg,#7fa88a,#cfe0b8); border-radius: 4px; transition: width 0.3s; }
+  .ge-progress .f { height: 100%; background: linear-gradient(90deg,#2f8f5f,#7fd0a3); border-radius: 4px; transition: width 0.3s; }
 
-  /* ---------- App ---------- */
+  /* ================= App ================= */
   .chk-row { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--line2); cursor: pointer; }
   .chk-row:last-child { border-bottom: none; }
   .chk-box { width: 22px; height: 22px; border-radius: 7px; border: 2px solid var(--mut2); flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; background: var(--card); transition: all 0.12s; }
-  .chk-row.on .chk-box { background: #2f6b4f; border-color: #2f6b4f; }
+  .chk-row.on .chk-box { background: var(--sign); border-color: var(--sign); }
   .chk-row.on .chk-box::after { content: "✓"; color: #fff; font-size: 13px; font-weight: 700; }
   .chk-body { flex: 1; }
   .chk-text { font-size: 0.82rem; font-weight: 600; }
   .chk-row.on .chk-text { text-decoration: line-through; color: var(--mut); }
   .chk-when { font-size: 0.68rem; color: var(--mut); margin-top: 1px; }
   .chk-when.overdue { color: var(--red); font-weight: 700; }
-
   .piq { border: 1px solid var(--line); border-radius: 11px; margin-bottom: 8px; overflow: hidden; background: var(--card); }
   .piq-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 11px 12px; cursor: pointer; }
   .piq-title { font-size: 0.8rem; font-weight: 650; line-height: 1.35; flex: 1; }
-  .piq-tag { font-size: 0.58rem; font-weight: 700; text-transform: uppercase; padding: 3px 7px; border-radius: 10px; background: #f2dbd4; color: #9c3a26; white-space: nowrap; }
+  .piq-tag { font-size: 0.58rem; font-weight: 700; text-transform: uppercase; padding: 3px 7px; border-radius: 10px; background: #f2ddd6; color: #a13a24; white-space: nowrap; }
   .piq-tag.opt { background: var(--line2); color: var(--mut); }
   .piq-wc { font-size: 0.64rem; color: var(--mut2); white-space: nowrap; font-variant-numeric: tabular-nums; }
   .piq-body { display: none; padding: 0 12px 12px; }
@@ -258,11 +303,10 @@
   .piq-body .wc.over { color: var(--red); font-weight: 700; }
   .piq-status { display: flex; gap: 5px; margin: 8px 0 2px; }
   .piq-status button { flex: 1; border: 1px solid var(--line); background: var(--card2); border-radius: 8px; font-size: 0.62rem; font-weight: 700; padding: 6px 2px; color: var(--mut); cursor: pointer; }
-  .piq-status button.on { background: #2e5a8f; border-color: #2e5a8f; color: #fff; }
+  .piq-status button.on { background: var(--blue); border-color: var(--blue); color: #fff; }
   .piq-bar { height: 4px; border-radius: 3px; background: var(--line2); margin-top: 8px; overflow: hidden; }
   .piq-bar .f { height: 100%; background: #7ba3d0; border-radius: 3px; }
   .piq-ts { font-size: 0.6rem; color: var(--mut2); margin-top: 4px; }
-
   .act { background: var(--card); border: 1px solid var(--line); border-radius: 11px; padding: 12px; margin-bottom: 8px; }
   .act-head { display: flex; justify-content: space-between; gap: 8px; align-items: flex-start; }
   .act-name { font-weight: 650; font-size: 0.86rem; }
@@ -271,66 +315,56 @@
   .act-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
   .act-tag { font-size: 0.62rem; font-weight: 700; background: var(--line2); color: var(--mut); border-radius: 10px; padding: 3px 8px; }
   .act-complete { height: 4px; border-radius: 3px; background: var(--line2); margin-top: 8px; overflow: hidden; }
-  .act-complete .f { height: 100%; background: #7fa88a; border-radius: 3px; }
-
+  .act-complete .f { height: 100%; background: #4d9e74; border-radius: 3px; }
   .link-item { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--line2); }
   .link-item:last-child { border-bottom: none; }
   .link-body { flex: 1; min-width: 0; }
   .link-title { font-size: 0.82rem; font-weight: 650; }
   .link-title a { color: var(--blue); text-decoration: none; word-break: break-all; }
   .link-note { font-size: 0.7rem; color: var(--mut); margin-top: 2px; }
+  .gloss dt { font-size: 0.78rem; font-weight: 800; margin-top: 9px; }
+  .gloss dt:first-child { margin-top: 0; }
+  .gloss dd { font-size: 0.74rem; color: var(--mut); margin: 2px 0 0; line-height: 1.5; }
 
-  /* ---------- goals ---------- */
-  .goal { padding: 9px 0; border-bottom: 1px solid var(--line2); }
-  .goal:last-child { border-bottom: none; }
-  .goal-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-  .goal-title { font-size: 0.82rem; font-weight: 650; flex: 1; }
-  .goal-title.done { text-decoration: line-through; color: var(--mut); }
-  .goal-pct { font-size: 0.7rem; color: var(--mut); font-variant-numeric: tabular-nums; }
-  .goal input[type=range] { width: 100%; margin-top: 6px; accent-color: #2f6b4f; }
-  .goal-presets { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
-  .preset { border: 1px dashed var(--mut2); background: none; border-radius: 12px; font-size: 0.64rem; font-weight: 700; color: var(--mut); padding: 5px 9px; cursor: pointer; }
-
-  /* ---------- timeline ---------- */
+  /* ================= Dates ================= */
+  .countdown-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+  .cd-sign { background: var(--sign); color: #f4f6f3; border: 2px solid var(--signtext); border-radius: 11px; padding: 11px 13px; }
+  .cd-sign.urgent { background: #8e321f; }
+  .cd-label { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.8; }
+  .cd-days { font-size: 1.25rem; font-weight: 800; font-variant-numeric: tabular-nums; margin-top: 2px; }
+  .tl-yr { font-size: 0.66rem; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mut); margin: 16px 0 8px; }
   .tl-item { display: flex; gap: 12px; }
   .tl-rail { display: flex; flex-direction: column; align-items: center; }
   .tl-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--mut2); flex-shrink: 0; margin-top: 4px; }
-  .tl-dot.next { background: #b5772e; box-shadow: 0 0 0 4px #f4e3cc; }
-  .tl-dot.past { background: #2f6b4f; }
-  .tl-line { width: 2px; flex: 1; background: var(--line); min-height: 26px; }
-  .tl-body { padding-bottom: 16px; flex: 1; }
+  .tl-dot.next { background: var(--amber); box-shadow: 0 0 0 4px #f4e3cc; }
+  .tl-dot.past { background: var(--green); }
+  .tl-dot.smc { background: var(--blue); }
+  .tl-dot.smc.past { background: var(--green); }
+  .tl-line { width: 2px; flex: 1; background: var(--line); min-height: 24px; }
+  .tl-body { padding-bottom: 15px; flex: 1; }
   .tl-date { font-size: 0.66rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--mut); }
   .tl-what { font-size: 0.86rem; font-weight: 650; margin: 2px 0; }
   .tl-note { font-size: 0.73rem; color: var(--mut); line-height: 1.4; }
-  .countdown-strip { background: #141b28; color: #f4f2ec; border-radius: 12px; padding: 13px 15px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; }
-  .cd-label { font-size: 0.7rem; opacity: 0.7; }
-  .cd-days { font-size: 1.3rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .tl-src { font-size: 0.56rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 6px; border-radius: 8px; margin-left: 6px; vertical-align: 1px; }
+  .src-smc { background: #dbe4f0; color: #2e5a8f; }
+  .src-uc { background: #f2ddd6; color: #a13a24; }
 
-  .bk-row { display: flex; gap: 8px; margin-top: 8px; }
-  .bk-btn { flex: 1; padding: 9px; border-radius: 9px; border: 1px solid var(--line); background: var(--card2); font-size: 0.76rem; font-weight: 700; color: var(--ink); cursor: pointer; }
-  .bk-area { width: 100%; margin-top: 8px; padding: 8px; border-radius: 8px; border: 1px solid var(--line); font-size: 0.68rem; font-family: monospace; min-height: 60px; display: none; background: var(--card2); color: var(--ink); }
-  .bk-area.open { display: block; }
-  .reset-btn { display: block; margin: 22px auto 0; background: none; border: 1px solid var(--line); color: var(--mut); font-size: 0.76rem; padding: 9px 18px; border-radius: 20px; cursor: pointer; }
-
-  #toast { position: fixed; bottom: max(20px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%) translateY(20px); background: #141b28; color: #f4f2ec; font-size: 0.8rem; font-weight: 600; padding: 11px 18px; border-radius: 22px; opacity: 0; pointer-events: none; transition: all 0.25s ease; z-index: 50; box-shadow: 0 8px 24px rgba(20,27,40,0.3); white-space: nowrap; }
+  #toast { position: fixed; bottom: max(20px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%) translateY(20px); background: var(--asphalt); color: #f4f6f3; font-size: 0.8rem; font-weight: 600; padding: 11px 18px; border-radius: 22px; opacity: 0; pointer-events: none; transition: all 0.25s ease; z-index: 50; box-shadow: 0 8px 24px rgba(0,0,0,0.35); white-space: nowrap; }
   #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-  /* ---------- search ---------- */
-  #searchOverlay { position: fixed; inset: 0; background: rgba(244,242,236,0.97); z-index: 40; display: none; padding: max(16px, env(safe-area-inset-top)) 14px 20px; overflow-y: auto; }
+  #searchOverlay { position: fixed; inset: 0; background: rgba(242,241,236,0.97); z-index: 40; display: none; padding: max(16px, env(safe-area-inset-top)) 14px 20px; overflow-y: auto; }
   #searchOverlay.open { display: block; }
   .search-bar { display: flex; gap: 8px; max-width: 680px; margin: 0 auto 14px; }
   .search-bar input { flex: 1; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line); font-size: 0.95rem; background: var(--card); color: var(--ink); }
-  .search-close { border: none; background: var(--card); border-radius: 12px; padding: 0 16px; font-size: 1rem; color: var(--mut); cursor: pointer; border: 1px solid var(--line); }
+  .search-close { border: 1px solid var(--line); background: var(--card); border-radius: 12px; padding: 0 16px; font-size: 1rem; color: var(--mut); cursor: pointer; }
   .search-results { max-width: 680px; margin: 0 auto; }
   .sr { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 11px 13px; margin-bottom: 7px; cursor: pointer; }
   .sr-kind { font-size: 0.58rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--blue); }
   .sr-title { font-size: 0.84rem; font-weight: 650; margin-top: 2px; }
   .sr-snip { font-size: 0.7rem; color: var(--mut); margin-top: 2px; }
 
-  /* ---------- confetti ---------- */
   #confetti { position: fixed; inset: 0; pointer-events: none; z-index: 60; }
 
-  /* ---------- print / counselor report ---------- */
   #printReport { display: none; }
   @media print {
     body > *:not(#printReport) { display: none !important; }
@@ -347,50 +381,60 @@
 
 <header>
   <div class="wrap">
-    <div class="hd-row">
-      <div>
-        <div class="hd-title">SMC → UCI Business Admin</div>
-        <div class="hd-sub">Merage School · no TAG for this major · target 3.4+</div>
+    <div class="hd-top">
+      <div class="route-shield">
+        <div class="shield"><small>INTERSTATE</small><b>405</b></div>
+        <div class="route-name">South<span>Santa Monica → Irvine</span></div>
       </div>
       <div class="hd-tools">
-        <button class="tool-btn" id="btnSearch">🔍 Search</button>
+        <button class="tool-btn" id="btnSearch">🔍</button>
         <button class="tool-btn" id="btnReport">🖨 Report</button>
       </div>
     </div>
-    <div class="stats">
-      <div class="stat" data-go="done"><div class="v" id="stGpa">–</div><div class="l">UC GPA</div></div>
-      <div class="stat" data-go="plan"><div class="v" id="stUnits">0</div><div class="l">Units / 60</div></div>
-      <div class="stat" data-go="plan"><div class="v" id="stPrep">0/7</div><div class="l">Major Prep</div></div>
-      <div class="stat" data-go="dates"><div class="v" id="stDays">–</div><div class="l">Days to App</div></div>
-    </div>
-    <div class="rings">
-      <div class="ring r1"><svg width="54" height="54"><circle class="bg" cx="27" cy="27" r="23" fill="none" stroke-width="5"/><circle class="fg" id="ringPrep" cx="27" cy="27" r="23" fill="none" stroke-width="5" stroke-dasharray="144.5" stroke-dashoffset="144.5"/></svg><div class="rv"><b id="ringPrepV">0%</b><span>Prep</span></div></div>
-      <div class="ring r2"><svg width="54" height="54"><circle class="bg" cx="27" cy="27" r="23" fill="none" stroke-width="5"/><circle class="fg" id="ringGe" cx="27" cy="27" r="23" fill="none" stroke-width="5" stroke-dasharray="144.5" stroke-dashoffset="144.5"/></svg><div class="rv"><b id="ringGeV">0%</b><span>GE</span></div></div>
-      <div class="ring r3"><svg width="54" height="54"><circle class="bg" cx="27" cy="27" r="23" fill="none" stroke-width="5"/><circle class="fg" id="ringApp" cx="27" cy="27" r="23" fill="none" stroke-width="5" stroke-dasharray="144.5" stroke-dashoffset="144.5"/></svg><div class="rv"><b id="ringAppV">0%</b><span>App</span></div></div>
-      <div class="ready-side">
-        <div class="readiness-bar-track"><div class="readiness-bar" id="readyBar" style="width:0%"></div></div>
-        <div class="readiness-label" id="readyLabel">Transfer readiness: 0%</div>
+    <div class="guide-sign">
+      <div class="gs-row">
+        <div class="gs-dest">Irvine<small>UCI · Merage School</small></div>
+        <div class="gs-miles"><b id="milesLeft">52</b><span>miles left</span></div>
       </div>
+      <div class="lane"><div class="gone" id="laneGone" style="width:0%"></div></div>
+      <div class="lane-caption"><span id="milesDriven">0 mi driven</span><span id="readyPct">0% ready</span></div>
+    </div>
+    <div class="stats">
+      <div class="stat" data-go="stats"><div class="v" id="stGpa">–</div><div class="l">UC GPA</div></div>
+      <div class="stat" data-go="road"><div class="v" id="stUnits">0</div><div class="l">Units/60</div></div>
+      <div class="stat" data-go="road"><div class="v" id="stPrep">0/7</div><div class="l">Prep</div></div>
+      <div class="stat" data-go="dates"><div class="v" id="stDays">–</div><div class="l">To App</div></div>
     </div>
   </div>
 </header>
 
 <div class="wrap">
   <div class="tabs">
-    <div class="tab active" data-panel="plan">Plan<span class="n" id="nPlan" style="display:none"></span></div>
-    <div class="tab" data-panel="done">Done<span class="n" id="nDone" style="display:none"></span></div>
+    <div class="tab active" data-panel="road">Road<span class="n" id="nRoad" style="display:none"></span></div>
+    <div class="tab" data-panel="stats">Stats<span class="n" id="nStats" style="display:none"></span></div>
     <div class="tab" data-panel="ge">GE</div>
     <div class="tab" data-panel="app">App<span class="n red" id="nApp" style="display:none"></span></div>
     <div class="tab" data-panel="dates">Dates</div>
   </div>
 
-  <!-- ============ PLAN ============ -->
-  <div class="panel active" id="panel-plan">
-    <div class="card" id="insightsCard">
-      <h3>Insights</h3>
-      <div id="insightsList"></div>
+  <!-- ============ ROAD ============ -->
+  <div class="panel active" id="panel-road">
+    <div id="heroWrap"></div>
+
+    <div class="card clps closed">
+      <h3>How this works</h3>
+      <div class="clps-body hint">
+        Each exit on the road is one SMC term with its real district-calendar dates. Set courses to <b>Taking</b> when the term starts, then <b>Enter grade → Submit</b> when grades post — everything else (GPA, units, miles, insights) updates itself. The miles bar is your whole journey: it blends major prep, GPA, units, Cal-GETC, and application progress. Green flags = done, red = fix now.
+      </div>
     </div>
-    <div id="termsContainer"></div>
+
+    <div class="card clps" id="insightsCard">
+      <h3>Road conditions</h3>
+      <div class="clps-body" id="insightsList"></div>
+    </div>
+
+    <div class="road" id="roadContainer"></div>
+
     <button class="add-btn" id="openAdd">+ Add a course</button>
     <div class="add-form" id="addForm">
       <input type="text" id="afName" placeholder="Course name (e.g. COMM 1)">
@@ -409,8 +453,8 @@
     <button class="reset-btn" id="resetBtn">Reset everything</button>
   </div>
 
-  <!-- ============ DONE ============ -->
-  <div class="panel" id="panel-done">
+  <!-- ============ STATS ============ -->
+  <div class="panel" id="panel-stats">
     <div class="card">
       <h3>Profile strength</h3>
       <div class="strength-band">
@@ -438,7 +482,7 @@
     <div class="card clps" id="simCard">
       <h3>Grade simulator</h3>
       <div class="clps-body">
-        <div class="hint">Tap hypothetical grades on unfinished courses — nothing is submitted, it just projects.</div>
+        <div class="hint">Tap hypothetical grades on unfinished courses — nothing is submitted, it just projects. Use it to see if that B in calc actually hurts you (usually less than you think).</div>
         <div class="sim-proj">
           <div class="pv" id="simProj">–</div>
           <div class="pd" id="simDelta"></div>
@@ -453,7 +497,7 @@
       <div class="clps-body">
         <canvas id="gpaChart"></canvas>
         <div class="chart-legend">
-          <span><i style="background:#7fa88a"></i>Cumulative</span>
+          <span><i style="background:#4d9e74"></i>Cumulative</span>
           <span><i style="background:#7ba3d0"></i>Term GPA</span>
         </div>
       </div>
@@ -462,6 +506,7 @@
     <div class="card clps closed" id="scoreCard">
       <h3>Transfer score</h3>
       <div class="clps-body">
+        <div class="hint" style="margin-bottom:6px">Everything that matters, weighted into one number. Academics carry the most because they decide whether you're even in the pool — the rest decides how you look inside it.</div>
         <div class="score-total"><span id="scoreTotal">0</span><small> / 1000</small></div>
         <div id="scoreRows"></div>
       </div>
@@ -502,7 +547,7 @@
 
     <div class="card">
       <h3>Backup & restore</h3>
-      <div class="hint">Saves live on this device only. Export before switching phones or clearing browser data. Covers courses, grades, GE, app checklist, PIQ drafts, activities, goals, and links.</div>
+      <div class="hint">Saves live on this device only. Export before switching phones or clearing browser data.</div>
       <div class="bk-row">
         <button class="bk-btn" id="bkExport">Export data</button>
         <button class="bk-btn" id="bkImport">Import data</button>
@@ -515,7 +560,7 @@
   <div class="panel" id="panel-ge">
     <div class="card">
       <h3>Cal-GETC general education</h3>
-      <div class="hint">Cal-GETC replaced IGETC for CCC → UC transfers starting Fall 2025. Tap a box per completed course in each area. <b>Verify every course against SMC's Cal-GETC list or a counselor</b> — this tracks progress, it doesn't certify it. Also ask whether Merage wants full Cal-GETC or major prep + minimum GE.</div>
+      <div class="hint"><b>Why this exists:</b> UC wants proof you can handle breadth, not just business classes. Cal-GETC (replaced IGETC starting Fall 2025) is the standard package — finish it and every UC treats your GE as done. Tap a box per completed course. <b>Verify courses against SMC's Cal-GETC list or a counselor</b> — this tracks, it doesn't certify. Ask whether Merage prefers full Cal-GETC or major prep + minimum GE before loading up.</div>
     </div>
     <div class="ge-progress"><div class="f" id="geBar" style="width:0%"></div></div>
     <div id="geList"></div>
@@ -525,18 +570,19 @@
   <div class="panel" id="panel-app">
     <div class="card">
       <h3>Application checklist</h3>
+      <div class="hint" style="margin-bottom:6px">The paperwork side of the journey. Grades get you considered — missing one of these gets you dropped on a technicality.</div>
       <div id="appChecklist"></div>
     </div>
 
     <div class="card">
       <h3>Personal Insight Questions</h3>
-      <div class="hint" style="margin-bottom:10px">Transfers answer the required question + 3 of the others. 350 words max each. Track each one from outline → final. Your SMMZOLO / Mikye Media story is strong material for the required prompt and the leadership/creativity ones.</div>
+      <div class="hint" style="margin-bottom:10px"><b>Why they matter:</b> at 3.4+, thousands of applicants look identical on paper — PIQs are where you stop being a GPA. Transfers answer the required prompt + 3 others, 350 words each. Track each from outline → final. Your SMMZOLO / Mikye Media story is the required prompt basically writing itself: real revenue, real customers, self-taught frontend, and now formal business training to scale it.</div>
       <div id="piqList"></div>
     </div>
 
     <div class="card">
       <h3>Activities & experience</h3>
-      <div class="hint" style="margin-bottom:8px">Mirrors the UC app format. Descriptions cap at 350 characters there — keep them concrete: revenue, clients, what you built. Completion bar shows how filled-out each entry is.</div>
+      <div class="hint" style="margin-bottom:8px">Mirrors the UC app format (350-char descriptions there). Numbers beat adjectives: "handled X orders/month", "built checkout flow solo", "N clients retained". Completion bar shows how filled-out each entry is.</div>
       <div id="actList"></div>
       <button class="add-btn" id="actAddBtn">+ Add activity</button>
       <div class="add-form" id="actForm">
@@ -558,7 +604,6 @@
     <div class="card clps closed" id="linksCard">
       <h3>Links & notes vault</h3>
       <div class="clps-body">
-        <div class="hint" style="margin-bottom:6px">Keep your ASSIST agreement, Merage pages, counselor portal, and notes in one place.</div>
         <div id="linksList"></div>
         <button class="add-btn" id="linkAddBtn">+ Add link or note</button>
         <div class="add-form" id="linkForm">
@@ -579,13 +624,29 @@
       </div>
     </div>
 
+    <div class="card clps closed">
+      <h3>Glossary — the jargon, decoded</h3>
+      <div class="clps-body">
+        <dl class="gloss">
+          <dt>ASSIST</dt><dd>The official CA database showing exactly which SMC courses count at which UC, course-for-course. The source of truth for your plan.</dd>
+          <dt>Articulation</dt><dd>"This SMC course = that UCI course." If it's not articulated on ASSIST, assume it doesn't count.</dd>
+          <dt>Cal-GETC</dt><dd>The general-ed package (replaced IGETC in Fall 2025). Complete it and GE is settled at every UC.</dd>
+          <dt>TAG</dt><dd>Transfer Admission Guarantee — guaranteed UC admission if you hit set numbers. Business Admin doesn't offer it; Business Econ does.</dd>
+          <dt>TAU</dt><dd>Transfer Academic Update — in January you log your fall grades + spring classes into your submitted UC app. Miss it and your app dies quietly.</dd>
+          <dt>PIQ</dt><dd>Personal Insight Questions — the UC "essays." Short answers, 350 words, transfers do 4.</dd>
+          <dt>Merage</dt><dd>The Paul Merage School of Business — UCI's business school, runs its own transfer advising on top of UC admissions.</dd>
+          <dt>Corsair Connect</dt><dd>SMC's student portal — enrollment appointments, registration, records. Your enrollment date posts here each term; earlier = better classes.</dd>
+        </dl>
+      </div>
+    </div>
+
     <div class="card">
       <h3>Ask your counselor</h3>
       <div class="hint">
         1. Is ECON C2001 micro or macro under the new numbering — and which second econ course do I take?<br>
         2. Full Cal-GETC or minimum GE + major prep for Merage?<br>
-        3. Which second English comp course counts, and does it fit Winter 2027?<br>
-        4. On track for 60 UC-transferable units by Spring 2028?<br>
+        3. Which second English comp course counts, and does it fit Winter 2027 (Jan 4 – Feb 11)?<br>
+        4. On track for 60 UC-transferable units by end of Spring 2028 (Jun 13)?<br>
         5. TAG Business Econ vs straight Business Admin app — which is smarter for my GPA?<br>
         6. Do any of my courses double-count for Cal-GETC areas + major prep?
       </div>
@@ -595,9 +656,10 @@
   <!-- ============ DATES ============ -->
   <div class="panel" id="panel-dates">
     <div class="countdown-strip">
-      <div><div class="cd-label">UC application opens</div><div class="cd-days" id="cdApp">–</div></div>
-      <div style="text-align:right"><div class="cd-label">Deadline Nov 30, 2027</div><div class="cd-days" id="cdDeadline">–</div></div>
+      <div class="cd-sign"><div class="cd-label">UC app opens</div><div class="cd-days" id="cdApp">–</div></div>
+      <div class="cd-sign" id="cdDeadlineSign"><div class="cd-label">Deadline Nov 30 '27</div><div class="cd-days" id="cdDeadline">–</div></div>
     </div>
+    <div class="hint" style="margin-bottom:4px">Blue dots = SMC district calendar (official). Red-tagged = UC/UCI process dates. Everything in one river so nothing sneaks up on you.</div>
     <div id="timeline"></div>
   </div>
 </div>
@@ -626,33 +688,41 @@ const DEFAULT_COURSES = [
   { id: "econ1",   name: "ECON C2001 (confirm micro/macro)",     uci: "ECON 20A/B", units: 3, cat: "major", term: "fall26", status: "progress", grade: null, note: "" },
   { id: "engl1",   name: "ENGL C1000",                            uci: "English comp 1/2", units: 3, cat: "english", term: "fall26", status: "progress", grade: null, note: "" },
   { id: "ahis11",  name: "AHIS 11",                               uci: "GE — likely Cal-GETC 3A Arts", units: 3, cat: "ge", term: "fall26", status: "progress", grade: null, note: "" },
-  { id: "engl2",   name: "Second English comp course",            uci: "English comp 2/2 · Cal-GETC 1B", units: 3, cat: "english", term: "win27", status: "planned", grade: null, note: "" },
-  { id: "math7",   name: "MATH 7 — Calculus 1",                   uci: "MATH 2A", units: 5, cat: "major", term: "spr27", status: "planned", grade: null, note: "" },
+  { id: "engl2",   name: "Second English comp course",            uci: "English comp 2/2 · Cal-GETC 1B", units: 3, cat: "english", term: "win27", status: "planned", grade: null, note: "",
+    why: "UC hard rule: both English comps must be done by the spring before transfer. Knocking it out in the short winter session clears the runway for the calc/accounting terms." },
+  { id: "math7",   name: "MATH 7 — Calculus 1",                   uci: "MATH 2A", units: 5, cat: "major", term: "spr27", status: "planned", grade: null, note: "",
+    why: "Gateway course — MATH 8 can't happen without it, and both must be done before you apply. Starting it any later than Spring 2027 puts your whole timeline at risk." },
   { id: "acctg2",  name: "ACCTG 2 — Corp Fin & Managerial Acctg", uci: "MGMT 30B", units: 5, cat: "major", term: "spr27", status: "planned", grade: null, note: "" },
   { id: "econ2",   name: "Second ECON (micro or macro)",          uci: "ECON 20A/B", units: 3, cat: "major", term: "spr27", status: "planned", grade: null, note: "" },
-  { id: "math8",   name: "MATH 8 — Calculus 2",                   uci: "MATH 2B", units: 5, cat: "major", term: "fall27", status: "planned", grade: null, note: "" },
+  { id: "math8",   name: "MATH 8 — Calculus 2",                   uci: "MATH 2B", units: 5, cat: "major", term: "fall27", status: "planned", grade: null, note: "",
+    why: "Your app goes in Nov 30 while you're still taking this — UCI sees it as 'in progress' and then checks the grade in your January TAU. A strong fall here is the last thing admissions sees before deciding." },
   { id: "stat",    name: "STAT C1000 — Intro Statistics",         uci: "MGMT 7 · Cal-GETC area 2", units: 4, cat: "major", term: "fall27", status: "planned", grade: null, note: "" },
   { id: "ge1",     name: "GE / elective (pick w/ counselor)",     uci: "units toward 60", units: 3, cat: "ge", term: "win28", status: "planned", grade: null, note: "" },
   { id: "ge2",     name: "Remaining GE / electives",              uci: "units toward 60", units: 6, cat: "ge", term: "spr28", status: "planned", grade: null, note: "" },
   { id: "bus1",    name: "BUS 1 — Intro to Business",             uci: "MGMT 1 (optional)", units: 3, cat: "opt", term: "spr28", status: "planned", grade: null, note: "" },
 ];
 
+/* SMC district calendar 2026-27 + 2027-28 (board-approved) */
 const TERMS = [
-  { id: "fall26", label: "Fall 2026 — current", short: "F26" },
-  { id: "win27",  label: "Winter 2027", short: "W27" },
-  { id: "spr27",  label: "Spring 2027", short: "S27" },
-  { id: "sum27",  label: "Summer 2027", short: "Su27" },
-  { id: "fall27", label: "Fall 2027", short: "F27" },
-  { id: "win28",  label: "Winter 2028", short: "W28" },
-  { id: "spr28",  label: "Spring 2028", short: "S28" },
+  { id: "fall26", label: "Fall 2026", short: "F26", start: "2026-08-31", end: "2026-12-22", finals: "Dec 15–22", focus: "Your GPA gets born this term. Four courses, three of them requirements — every grade here is permanent." },
+  { id: "win27",  label: "Winter 2027", short: "W27", start: "2027-01-04", end: "2027-02-11", finals: "ends Feb 11", focus: "Six-week sprint. One class, full send — winter courses move double-speed, so don't stack it." },
+  { id: "spr27",  label: "Spring 2027", short: "S27", start: "2027-02-16", end: "2027-06-16", finals: "Jun 8–16", focus: "The hardest term on the whole road: Calc 1 + Accounting 2 + Econ together. Survive this with B's or better and the rest is downhill." },
+  { id: "sum27",  label: "Summer 2027", short: "Su27", start: "2027-06-21", end: "2027-07-30", finals: "ends Jul 30", focus: "Optional gear. Sessions Jun 21 – Jul 30 / Aug 13 — a summer class here is cheap insurance if spring gets rough." },
+  { id: "fall27", label: "Fall 2027", short: "F27", start: "2027-08-30", end: "2027-12-21", finals: "Dec 14–21", focus: "Application season. You're taking Calc 2 + Stats while submitting the UC app (Oct 1 – Nov 30). Plan the workload like both are classes." },
+  { id: "win28",  label: "Winter 2028", short: "W28", start: "2028-01-04", end: "2028-02-10", finals: "ends Feb 10", focus: "TAU month — log fall grades into your app by Jan 31 or it dies. Class-wise, keep it light." },
+  { id: "spr28",  label: "Spring 2028", short: "S28", start: "2028-02-14", end: "2028-06-13", finals: "Jun 6–13", focus: "Finish line. Everything — 60 units, all prep, all GE — must be complete when this term ends Jun 13. Decisions land while you're in it." },
 ];
 const termIdx = id => TERMS.findIndex(t => t.id === id);
+function fmtRange(t) {
+  const f = d => new Date(d + "T12:00").toLocaleDateString(undefined, { month: "short", day: "numeric" });
+  return f(t.start) + " – " + f(t.end) + " · Finals " + t.finals;
+}
 
 const GE_AREAS = [
   { id: "1a", name: "1A — English Composition", need: 1, hint: "ENGL C1000 covers this." },
   { id: "1b", name: "1B — Critical Thinking & Composition", need: 1, hint: "Your second English comp usually lands here — confirm the specific course." },
   { id: "1c", name: "1C — Oral Communication", need: 1, hint: "A speech/comm course (e.g. COMM). Not in your plan yet — good Winter 2028 filler." },
-  { id: "2",  name: "2 — Math / Quantitative Reasoning", need: 1, hint: "STAT C1000 or MATH 7 covers this. Double-counts with major prep." },
+  { id: "2",  name: "2 — Math / Quantitative Reasoning", need: 1, hint: "STAT C1000 or MATH 7 covers this. Double-counts with major prep — free win." },
   { id: "3a", name: "3A — Arts", need: 1, hint: "AHIS 11 likely covers this — verify." },
   { id: "3b", name: "3B — Humanities", need: 1, hint: "Lit, philosophy, history, etc." },
   { id: "4",  name: "4 — Social & Behavioral Sciences", need: 2, hint: "Two courses, two different disciplines. Your ECON courses likely count — verify both apply." },
@@ -688,17 +758,30 @@ const APP_CHECKS = [
   { id: "transcripts", text: "Send final official transcripts after committing", when: "Jul 2028", due: "2028-07-01" },
 ];
 
+/* merged SMC district calendar + UC process timeline */
 const TIMELINE = [
-  { date: new Date("2026-09-13"), label: "Sep 13, 2026", what: "Fall refund deadline", note: "Last day to drop fall classes with refund." },
-  { date: new Date("2026-12-22"), label: "Dec 2026", what: "Fall 2026 grades post", note: "First 4 grades enter your UC GPA. Submit them from the Plan tab." },
-  { date: new Date("2027-06-07"), label: "Jun 2027", what: "Merage transfer advising window (typical)", note: "Merage runs its own advising sessions + google form in early June — watch merage.uci.edu." },
-  { date: new Date("2027-08-01"), label: "Aug 2027", what: "UC app opens for editing", note: "Create account, start PIQ drafts in the App tab." },
-  { date: new Date("2027-09-01"), label: "Sep 1–30, 2027", what: "UCI TAG window (if going Business Econ route)", note: "TAG major must match your primary UC app major. Decide before this window." },
-  { date: new Date("2027-10-01"), label: "Oct 1, 2027", what: "UC application submission opens", note: "Submit window: Oct 1 – Nov 30." },
-  { date: new Date("2027-11-30"), label: "Nov 30, 2027", what: "UC APPLICATION DEADLINE", note: "Hard deadline for Fall 2028 transfer. Don't submit on the last day." },
-  { date: new Date("2028-01-31"), label: "Jan 31, 2028", what: "Transfer Academic Update", note: "Report fall grades + planned spring courses in your UC app." },
-  { date: new Date("2028-03-02"), label: "Mar 2, 2028", what: "FAFSA / CADAA + Cal Grant priority deadline", note: "File even if you think you won't qualify — Cal Grant + Blue & Gold need it." },
-  { date: new Date("2028-04-30"), label: "Spring 2028", what: "Decisions + finish coursework", note: "Complete all major prep + 60 UC-transferable units by end of spring." },
+  { date: "2026-08-31", label: "Aug 31, 2026", src: "smc", what: "Fall 2026 begins", note: "Regular session Aug 31 – Dec 22. Your first four requirement grades start here." },
+  { date: "2026-09-13", label: "Sep 13, 2026", src: "smc", what: "Fall refund deadline", note: "Last day to drop fall classes with a refund (per your Corsair schedule)." },
+  { date: "2026-11-01", label: "~Nov 2026", src: "smc", what: "Winter + Spring 2027 enrollment opens", note: "Appointment dates post on Corsair Connect — enroll the minute yours opens; English comp and calc sections fill fast." },
+  { date: "2026-12-15", label: "Dec 15–22, 2026", src: "smc", what: "Fall finals week → grades post", note: "Submit all four grades in the app when they land. Your UC GPA officially exists after this." },
+  { date: "2026-12-24", label: "Dec 24–31, 2026", src: "smc", what: "Winter break", note: "Campus closed. Rest — Spring 2027 is the heavy one." },
+  { date: "2027-01-04", label: "Jan 4 – Feb 11, 2027", src: "smc", what: "Winter 2027 session (English comp #2)", note: "Six weeks, double pace. One class max." },
+  { date: "2027-02-16", label: "Feb 16, 2027", src: "smc", what: "Spring 2027 begins", note: "Calc 1 + ACCTG 2 + second Econ. Hardest stretch of the whole road — runs to Jun 16, finals Jun 8–16. Spring break Apr 12–16." },
+  { date: "2027-06-07", label: "Jun 2027", src: "uc", what: "Merage transfer advising window (typical)", note: "Merage posts their advising sessions + google form in early June — get on their radar a year before applying." },
+  { date: "2027-06-21", label: "Jun 21 – Jul 30, 2027", src: "smc", what: "Summer 2027 sessions", note: "Optional catch-up window (6-week to Jul 30, 8-week to Aug 13) if spring didn't go to plan." },
+  { date: "2027-08-01", label: "Aug 2027", src: "uc", what: "UC app opens for editing", note: "Create the account, start PIQ drafts in the App tab. Everything you write now is stress you skip in November." },
+  { date: "2027-08-30", label: "Aug 30, 2027", src: "smc", what: "Fall 2027 begins", note: "Calc 2 + Stats while running the application. Runs to Dec 21." },
+  { date: "2027-09-01", label: "Sep 1–30, 2027", src: "uc", what: "UCI TAG window (Business Econ route only)", note: "TAG major must match your primary UC app major — the decision has to be made before this window." },
+  { date: "2027-10-01", label: "Oct 1, 2027", src: "uc", what: "UC application submission opens", note: "Window: Oct 1 – Nov 30." },
+  { date: "2027-11-30", label: "Nov 30, 2027", src: "uc", what: "UC APPLICATION DEADLINE", note: "Hard stop for Fall 2028. Submit by mid-November — the site melts on the last days." },
+  { date: "2027-12-14", label: "Dec 14–21, 2027", src: "smc", what: "Fall finals → the grades UCI checks", note: "These grades go straight into your January TAU. Finish strong." },
+  { date: "2028-01-04", label: "Jan 4 – Feb 10, 2028", src: "smc", what: "Winter 2028 session", note: "Light load. The real assignment this month is the TAU." },
+  { date: "2028-01-31", label: "Jan 31, 2028", src: "uc", what: "Transfer Academic Update due", note: "Log fall grades + planned spring courses in your submitted app. Skipping this can void the application." },
+  { date: "2028-02-14", label: "Feb 14, 2028", src: "smc", what: "Spring 2028 begins — final term", note: "Runs to Jun 13 (finals Jun 6–13, break Apr 10–14). Everything must be complete when it ends." },
+  { date: "2028-03-02", label: "Mar 2, 2028", src: "uc", what: "FAFSA / CADAA + Cal Grant priority deadline", note: "File even if you doubt you qualify — Cal Grant and UC Blue & Gold both need it." },
+  { date: "2028-04-15", label: "Mar–Apr 2028", src: "uc", what: "Decisions arrive", note: "UC transfer decisions typically land through March and April." },
+  { date: "2028-06-06", label: "Jun 6–13, 2028", src: "smc", what: "Spring finals — the finish line", note: "60 units, 7 major prep courses, both English comps, GE: all done here." },
+  { date: "2028-09-20", label: "Late Sep 2028", src: "uc", what: "UCI Fall quarter begins", note: "UCI runs quarters starting late September (Fall 2027 started Sep 20 — expect similar). Enrollment windows post in UCI StudentAccess after you commit." },
 ];
 
 const DEFAULT_META = {
@@ -707,6 +790,7 @@ const DEFAULT_META = {
   links: [
     { id: "l1", title: "ASSIST — SMC → UCI BusAdmin agreement", url: "https://assist.org", note: "Re-check each academic year" },
     { id: "l2", title: "Merage transfer page", url: "https://merage.uci.edu/programs/undergraduate/transfer-students.html", note: "Advising form posts ~June" },
+    { id: "l3", title: "Corsair Connect", url: "https://www.smc.edu", note: "Enrollment appointments + registration" },
   ],
   acts: [
     { id: "a1", name: "SMMZOLO", role: "Founder & Operator", cat: "Business", hrs: "", weeks: "", desc: "Run a social media marketing panel — built the entire frontend myself, handle payments, support, and service fulfillment." },
@@ -737,12 +821,21 @@ function migrateMeta(m) {
   m.acts = (m.acts || JSON.parse(JSON.stringify(DEFAULT_META.acts))).map(a => ({ cat: "Business", weeks: "", ...a }));
   return m;
 }
-
+function mergeWhy() {
+  /* carry explainer text onto stored courses that predate this version */
+  courses.forEach(c => {
+    if (!c.why) {
+      const d = DEFAULT_COURSES.find(x => x.id === c.id);
+      if (d && d.why) c.why = d.why;
+    }
+  });
+}
 function load() {
   try {
     const r = localStorage.getItem(KEY);
     courses = r ? JSON.parse(r) : JSON.parse(JSON.stringify(DEFAULT_COURSES));
   } catch (e) { courses = JSON.parse(JSON.stringify(DEFAULT_COURSES)); }
+  mergeWhy();
   try {
     let m = localStorage.getItem(META_KEY) || localStorage.getItem(OLD_META_KEY);
     meta = migrateMeta(m ? JSON.parse(m) : JSON.parse(JSON.stringify(DEFAULT_META)));
@@ -817,10 +910,28 @@ function overdueChecks() {
   const now = new Date();
   return APP_CHECKS.filter(c => c.due && !meta.appChecks[c.id] && new Date(c.due) < now);
 }
-function daysUntil(d) { return Math.ceil((d - new Date()) / 86400000); }
+function readiness() {
+  const { gpa } = gpaData();
+  const prep = majorPrepDone();
+  const eng = englishDone();
+  const prepPct = prep.done / prep.total;
+  const unitPct = Math.min(completedUnits() / 60, 1);
+  const engPct = eng.done / eng.total;
+  const gpaPct = gpa === null ? null : Math.min(gpa / 3.4, 1);
+  if (gpaPct === null) return prepPct * 0.38 + unitPct * 0.24 + engPct * 0.08 + gePct().pct * 0.20 + appPct().pct * 0.10;
+  return prepPct * 0.32 + unitPct * 0.20 + engPct * 0.07 + gpaPct * 0.15 + gePct().pct * 0.17 + appPct().pct * 0.09;
+}
+function daysUntil(d) { return Math.ceil((new Date(d) - new Date()) / 86400000); }
 function gradeClass(g) { const v = GRADES[g]; return v >= 3.7 ? "g-a" : v >= 2.7 ? "g-b" : v >= 1.7 ? "g-c" : "g-df"; }
 function wordCount(s) { return (s || "").trim() ? s.trim().split(/\s+/).length : 0; }
 function esc(s) { return String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+function currentTermIdx() {
+  const now = new Date();
+  for (let i = 0; i < TERMS.length; i++) {
+    if (now <= new Date(TERMS[i].end + "T23:59")) return i;
+  }
+  return TERMS.length;
+}
 
 /* ---------- score /1000 ---------- */
 function scoreBreakdown() {
@@ -867,91 +978,80 @@ function insights() {
   const prep = majorPrepDone();
   const { gpa, gradedUnits } = gpaData();
 
-  // below-C major prep
   courses.filter(c => c.cat === "major" && c.status === "done" && c.grade && GRADES[c.grade] < 2.0)
-    .forEach(c => out.push({ level: "red", text: `${c.name.split(" — ")[0]} finished below C — it does not satisfy major prep.`, fix: "Plan a retake; UCI needs C or better in all seven." }));
+    .forEach(c => out.push({ level: "red", tab: "stats", text: `${c.name.split(" — ")[0]} finished below C — it does not satisfy major prep.`, fix: "Plan a retake; UCI needs C or better in all seven." }));
 
-  // calc sequencing
   const m7 = courses.find(c => c.id === "math7"), m8 = courses.find(c => c.id === "math8");
   if (m7 && m8 && m7.status !== "done" && m8.status !== "done" && termIdx(m8.term) <= termIdx(m7.term)) {
-    out.push({ level: "red", text: "Calc 2 is scheduled before or alongside Calc 1.", fix: "MATH 8 needs MATH 7 first — move one of them." });
+    out.push({ level: "red", tab: "road", text: "Calc 2 is scheduled before or alongside Calc 1.", fix: "MATH 8 needs MATH 7 first — move one of them." });
   }
 
-  // english comp deadline
   const e2 = courses.find(c => c.id === "engl2");
   if (e2 && e2.status !== "done") {
-    if (termIdx(e2.term) >= termIdx("spr28")) out.push({ level: "amber", text: "Second English comp is parked in the last allowed term (Spring 2028).", fix: "UC requires both English comps done by spring before transfer — earlier is safer." });
+    if (termIdx(e2.term) >= termIdx("spr28")) out.push({ level: "amber", tab: "road", text: "Second English comp is parked in the last allowed term (Spring 2028).", fix: "UC requires both English comps done by spring before transfer — earlier is safer." });
   } else if (!e2 && englishDone().done < 2) {
-    out.push({ level: "red", text: "Second English comp course is missing from the plan.", fix: "Add it — hard requirement, due by Spring 2028." });
+    out.push({ level: "red", tab: "road", text: "Second English comp course is missing from the plan.", fix: "Add it — hard requirement, due by end of Spring 2028 (Jun 13)." });
   }
 
-  // unit load per term
   TERMS.forEach(t => {
     const list = courses.filter(c => c.term === t.id && c.status !== "done");
     const u = list.reduce((s, c) => s + c.units, 0);
-    if (u > 16) out.push({ level: "amber", text: `${t.label.replace(" — current","")} is loaded at ${u} units.`, fix: "Over 16 usually needs a petition at SMC and risks your GPA — consider moving a course." });
+    if (u > 16) out.push({ level: "amber", tab: "road", text: `${t.label} is loaded at ${u} units.`, fix: "Over 16 usually needs a petition at SMC and risks your GPA — consider moving a course." });
   });
 
-  // heavy pairing
   TERMS.forEach(t => {
     const list = courses.filter(c => c.term === t.id && c.status !== "done").map(c => c.name);
-    const hasCalc = list.some(n => n.includes("MATH")), hasAcctg = list.some(n => n.includes("ACCTG"));
-    if (hasCalc && hasAcctg) out.push({ level: "blue", text: `${t.label.replace(" — current","")} pairs calculus with accounting — the two heaviest prep courses.`, fix: "Doable, but protect that term: keep the rest light." });
+    if (list.some(n => n.includes("MATH")) && list.some(n => n.includes("ACCTG")))
+      out.push({ level: "blue", tab: "road", text: `${t.label} pairs calculus with accounting — the two heaviest prep courses.`, fix: "Doable, but protect that term: keep the rest light." });
   });
 
-  // total units
   const totalPlanned = completedUnits() + plannedUnits();
-  if (totalPlanned < 60) out.push({ level: "amber", text: `Current plan totals ${totalPlanned} units — short of the 60 required.`, fix: `Add ${60 - totalPlanned} more transferable units (electives/GE count).` });
+  if (totalPlanned < 60) out.push({ level: "amber", tab: "road", text: `Current plan totals ${totalPlanned} units — short of the 60 required.`, fix: `Add ${60 - totalPlanned} more transferable units (electives/GE count).` });
 
-  // GE gaps
   const untouched = GE_AREAS.filter(a => !(meta.ge[a.id] > 0));
-  if (untouched.length >= 4) out.push({ level: "amber", text: `${untouched.length} Cal-GETC areas have nothing done yet (incl. ${untouched.slice(0,3).map(a => a.name.split(" — ")[1]).join(", ")}).`, fix: "Slot these into Winter/Spring 2028 or verify current courses double-count." });
-  else if (untouched.length > 0) out.push({ level: "blue", text: `${untouched.length} Cal-GETC area${untouched.length > 1 ? "s" : ""} still open: ${untouched.map(a => a.name.split(" — ")[1]).join(", ")}.` });
+  if (untouched.length >= 4) out.push({ level: "amber", tab: "ge", text: `${untouched.length} Cal-GETC areas have nothing done yet (incl. ${untouched.slice(0,3).map(a => a.name.split(" — ")[1]).join(", ")}).`, fix: "Slot these into Winter/Spring 2028 or verify current courses double-count." });
+  else if (untouched.length > 0) out.push({ level: "blue", tab: "ge", text: `${untouched.length} Cal-GETC area${untouched.length > 1 ? "s" : ""} still open: ${untouched.map(a => a.name.split(" — ")[1]).join(", ")}.` });
 
-  // GPA pace
-  if (gpa !== null && gradedUnits >= 6 && gpa < 3.4) out.push({ level: "blue", text: `Cumulative ${gpa.toFixed(2)} is below the 3.4 competitive target.`, fix: "Open \"What do I need from here?\" on the Done tab for the exact average required." });
+  if (gpa !== null && gradedUnits >= 6 && gpa < 3.4) out.push({ level: "blue", tab: "stats", text: `Cumulative ${gpa.toFixed(2)} is below the 3.4 competitive target.`, fix: "Open \"What do I need from here?\" in Stats for the exact average required." });
 
-  // PIQ timing
   const reqPiq = meta.piqs.req;
   if (now >= new Date("2027-08-01") && (!reqPiq || !reqPiq.text || !["revision","final"].includes(reqPiq.status))) {
-    out.push({ level: "amber", text: "Required PIQ (major preparation) isn't near final yet.", fix: "It's the one every reader weighs most for Merage — get it to revision before October." });
+    out.push({ level: "amber", tab: "app", text: "Required PIQ (major preparation) isn't near final yet.", fix: "It's the one every reader weighs most for Merage — get it to revision before October." });
   }
 
-  // overdue app checks
   const od = overdueChecks();
-  if (od.length) out.push({ level: "amber", text: `${od.length} application task${od.length > 1 ? "s are" : " is"} past due: ${od[0].text}${od.length > 1 ? " +" + (od.length - 1) + " more" : ""}.`, fix: "Check them off in the App tab or catch up now." });
+  if (od.length) out.push({ level: "amber", tab: "app", text: `${od.length} application task${od.length > 1 ? "s are" : " is"} past due: ${od[0].text}${od.length > 1 ? " +" + (od.length - 1) + " more" : ""}.`, fix: "Check them off in the App tab or catch up now." });
 
-  // deadline urgency
-  const dl = daysUntil(new Date("2027-11-30"));
-  if (dl > 0 && dl <= 60 && !meta.appChecks.submit) out.push({ level: "red", text: `${dl} days to the UC deadline and the app isn't submitted.`, fix: "Submit early — the site slows badly in the final days." });
+  const dl = daysUntil("2027-11-30");
+  if (dl > 0 && dl <= 60 && !meta.appChecks.submit) out.push({ level: "red", tab: "app", text: `${dl} days to the UC deadline and the app isn't submitted.`, fix: "Submit early — the site slows badly in the final days." });
 
-  // activities
-  if (meta.acts.length < 3) out.push({ level: "blue", text: "Only " + meta.acts.length + " activities logged — the UC app holds up to 20 entries.", fix: "Add work, projects, volunteering — SMC clubs count too." });
+  /* term-start heads-up from SMC calendar */
+  TERMS.forEach(t => {
+    const d = daysUntil(t.start);
+    const hasCourses = courses.some(c => c.term === t.id && c.status !== "done");
+    if (d > 0 && d <= 30 && hasCourses) out.push({ level: "blue", tab: "road", text: `${t.label} starts in ${d} day${d > 1 ? "s" : ""} (${new Date(t.start + "T12:00").toLocaleDateString(undefined,{month:"short",day:"numeric"})}).`, fix: "Confirm enrollment + books now; set those courses to Taking when it begins." });
+  });
 
-  // sim notice
-  if (Object.keys(meta.sim).some(k => meta.sim[k])) out.push({ level: "blue", text: "Grade simulator is active — projected numbers include hypothetical grades." });
+  if (meta.acts.length < 3) out.push({ level: "blue", tab: "app", text: "Only " + meta.acts.length + " activities logged — the UC app holds up to 20 entries.", fix: "Add work, projects, volunteering — SMC clubs count too." });
 
-  // all prep done
-  if (prep.done >= prep.total) out.push({ level: "green", text: "All 7 major prep courses complete. That's the hard part." });
+  if (Object.keys(meta.sim).some(k => meta.sim[k])) out.push({ level: "blue", tab: "stats", text: "Grade simulator is active — projected numbers include hypothetical grades." });
 
-  if (!out.length) out.push({ level: "green", text: "No issues detected. Plan is clean — keep executing." });
+  if (prep.done >= prep.total) out.push({ level: "green", tab: "stats", text: "All 7 major prep courses complete. That's the hard part." });
+
+  if (!out.length) out.push({ level: "green", tab: "road", text: "Road's clear. No issues detected — keep executing." });
   return out;
 }
 
 /* ================= render ================= */
-function renderAll() { renderHeader(); renderInsights(); renderPlan(); renderDone(); renderGe(); renderApp(); renderDates(); maybeCelebrate(); }
+function renderAll() { renderHeader(); renderHero(); renderInsights(); renderRoad(); renderStats(); renderGe(); renderApp(); renderDates(); maybeCelebrate(); }
 
-function setRing(id, vId, pct) {
-  const C = 144.5;
-  document.getElementById(id).style.strokeDashoffset = C * (1 - Math.min(pct, 1));
-  document.getElementById(vId).textContent = Math.round(pct * 100) + "%";
-}
+const TOTAL_MI = 52; /* SMC → UCI down the 405, close enough */
 
 function renderHeader() {
   const { gpa } = gpaData();
   const units = completedUnits();
   const prep = majorPrepDone();
-  const ge = gePct(), app = appPct();
+  const r = readiness();
 
   const gEl = document.getElementById("stGpa");
   gEl.textContent = gpa === null ? "–" : gpa.toFixed(2);
@@ -960,38 +1060,48 @@ function renderHeader() {
   uEl.textContent = units;
   uEl.className = "v " + (units >= 60 ? "ok" : "");
   document.getElementById("stPrep").textContent = prep.done + "/" + prep.total;
-  const dApp = daysUntil(new Date("2027-11-30"));
+  const dApp = daysUntil("2027-11-30");
   document.getElementById("stDays").textContent = dApp > 0 ? dApp : "0";
 
-  setRing("ringPrep", "ringPrepV", prep.done / prep.total);
-  setRing("ringGe", "ringGeV", ge.pct);
-  setRing("ringApp", "ringAppV", app.pct);
-
-  const eng = englishDone();
-  const prepPct = prep.done / prep.total;
-  const unitPct = Math.min(units / 60, 1);
-  const engPct = eng.done / eng.total;
-  const gpaPct = gpa === null ? null : Math.min(gpa / 3.4, 1);
-  let ready;
-  if (gpaPct === null) ready = prepPct * 0.38 + unitPct * 0.24 + engPct * 0.08 + ge.pct * 0.20 + app.pct * 0.10;
-  else ready = prepPct * 0.32 + unitPct * 0.20 + engPct * 0.07 + gpaPct * 0.15 + ge.pct * 0.17 + app.pct * 0.09;
-  document.getElementById("readyBar").style.width = Math.round(ready * 100) + "%";
-  document.getElementById("readyLabel").textContent = "Transfer readiness: " + Math.round(ready * 100) + "%";
+  const driven = r * TOTAL_MI;
+  document.getElementById("milesLeft").textContent = (TOTAL_MI - driven).toFixed(driven > 0 ? 1 : 0);
+  document.getElementById("milesDriven").textContent = driven.toFixed(1) + " mi driven";
+  document.getElementById("readyPct").textContent = Math.round(r * 100) + "% ready";
+  document.getElementById("laneGone").style.width = Math.round(r * 100) + "%";
 
   const active = courses.filter(c => c.status !== "done").length;
   const finished = courses.filter(c => c.status === "done").length;
-  const nP = document.getElementById("nPlan"), nD = document.getElementById("nDone"), nA = document.getElementById("nApp");
-  nP.style.display = active ? "flex" : "none"; nP.textContent = active;
-  nD.style.display = finished ? "flex" : "none"; nD.textContent = finished;
+  const nR = document.getElementById("nRoad"), nS = document.getElementById("nStats"), nA = document.getElementById("nApp");
+  nR.style.display = active ? "flex" : "none"; nR.textContent = active;
+  nS.style.display = finished ? "flex" : "none"; nS.textContent = finished;
   const od = overdueChecks().length;
   nA.style.display = od ? "flex" : "none"; nA.textContent = od;
 }
 
+function renderHero() {
+  const wrap = document.getElementById("heroWrap");
+  const order = { red: 0, amber: 1, blue: 2, green: 3 };
+  const items = insights().sort((a, b) => order[a.level] - order[b.level]);
+  const top = items[0];
+  const kicker = top.level === "red" ? "Fix this first" : top.level === "amber" ? "Next best move" : top.level === "blue" ? "Heads up" : "Status";
+  wrap.innerHTML = `
+    <div class="hero ${top.level}" data-tab="${top.tab || "road"}">
+      <div class="hero-kicker">${kicker}</div>
+      <div class="hero-text">${top.text}</div>
+      ${top.fix ? `<div class="hero-fix">${top.fix}</div>` : ""}
+      <span class="hero-go">Go →</span>
+    </div>`;
+  wrap.querySelector(".hero").addEventListener("click", e => {
+    const tab = document.querySelector(`.tab[data-panel="${e.currentTarget.dataset.tab}"]`);
+    if (tab) tab.click();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+}
+
 function renderInsights() {
   const list = document.getElementById("insightsList");
-  const items = insights();
   const order = { red: 0, amber: 1, blue: 2, green: 3 };
-  items.sort((a, b) => order[a.level] - order[b.level]);
+  const items = insights().sort((a, b) => order[a.level] - order[b.level]);
   list.innerHTML = items.map(i => `
     <div class="insight">
       <div class="ins-dot ${i.level}"></div>
@@ -999,32 +1109,83 @@ function renderInsights() {
     </div>`).join("");
 }
 
-/* ---------- Plan ---------- */
-function loadPill(u) {
-  if (u > 16) return '<span class="load-pill load-over">Overload</span>';
-  if (u >= 14) return '<span class="load-pill load-heavy">Heavy</span>';
-  if (u >= 9)  return '<span class="load-pill load-solid">Solid</span>';
-  return '<span class="load-pill load-light">Light</span>';
+/* ---------- THE ROAD ---------- */
+function ringSvg(pct) {
+  const C = 87.96; /* 2πr, r=14 */
+  return `<svg width="38" height="38"><circle class="bg" cx="19" cy="19" r="14" fill="none" stroke-width="4"/><circle class="fg" cx="19" cy="19" r="14" fill="none" stroke-width="4" stroke-dasharray="${C}" stroke-dashoffset="${C * (1 - pct)}"/></svg><b>${Math.round(pct * 100)}%</b>`;
 }
 
-function renderPlan() {
-  const container = document.getElementById("termsContainer");
+function renderRoad() {
+  const container = document.getElementById("roadContainer");
   container.innerHTML = "";
-  const activeCourses = courses.filter(c => c.status !== "done");
-  if (!activeCourses.length) {
-    container.innerHTML = `<div class="empty">Everything's submitted. 🎓<br>Check the Done tab for your stats.</div>`;
-  } else {
-    TERMS.forEach(term => {
-      const list = activeCourses.filter(c => c.term === term.id);
-      if (!list.length) return;
-      const totUnits = list.reduce((s, c) => s + c.units, 0);
-      const wrap = document.createElement("div");
-      wrap.className = "term";
-      wrap.innerHTML = `<div class="term-head"><div class="term-title">${term.label}</div>${loadPill(totUnits)}<div class="term-units">${totUnits} u</div></div>`;
-      list.forEach(c => wrap.appendChild(courseCard(c)));
-      container.appendChild(wrap);
-    });
-  }
+  const curIdx = currentTermIdx();
+  const now = new Date();
+  let exitNo = 0;
+  let placedYAH = false;
+
+  TERMS.forEach((term, ti) => {
+    const all = courses.filter(c => c.term === term.id);
+    const active = all.filter(c => c.status !== "done");
+    if (!all.length) return;
+    exitNo++;
+
+    /* YOU ARE HERE marker before the current/nearest term */
+    if (!placedYAH && ti >= curIdx) {
+      placedYAH = true;
+      const started = now >= new Date(term.start + "T00:00");
+      const yah = document.createElement("div");
+      yah.className = "youarehere";
+      yah.innerHTML = `<div class="yah-pin"></div><div class="yah-label">You are here</div>
+        <div class="yah-sub">${started ? term.label + " in session — finals " + term.finals : term.label + " starts " + new Date(term.start + "T12:00").toLocaleDateString(undefined,{month:"short",day:"numeric"}) + " (" + Math.max(daysUntil(term.start),0) + " days)"}</div>`;
+      container.appendChild(yah);
+    }
+
+    const totUnits = active.reduce((s, c) => s + c.units, 0);
+    const doneCt = all.filter(c => c.status === "done").length;
+    const pct = all.length ? doneCt / all.length : 0;
+    const isPast = new Date(term.end + "T23:59") < now;
+    const isNext = ti === curIdx || ti === curIdx + 1;
+    const loadCls = totUnits > 16 ? "over" : "";
+    const loadTxt = !active.length ? "Done" : totUnits > 16 ? "Overload" : totUnits >= 14 ? "Heavy" : totUnits >= 9 ? "Solid" : "Light";
+
+    const exit = document.createElement("div");
+    exit.className = "exit" + (isPast ? " past" : "");
+    exit.innerHTML = `
+      <div class="exit-dot"></div>
+      <div class="exit-sign">
+        <div class="es-top">
+          <div>
+            <div class="es-exitno">Exit ${exitNo}</div>
+            <div class="es-name">${term.label}</div>
+            <div class="es-dates">${fmtRange(term)}</div>
+          </div>
+          <div class="es-right">
+            ${active.length ? `<span class="load-pill ${loadCls}">${loadTxt} · ${totUnits}u</span>` : `<span class="load-pill">Cleared</span>`}
+            <div class="es-ring">${ringSvg(pct)}</div>
+          </div>
+        </div>
+        ${term.focus ? `<div class="es-focus">${term.focus}</div>` : ""}
+        ${isNext && !isPast && active.length ? `<div class="es-enroll">📋 Enrollment runs through Corsair Connect — your appointment date posts ~4–6 weeks before term. Enroll the minute it opens; requirement sections fill first.</div>` : ""}
+      </div>
+      <div class="exit-courses"></div>`;
+    const courseWrap = exit.querySelector(".exit-courses");
+    active.forEach(c => courseWrap.appendChild(courseCard(c)));
+    if (!active.length) courseWrap.innerHTML = `<div class="note-preview" style="margin:6px 0 0 2px">All courses submitted — see Stats for grades.</div>`;
+    container.appendChild(exit);
+  });
+
+  /* destination */
+  const dest = document.createElement("div");
+  dest.className = "dest";
+  dest.innerHTML = `
+    <div class="dest-dot"></div>
+    <div class="dest-sign">
+      <div class="d1">Final destination</div>
+      <div class="d2">🎓 UC Irvine — Fall 2028</div>
+      <div class="d3">Quarter system, starts late September. Decisions land Mar–Apr 2028.<br>Keep the pedal down.</div>
+    </div>`;
+  container.appendChild(dest);
+
   document.getElementById("afTerm").innerHTML = TERMS.map(t => `<option value="${t.id}">${t.label}</option>`).join("");
 }
 
@@ -1037,7 +1198,7 @@ function courseCard(c) {
     <div class="c-top">
       <div>
         <div class="c-name">${c.name} <span class="uci">→ ${c.uci}</span></div>
-        <div class="c-meta">${c.units} units${meta.sim[c.id] ? ' · sim: ' + meta.sim[c.id] : ''}</div>
+        <div class="c-meta">${c.units} units${meta.sim[c.id] ? " · sim: " + meta.sim[c.id] : ""}</div>
       </div>
       <div class="c-side">
         <span class="cat-pill ${catPill[0]}">${catPill[1]}</span>
@@ -1057,6 +1218,7 @@ function courseCard(c) {
       <select class="grade-sel"><option value="">Grade…</option>${GRADE_LIST.map(g => `<option value="${g}" ${pendingGrade[c.id] === g ? "selected" : ""}>${g}</option>`).join("")}</select>
       <button class="submit-btn" ${pendingGrade[c.id] ? "" : "disabled"}>Submit ✓</button>
     </div>` : ""}
+    ${c.why ? `<div class="why"><div class="why-t">Why this course matters ▸</div><div class="why-b">${c.why}</div></div>` : ""}
     ${noteOpen[c.id] ? `<textarea class="note-area" placeholder="Notes — professor, section #, reminders…">${esc(c.note)}</textarea>`
       : (c.note ? `<div class="note-preview">✎ ${esc(c.note)}</div>` : "")}
   `;
@@ -1079,6 +1241,8 @@ function courseCard(c) {
     save(); renderAll();
     toast(`${c.name.split(" — ")[0]} submitted · ${c.grade}`);
   });
+  const why = el.querySelector(".why");
+  if (why) why.querySelector(".why-t").addEventListener("click", () => why.classList.toggle("open"));
   el.querySelector(".note-toggle").addEventListener("click", () => { noteOpen[c.id] = !noteOpen[c.id]; renderAll(); });
   const na = el.querySelector(".note-area");
   if (na) na.addEventListener("change", e => { c.note = e.target.value; save(); });
@@ -1091,26 +1255,24 @@ function courseCard(c) {
   return el;
 }
 
-/* ---------- Done tab ---------- */
-function renderDone() {
+/* ---------- Stats tab ---------- */
+function renderStats() {
   const { gpa, gradedUnits } = gpaData();
   const prepGpa = gpaData("major").gpa;
   const doneCourses = courses.filter(c => c.status === "done");
 
-  // strength
   const st = strength();
   const sl = document.getElementById("strengthLabel");
   sl.textContent = st.label; sl.className = "strength-label " + st.cls;
   document.getElementById("strengthPin").style.left = "calc(" + st.pos + "% - 2px)";
   document.getElementById("strengthReasons").innerHTML = st.reasons.map(r => `<div class="reason">${r}</div>`).join("");
 
-  // gpa card
   const big = document.getElementById("gpaBig");
   const verdict = document.getElementById("gpaVerdict");
   const marker = document.getElementById("gpaMarker");
   if (gpa === null) {
     big.textContent = "–"; big.className = "big-gpa";
-    verdict.textContent = "Nothing graded yet. When grades post, hit \"Enter grade\" on the Plan tab and submit.";
+    verdict.textContent = "Nothing graded yet. When grades post (Dec 15–22 for fall), hit \"Enter grade\" on the Road and submit.";
     marker.style.left = "0%";
   } else {
     big.textContent = gpa.toFixed(2);
@@ -1136,7 +1298,7 @@ function renderDone() {
 
   const listEl = document.getElementById("doneList");
   if (!doneCourses.length) {
-    listEl.innerHTML = `<div class="empty">No finished courses yet.<br>Submit grades from the Plan tab and they land here.</div>`;
+    listEl.innerHTML = `<div class="empty">No finished courses yet.<br>Submit grades from the Road and they land here.</div>`;
     return;
   }
   listEl.innerHTML = "";
@@ -1148,7 +1310,7 @@ function renderDone() {
     const tGpa = un ? (pts / un).toFixed(2) : "–";
     const wrap = document.createElement("div");
     wrap.className = "term";
-    wrap.innerHTML = `<div class="term-head"><div class="term-title">${term.label.replace(" — current","")}</div><div class="term-units">term GPA ${tGpa}</div></div>`;
+    wrap.innerHTML = `<div class="score-head" style="margin:14px 0 7px"><span style="text-transform:uppercase;letter-spacing:0.08em;font-size:0.7rem;color:var(--mut)">${term.label}</span><span>term GPA ${tGpa}</span></div>`;
     list.forEach(c => {
       const belowC = c.cat === "major" && c.grade && GRADES[c.grade] < 2.0;
       const row = document.createElement("div");
@@ -1162,7 +1324,7 @@ function renderDone() {
         </div>
         <div class="dc-actions">
           <button class="mini-btn edit">Edit grade</button>
-          <button class="mini-btn back">↩ To plan</button>
+          <button class="mini-btn back">↩ To road</button>
         </div>`;
       row.querySelector(".edit").addEventListener("click", () => {
         const g = prompt("New grade for " + c.name + " (A, A-, B+, B, B-, C+, C, C-, D, F):", c.grade || "");
@@ -1173,7 +1335,7 @@ function renderDone() {
       });
       row.querySelector(".back").addEventListener("click", () => {
         c.status = "progress"; c.grade = null;
-        save(); renderAll(); toast("Moved back to plan");
+        save(); renderAll(); toast("Moved back to the road");
       });
       wrap.appendChild(row);
     });
@@ -1191,9 +1353,8 @@ function renderSim() {
     const d = proj.gpa - gpa;
     pd.textContent = (d >= 0 ? "+" : "") + d.toFixed(2) + " vs current";
     pd.className = "pd " + (d >= 0 ? "up" : "down");
-  } else if (proj.simActive) {
-    pd.textContent = "projected"; pd.className = "pd";
-  } else { pd.textContent = "no sim grades set"; pd.className = "pd"; }
+  } else if (proj.simActive) { pd.textContent = "projected"; pd.className = "pd"; }
+  else { pd.textContent = "no sim grades set"; pd.className = "pd"; }
 
   const list = document.getElementById("simList");
   const targets = courses.filter(c => c.status !== "done" && c.cat !== "opt");
@@ -1236,12 +1397,11 @@ function drawChart() {
     termData.push({ short: t.short, term: p / u, cum: cumP / cumU });
   });
 
-  const mutedLine = getComputedStyle(document.documentElement).getPropertyValue("--line2").trim() || "#efece3";
+  const mutedLine = getComputedStyle(document.documentElement).getPropertyValue("--line2").trim() || "#edeae1";
   const mutedText = getComputedStyle(document.documentElement).getPropertyValue("--mut2").trim() || "#9a937f";
   const pad = { l: 30, r: 10, t: 10, b: 22 };
   const y = v => pad.t + (4.0 - v) / 2.0 * (H - pad.t - pad.b);
 
-  // grid
   x.strokeStyle = mutedLine; x.fillStyle = mutedText;
   x.font = "10px -apple-system, sans-serif"; x.lineWidth = 1;
   [2.0, 2.5, 3.0, 3.5, 4.0].forEach(v => {
@@ -1249,18 +1409,13 @@ function drawChart() {
     x.fillText(v.toFixed(1), 4, y(v) + 3);
   });
 
-  if (!termData.length) {
-    x.fillText("No graded terms yet", pad.l + 10, H / 2);
-    return;
-  }
+  if (!termData.length) { x.fillText("No graded terms yet", pad.l + 10, H / 2); return; }
   const xs = i => termData.length === 1 ? (pad.l + W - pad.r) / 2 : pad.l + i * (W - pad.l - pad.r) / (termData.length - 1);
 
-  // cumulative line
-  x.strokeStyle = "#7fa88a"; x.lineWidth = 2.5;
+  x.strokeStyle = "#4d9e74"; x.lineWidth = 2.5;
   x.beginPath();
   termData.forEach((d, i) => i ? x.lineTo(xs(i), y(d.cum)) : x.moveTo(xs(i), y(d.cum)));
   x.stroke();
-  // term points + thin line
   x.strokeStyle = "#7ba3d0"; x.lineWidth = 1.2;
   x.beginPath();
   termData.forEach((d, i) => i ? x.lineTo(xs(i), y(d.term)) : x.moveTo(xs(i), y(d.term)));
@@ -1268,7 +1423,7 @@ function drawChart() {
   termData.forEach((d, i) => {
     x.fillStyle = "#7ba3d0";
     x.beginPath(); x.arc(xs(i), y(d.term), 3.5, 0, 7); x.fill();
-    x.fillStyle = "#7fa88a";
+    x.fillStyle = "#4d9e74";
     x.beginPath(); x.arc(xs(i), y(d.cum), 3.5, 0, 7); x.fill();
     x.fillStyle = mutedText;
     x.fillText(d.short, xs(i) - 10, H - 6);
@@ -1373,7 +1528,6 @@ function renderApp() {
     cl.appendChild(row);
   });
 
-  // PIQs
   const pl = document.getElementById("piqList");
   pl.innerHTML = "";
   PIQS.forEach(p => {
@@ -1399,8 +1553,7 @@ function renderApp() {
     el.querySelectorAll(".piq-status button").forEach(b => {
       b.addEventListener("click", () => {
         meta.piqs[p.id] = { ...d, status: b.dataset.s, updated: Date.now() };
-        save(); renderApp(); renderInsights();
-        // keep this one open
+        save(); renderApp(); renderInsights(); renderHero();
         pl.querySelectorAll(".piq").forEach(x => { if (x.querySelector(".piq-title").textContent === p.title) x.classList.add("open"); });
       });
     });
@@ -1419,7 +1572,6 @@ function renderApp() {
     pl.appendChild(el);
   });
 
-  // activities
   const al = document.getElementById("actList");
   al.innerHTML = "";
   meta.acts.forEach(a => {
@@ -1446,7 +1598,6 @@ function renderApp() {
     al.appendChild(el);
   });
 
-  // links
   const ll = document.getElementById("linksList");
   ll.innerHTML = "";
   meta.links.forEach(l => {
@@ -1469,24 +1620,33 @@ function renderApp() {
 /* ---------- Dates ---------- */
 function renderDates() {
   const now = new Date();
-  const open = daysUntil(new Date("2027-10-01"));
-  const dl = daysUntil(new Date("2027-11-30"));
+  const open = daysUntil("2027-10-01");
+  const dl = daysUntil("2027-11-30");
   document.getElementById("cdApp").textContent = open > 0 ? open + " days" : "Open";
   document.getElementById("cdDeadline").textContent = dl > 0 ? dl + " days" : "Passed";
+  document.getElementById("cdDeadlineSign").className = "cd-sign" + (dl > 0 && dl <= 90 ? " urgent" : "");
+
   let nextFound = false;
-  document.getElementById("timeline").innerHTML = TIMELINE.map((t, i) => {
-    const past = t.date < now;
+  let lastYr = "";
+  let html = "";
+  TIMELINE.forEach((t, i) => {
+    const d = new Date(t.date + "T12:00");
+    const yr = t.date.slice(0, 4);
+    if (yr !== lastYr) { lastYr = yr; html += `<div class="tl-yr">${yr}</div>`; }
+    const past = d < now;
     let cls = past ? "past" : "";
     if (!past && !nextFound) { cls = "next"; nextFound = true; }
-    return `<div class="tl-item">
-      <div class="tl-rail"><div class="tl-dot ${cls}"></div>${i < TIMELINE.length - 1 ? '<div class="tl-line"></div>' : ""}</div>
+    const srcTag = t.src === "smc" ? '<span class="tl-src src-smc">SMC</span>' : '<span class="tl-src src-uc">UC</span>';
+    html += `<div class="tl-item">
+      <div class="tl-rail"><div class="tl-dot ${t.src === "smc" && !cls ? "smc" : cls}${t.src === "smc" && cls === "past" ? " smc" : ""}"></div>${i < TIMELINE.length - 1 ? '<div class="tl-line"></div>' : ""}</div>
       <div class="tl-body">
-        <div class="tl-date">${t.label}${cls === "next" ? " · NEXT UP" : ""}</div>
+        <div class="tl-date">${t.label}${cls === "next" ? " · NEXT UP" : ""}${srcTag}</div>
         <div class="tl-what">${t.what}</div>
         <div class="tl-note">${t.note}</div>
       </div>
     </div>`;
-  }).join("");
+  });
+  document.getElementById("timeline").innerHTML = html;
 }
 
 /* ---------- confetti ---------- */
@@ -1501,11 +1661,14 @@ function maybeCelebrate() {
 }
 function confettiBurst() {
   const cv = document.getElementById("confetti");
+  if (!cv || !cv.getContext) return;
+  const x = cv.getContext("2d");
+  if (!x) return;
   const dpr = window.devicePixelRatio || 1;
   cv.width = innerWidth * dpr; cv.height = innerHeight * dpr;
   cv.style.width = innerWidth + "px"; cv.style.height = innerHeight + "px";
-  const x = cv.getContext("2d"); x.scale(dpr, dpr);
-  const colors = ["#7fa88a", "#7ba3d0", "#e8b46a", "#d3765c", "#cfe0b8"];
+  x.scale(dpr, dpr);
+  const colors = ["#4d9e74", "#7ba3d0", "#e8c04a", "#d4795f", "#a8d8bc"];
   const parts = Array.from({length: 90}, () => ({
     px: innerWidth / 2, py: innerHeight * 0.3,
     vx: (Math.random() - 0.5) * 10, vy: -Math.random() * 9 - 3,
@@ -1537,7 +1700,6 @@ function buildReport() {
   const active = courses.filter(c => c.status !== "done");
   const issues = insights().filter(i => i.level === "red" || i.level === "amber");
   const d = new Date();
-
   document.getElementById("printReport").innerHTML = `
     <h1>Transfer Progress Report — SMC → UCI Business Administration</h1>
     <p>Prepared ${d.toLocaleDateString()} · Target: Fall 2028 · Paul Merage School of Business (no TAG for this major)</p>
@@ -1552,17 +1714,17 @@ function buildReport() {
     <h2>Completed courses</h2>
     ${doneCourses.length ? `<table><tr><th>Course</th><th>UCI equiv</th><th>Units</th><th>Grade</th></tr>
       ${doneCourses.map(c => `<tr><td>${esc(c.name)}</td><td>${esc(c.uci)}</td><td>${c.units}</td><td>${c.grade || "—"}</td></tr>`).join("")}</table>` : "<p>None yet.</p>"}
-    <h2>Planned / in progress</h2>
-    <table><tr><th>Term</th><th>Course</th><th>UCI equiv</th><th>Units</th><th>Status</th></tr>
-      ${active.map(c => `<tr><td>${TERMS.find(t => t.id === c.term).label.replace(" — current","")}</td><td>${esc(c.name)}</td><td>${esc(c.uci)}</td><td>${c.units}</td><td>${c.status === "progress" ? "Taking" : "Planned"}</td></tr>`).join("")}</table>
+    <h2>Planned / in progress (SMC district calendar dates)</h2>
+    <table><tr><th>Term</th><th>Dates</th><th>Course</th><th>UCI equiv</th><th>Units</th><th>Status</th></tr>
+      ${active.map(c => { const t = TERMS.find(x => x.id === c.term); return `<tr><td>${t.label}</td><td>${fmtRange(t)}</td><td>${esc(c.name)}</td><td>${esc(c.uci)}</td><td>${c.units}</td><td>${c.status === "progress" ? "Taking" : "Planned"}</td></tr>`; }).join("")}</table>
     <h2>Flags to discuss</h2>
     ${issues.length ? `<ul>${issues.map(i => `<li>${i.text}${i.fix ? " — " + i.fix : ""}</li>`).join("")}</ul>` : "<p>No open flags.</p>"}
     <h2>Questions for this meeting</h2>
     <ul>
       <li>Is ECON C2001 micro or macro under the new numbering — and which second econ course should I take?</li>
       <li>Full Cal-GETC or minimum GE + major prep for Merage?</li>
-      <li>Which second English comp course counts, and does it fit Winter 2027?</li>
-      <li>Am I on track for 60 UC-transferable units by Spring 2028?</li>
+      <li>Which second English comp course counts, and does it fit Winter 2027 (Jan 4 – Feb 11)?</li>
+      <li>Am I on track for 60 UC-transferable units by end of Spring 2028 (Jun 13)?</li>
       <li>TAG Business Econ vs straight Business Admin application — which is smarter for my numbers?</li>
       <li>Do any of my courses double-count for Cal-GETC areas and major prep?</li>
     </ul>`;
@@ -1572,14 +1734,14 @@ function buildReport() {
 /* ---------- search ---------- */
 function buildSearchIndex() {
   const idx = [];
-  courses.forEach(c => idx.push({ kind: "Course", title: c.name, snip: `${TERMS.find(t => t.id === c.term).label} · ${c.units}u · ${c.status}${c.grade ? " · " + c.grade : ""}${c.note ? " · " + c.note : ""}`, tab: c.status === "done" ? "done" : "plan", text: (c.name + " " + c.uci + " " + (c.note || "")).toLowerCase() }));
+  courses.forEach(c => idx.push({ kind: "Course", title: c.name, snip: `${TERMS.find(t => t.id === c.term).label} · ${c.units}u · ${c.status}${c.grade ? " · " + c.grade : ""}${c.note ? " · " + c.note : ""}`, tab: c.status === "done" ? "stats" : "road", text: (c.name + " " + c.uci + " " + (c.note || "")).toLowerCase() }));
   PIQS.forEach(p => { const d = meta.piqs[p.id]; idx.push({ kind: "PIQ", title: p.title, snip: d && d.text ? d.text.slice(0, 90) : "No draft yet", tab: "app", text: (p.title + " " + (d ? d.text : "")).toLowerCase() }); });
   APP_CHECKS.forEach(c => idx.push({ kind: "Checklist", title: c.text, snip: c.when, tab: "app", text: (c.text + " " + c.when).toLowerCase() }));
   GE_AREAS.forEach(a => idx.push({ kind: "Cal-GETC", title: a.name, snip: a.hint, tab: "ge", text: (a.name + " " + a.hint).toLowerCase() }));
   TIMELINE.forEach(t => idx.push({ kind: "Deadline", title: t.what, snip: t.label + " · " + t.note, tab: "dates", text: (t.what + " " + t.label + " " + t.note).toLowerCase() }));
   meta.acts.forEach(a => idx.push({ kind: "Activity", title: a.name, snip: a.role + (a.desc ? " · " + a.desc.slice(0, 70) : ""), tab: "app", text: (a.name + " " + a.role + " " + a.desc).toLowerCase() }));
   meta.links.forEach(l => idx.push({ kind: "Link", title: l.title, snip: l.note || l.url || "", tab: "app", text: (l.title + " " + (l.note || "") + " " + (l.url || "")).toLowerCase() }));
-  meta.goals.forEach(g => idx.push({ kind: "Goal", title: g.title, snip: g.progress + "% complete", tab: "done", text: g.title.toLowerCase() }));
+  meta.goals.forEach(g => idx.push({ kind: "Goal", title: g.title, snip: g.progress + "% complete", tab: "stats", text: g.title.toLowerCase() }));
   return idx;
 }
 function runSearch(q) {
@@ -1587,7 +1749,7 @@ function runSearch(q) {
   q = q.trim().toLowerCase();
   if (!q) { res.innerHTML = ""; return; }
   const hits = buildSearchIndex().filter(i => i.text.includes(q)).slice(0, 25);
-  res.innerHTML = hits.length ? hits.map((h, i) => `
+  res.innerHTML = hits.length ? hits.map(h => `
     <div class="sr" data-tab="${h.tab}">
       <div class="sr-kind">${h.kind}</div>
       <div class="sr-title">${esc(h.title)}</div>
@@ -1608,7 +1770,7 @@ document.querySelectorAll(".tab").forEach(tab => {
     document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
     tab.classList.add("active");
     document.getElementById("panel-" + tab.dataset.panel).classList.add("active");
-    if (tab.dataset.panel === "done") drawChart();
+    if (tab.dataset.panel === "stats") drawChart();
   });
 });
 document.querySelectorAll(".stat").forEach(s => {
@@ -1709,8 +1871,8 @@ document.getElementById("bkImport").addEventListener("click", () => {
   if (!area.classList.contains("open")) { area.classList.add("open"); area.value = ""; area.focus(); return; }
   try {
     const data = JSON.parse(area.value);
-    if (data.courses && Array.isArray(data.courses)) { courses = data.courses; meta = migrateMeta(data.meta || meta); }
-    else if (Array.isArray(data)) { courses = data; }
+    if (data.courses && Array.isArray(data.courses)) { courses = data.courses; meta = migrateMeta(data.meta || meta); mergeWhy(); }
+    else if (Array.isArray(data)) { courses = data; mergeWhy(); }
     else throw new Error("bad shape");
     save(); renderAll();
     area.classList.remove("open");
@@ -1718,7 +1880,8 @@ document.getElementById("bkImport").addEventListener("click", () => {
   } catch (e) { toast("Invalid data — paste an export"); }
 });
 window.addEventListener("resize", () => {
-  if (!document.getElementById("chartCard").classList.contains("closed")) drawChart();
+  const cc = document.getElementById("chartCard");
+  if (cc && !cc.classList.contains("closed")) drawChart();
 });
 
 load();
