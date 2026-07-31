@@ -13,62 +13,77 @@
 <title>UCI Transfer HQ</title>
 <style>
   :root {
-    --ink: #141b28;
-    --ink2: #232e42;
-    --paper: #f4f2ec;
-    --card: #ffffff;
-    --line: #ddd7ca;
-    --green: #2f6b4f;
-    --amber: #b5772e;
-    --red: #9c3a26;
-    --blue: #2e5a8f;
-    --mut: #756f60;
+    --ink: #141b28; --ink2: #232e42;
+    --paper: #f4f2ec; --card: #ffffff; --card2: #f7f5ef;
+    --line: #ddd7ca; --line2: #efece3;
+    --green: #2f6b4f; --amber: #b5772e; --red: #9c3a26; --blue: #2e5a8f;
+    --mut: #756f60; --mut2: #9a937f;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #eef0f4; --ink2: #1c2536;
+      --paper: #10161f; --card: #1a2230; --card2: #212b3c;
+      --line: #2d3950; --line2: #232e42;
+      --green: #6fae8b; --amber: #d99c52; --red: #d3765c; --blue: #7ba3d0;
+      --mut: #93a0b5; --mut2: #6b7891;
+    }
+    header { background: #0b0f16 !important; }
+    .tabs { background: var(--paper) !important; }
+    .tab { background: var(--card); }
+    .tab.active { background: var(--ink2) !important; color: #eef0f4 !important; border-color: var(--ink2) !important; }
+    .seg { background: var(--card2); }
+    .seg button.on-planned { background: var(--card); color: var(--ink); }
+    input, select, textarea { background: var(--card2) !important; color: var(--ink) !important; border-color: var(--line) !important; }
+    #searchOverlay { background: rgba(10,14,20,0.96) !important; }
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body { margin: 0; }
   body {
-    background: var(--paper);
-    color: var(--ink);
+    background: var(--paper); color: var(--ink);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     padding-bottom: 80px;
   }
   .wrap { max-width: 680px; margin: 0 auto; padding: 0 14px; }
 
   /* ---------- header ---------- */
-  header {
-    background: var(--ink);
-    color: var(--paper);
-    padding: max(18px, env(safe-area-inset-top)) 14px 16px;
-    margin-bottom: 12px;
-  }
+  header { background: #141b28; color: #f4f2ec; padding: max(18px, env(safe-area-inset-top)) 14px 16px; margin-bottom: 12px; }
   header .wrap { padding: 0; }
+  .hd-row { display: flex; justify-content: space-between; align-items: flex-start; }
   .hd-title { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.01em; }
   .hd-sub { font-size: 0.72rem; opacity: 0.65; margin-top: 2px; }
+  .hd-tools { display: flex; gap: 6px; }
+  .tool-btn {
+    border: 1px solid rgba(244,242,236,0.25); background: rgba(244,242,236,0.08);
+    color: #f4f2ec; border-radius: 16px; font-size: 0.68rem; font-weight: 700;
+    padding: 6px 11px; cursor: pointer; white-space: nowrap;
+  }
   .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 14px; }
-  .stat { background: var(--ink2); border-radius: 10px; padding: 10px 8px; text-align: center; }
+  .stat { background: #232e42; border-radius: 10px; padding: 10px 8px; text-align: center; cursor: pointer; }
   .stat .v { font-size: 1.05rem; font-weight: 700; font-variant-numeric: tabular-nums; }
   .stat .l { font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.6; margin-top: 2px; }
-  .stat .v.ok { color: #9fd0ae; }
-  .stat .v.warn { color: #e8b46a; }
-  .stat .v.bad { color: #e88a6a; }
-  .readiness-bar-track { height: 8px; background: rgba(244,242,236,0.12); border-radius: 6px; overflow: hidden; margin-top: 12px; }
+  .stat .v.ok { color: #9fd0ae; } .stat .v.warn { color: #e8b46a; } .stat .v.bad { color: #e88a6a; }
+
+  .rings { display: flex; gap: 14px; margin-top: 14px; align-items: center; }
+  .ring { position: relative; width: 54px; height: 54px; flex-shrink: 0; }
+  .ring svg { transform: rotate(-90deg); }
+  .ring .bg { stroke: rgba(244,242,236,0.12); }
+  .ring .fg { stroke: #7fa88a; stroke-linecap: round; transition: stroke-dashoffset 0.5s ease; }
+  .ring.r2 .fg { stroke: #7ba3d0; }
+  .ring.r3 .fg { stroke: #e8b46a; }
+  .ring .rv { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .ring .rv b { font-size: 0.72rem; font-variant-numeric: tabular-nums; }
+  .ring .rv span { font-size: 0.44rem; text-transform: uppercase; letter-spacing: 0.04em; opacity: 0.6; }
+  .ready-side { flex: 1; }
+  .readiness-bar-track { height: 8px; background: rgba(244,242,236,0.12); border-radius: 6px; overflow: hidden; }
   .readiness-bar { height: 100%; border-radius: 6px; background: linear-gradient(90deg,#7fa88a,#cfe0b8); transition: width 0.4s ease; }
   .readiness-label { font-size: 0.66rem; opacity: 0.6; margin-top: 5px; }
 
   /* ---------- tabs ---------- */
-  .tabs { display: flex; gap: 6px; margin-bottom: 12px; position: sticky; top: 0; z-index: 10; background: var(--paper); padding: 8px 0; }
-  .tab {
-    flex: 1; text-align: center; font-size: 0.74rem; font-weight: 700;
-    padding: 9px 2px; border-radius: 20px; border: 1px solid var(--line);
-    background: var(--card); color: var(--mut); cursor: pointer; position: relative;
-  }
-  .tab.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-  .tab .n {
-    position: absolute; top: -4px; right: 2px;
-    background: var(--amber); color: #fff; font-size: 0.58rem;
-    min-width: 15px; height: 15px; border-radius: 8px;
-    display: flex; align-items: center; justify-content: center; padding: 0 3px;
-  }
+  .tabs { display: flex; gap: 5px; margin-bottom: 12px; position: sticky; top: 0; z-index: 10; background: var(--paper); padding: 8px 0; }
+  .tab { flex: 1; text-align: center; font-size: 0.72rem; font-weight: 700; padding: 9px 1px; border-radius: 18px; border: 1px solid var(--line); background: var(--card); color: var(--mut); cursor: pointer; position: relative; }
+  .tab.active { background: #141b28; color: #f4f2ec; border-color: #141b28; }
+  .tab .n { position: absolute; top: -4px; right: 1px; background: var(--amber); color: #fff; font-size: 0.56rem; min-width: 15px; height: 15px; border-radius: 8px; display: flex; align-items: center; justify-content: center; padding: 0 3px; }
+  .tab .n.red { background: var(--red); }
 
   .panel { display: none; }
   .panel.active { display: block; animation: fadeIn 0.18s ease; }
@@ -76,15 +91,39 @@
 
   /* ---------- cards ---------- */
   .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 15px; margin-bottom: 12px; }
-  .card h3 { margin: 0 0 4px; font-size: 0.9rem; }
+  .card h3 { margin: 0 0 4px; font-size: 0.9rem; display: flex; justify-content: space-between; align-items: center; }
   .card .hint { font-size: 0.74rem; color: var(--mut); line-height: 1.5; }
+  .card .hint b { color: var(--ink); }
+  .card.clps h3 { cursor: pointer; }
+  .card.clps h3::after { content: "▾"; font-size: 0.8rem; color: var(--mut2); transition: transform 0.15s; }
+  .card.clps.closed h3::after { transform: rotate(-90deg); }
+  .card.clps.closed h3 { margin-bottom: 0; }
+  .card.clps.closed .clps-body { display: none; }
 
+  /* ---------- insights ---------- */
+  .insight { display: flex; gap: 10px; align-items: flex-start; padding: 9px 0; border-bottom: 1px solid var(--line2); }
+  .insight:last-child { border-bottom: none; padding-bottom: 0; }
+  .insight:first-child { padding-top: 0; }
+  .ins-dot { width: 9px; height: 9px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+  .ins-dot.red { background: var(--red); box-shadow: 0 0 0 3px rgba(156,58,38,0.15); }
+  .ins-dot.amber { background: var(--amber); }
+  .ins-dot.blue { background: var(--blue); }
+  .ins-dot.green { background: var(--green); }
+  .ins-text { font-size: 0.79rem; line-height: 1.45; flex: 1; }
+  .ins-text .fix { display: block; font-size: 0.71rem; color: var(--mut); margin-top: 1px; }
+
+  /* ---------- plan ---------- */
   .term { margin-bottom: 18px; }
-  .term-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 7px; }
-  .term-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--mut); font-weight: 700; }
-  .term-units { font-size: 0.66rem; color: #9a937f; font-variant-numeric: tabular-nums; }
+  .term-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px; gap: 8px; }
+  .term-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--mut); font-weight: 700; flex: 1; }
+  .term-units { font-size: 0.66rem; color: var(--mut2); font-variant-numeric: tabular-nums; }
+  .load-pill { font-size: 0.58rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; padding: 3px 8px; border-radius: 10px; }
+  .load-light { background: #e5e2d8; color: #756f60; }
+  .load-solid { background: #dcead4; color: #2f6b4f; }
+  .load-heavy { background: #f4e3cc; color: #b5772e; }
+  .load-over { background: #f2dbd4; color: #9c3a26; }
 
-  .course { background: var(--card); border: 1px solid var(--line); border-radius: 11px; padding: 12px; margin-bottom: 8px; transition: border-color 0.15s; }
+  .course { background: var(--card); border: 1px solid var(--line); border-radius: 11px; padding: 12px; margin-bottom: 8px; }
   .course.taking { border-left: 4px solid var(--amber); }
   .c-top { display: flex; justify-content: space-between; gap: 8px; align-items: flex-start; }
   .c-name { font-weight: 650; font-size: 0.9rem; line-height: 1.25; }
@@ -92,173 +131,265 @@
   .c-meta { font-size: 0.7rem; color: var(--mut); margin-top: 3px; }
   .c-side { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex-shrink: 0; }
   .cat-pill { font-size: 0.58rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; padding: 3px 7px; border-radius: 12px; }
-  .cat-major { background: #f2dbd4; color: var(--red); }
-  .cat-english { background: #dbe4f0; color: var(--blue); }
-  .cat-ge { background: #e5e2d8; color: var(--mut); }
+  .cat-major { background: #f2dbd4; color: #9c3a26; }
+  .cat-english { background: #dbe4f0; color: #2e5a8f; }
+  .cat-ge { background: #e5e2d8; color: #756f60; }
   .cat-opt { background: #efe9db; color: #8a7f5e; }
-  .icon-btn { border: none; background: none; color: #b3ab99; font-size: 0.95rem; cursor: pointer; padding: 0 2px; line-height: 1; }
+  .icon-btn { border: none; background: none; color: var(--mut2); font-size: 0.95rem; cursor: pointer; padding: 0 2px; line-height: 1; }
 
-  /* segmented status control */
-  .seg { display: flex; background: #efece3; border-radius: 10px; padding: 3px; margin-top: 10px; }
-  .seg button {
-    flex: 1; border: none; background: none; padding: 8px 4px;
-    font-size: 0.72rem; font-weight: 700; color: var(--mut);
-    border-radius: 8px; cursor: pointer; transition: all 0.12s;
-  }
+  .seg { display: flex; background: var(--line2); border-radius: 10px; padding: 3px; margin-top: 10px; }
+  .seg button { flex: 1; border: none; background: none; padding: 8px 4px; font-size: 0.72rem; font-weight: 700; color: var(--mut); border-radius: 8px; cursor: pointer; transition: all 0.12s; }
   .seg button.on-planned { background: var(--card); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
-  .seg button.on-taking { background: #f4e3cc; color: var(--amber); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
-  .seg button.on-grade { background: #dcead4; color: var(--green); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .seg button.on-taking { background: #f4e3cc; color: #b5772e; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .seg button.on-grade { background: #dcead4; color: #2f6b4f; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
 
-  /* grade submit row */
   .submit-row { display: flex; gap: 8px; margin-top: 10px; animation: fadeIn 0.15s ease; }
-  .grade-sel {
-    flex: 1; font-size: 0.84rem; font-weight: 700; padding: 9px 10px;
-    border-radius: 9px; border: 1px solid var(--line); background: #fff; color: var(--ink);
-  }
-  .submit-btn {
-    flex: 1.2; border: none; border-radius: 9px; background: var(--green); color: #fff;
-    font-size: 0.8rem; font-weight: 700; cursor: pointer; padding: 9px;
-  }
-  .submit-btn:disabled { background: #b7c9b0; cursor: default; }
-
-  /* notes */
-  .note-area {
-    width: 100%; margin-top: 9px; padding: 8px 10px; border-radius: 8px;
-    border: 1px solid var(--line); font-size: 0.78rem; font-family: inherit;
-    color: var(--ink); background: #fdfcf9; resize: vertical; min-height: 40px;
-  }
+  .grade-sel { flex: 1; font-size: 0.84rem; font-weight: 700; padding: 9px 10px; border-radius: 9px; border: 1px solid var(--line); background: var(--card); color: var(--ink); }
+  .submit-btn { flex: 1.2; border: none; border-radius: 9px; background: #2f6b4f; color: #fff; font-size: 0.8rem; font-weight: 700; cursor: pointer; padding: 9px; }
+  .submit-btn:disabled { background: #9db8a4; cursor: default; }
+  .note-area { width: 100%; margin-top: 9px; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--line); font-size: 0.78rem; font-family: inherit; color: var(--ink); background: var(--card2); resize: vertical; min-height: 40px; }
   .note-preview { font-size: 0.72rem; color: #8a7f5e; margin-top: 7px; font-style: italic; }
 
-  .add-btn {
-    width: 100%; padding: 11px; border-radius: 11px;
-    border: 1px dashed #b3ab99; background: none; color: var(--mut);
-    font-size: 0.8rem; font-weight: 600; cursor: pointer; margin-top: 2px;
-  }
+  .add-btn { width: 100%; padding: 11px; border-radius: 11px; border: 1px dashed var(--mut2); background: none; color: var(--mut); font-size: 0.8rem; font-weight: 600; cursor: pointer; margin-top: 2px; }
   .add-form { background: var(--card); border: 1px solid var(--line); border-radius: 11px; padding: 12px; margin-top: 8px; display: none; }
   .add-form.open { display: block; }
-  .add-form input, .add-form select {
-    width: 100%; padding: 9px 10px; border-radius: 8px; border: 1px solid var(--line);
-    font-size: 0.85rem; margin-bottom: 8px; background: #fff; color: var(--ink);
-  }
+  .add-form input, .add-form select, .add-form textarea { width: 100%; padding: 9px 10px; border-radius: 8px; border: 1px solid var(--line); font-size: 0.85rem; margin-bottom: 8px; background: var(--card); color: var(--ink); font-family: inherit; }
   .af-row { display: flex; gap: 8px; }
   .af-row > * { flex: 1; }
-  .af-save { width: 100%; padding: 10px; border-radius: 9px; border: none; background: var(--ink); color: var(--paper); font-weight: 700; font-size: 0.82rem; cursor: pointer; }
-
+  .af-save { width: 100%; padding: 10px; border-radius: 9px; border: none; background: #141b28; color: #f4f2ec; font-weight: 700; font-size: 0.82rem; cursor: pointer; }
   .empty { text-align: center; color: var(--mut); font-size: 0.82rem; padding: 30px 10px; line-height: 1.5; }
 
-  /* ---------- Finished tab ---------- */
+  /* ---------- strength / score ---------- */
+  .strength-band { display: flex; align-items: center; gap: 12px; margin-top: 6px; }
+  .strength-label { font-size: 1.3rem; font-weight: 800; }
+  .s-strong { color: var(--green); } .s-comp { color: #4e8a68; } .s-build { color: var(--amber); } .s-risk { color: var(--red); } .s-early { color: var(--mut); }
+  .strength-meter { flex: 1; height: 10px; border-radius: 6px; background: linear-gradient(90deg,#d9a08e,#e2c79c,#a8c9a0); position: relative; }
+  .strength-pin { position: absolute; top: -4px; width: 4px; height: 18px; border-radius: 3px; background: var(--ink); transition: left 0.4s ease; }
+  .reasons { margin-top: 10px; }
+  .reason { font-size: 0.76rem; color: var(--mut); line-height: 1.5; display: flex; gap: 7px; }
+  .reason::before { content: "·"; font-weight: 900; }
+
+  .score-total { font-size: 2rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .score-total small { font-size: 0.9rem; color: var(--mut); font-weight: 700; }
+  .score-row { margin-top: 9px; }
+  .score-head { display: flex; justify-content: space-between; font-size: 0.72rem; font-weight: 700; margin-bottom: 3px; }
+  .score-head span:last-child { color: var(--mut); font-variant-numeric: tabular-nums; }
+  .score-track { height: 6px; border-radius: 4px; background: var(--line2); overflow: hidden; }
+  .score-fill { height: 100%; border-radius: 4px; background: #7fa88a; transition: width 0.4s ease; }
+
+  /* ---------- simulator ---------- */
+  .sim-row { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--line2); }
+  .sim-row:last-child { border-bottom: none; }
+  .sim-name { font-size: 0.76rem; font-weight: 600; flex: 1; min-width: 0; }
+  .sim-chips { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
+  .sim-chip { border: 1px solid var(--line); background: var(--card2); border-radius: 8px; font-size: 0.66rem; font-weight: 800; padding: 5px 7px; color: var(--mut); cursor: pointer; }
+  .sim-chip.on { background: #2e5a8f; border-color: #2e5a8f; color: #fff; }
+  .sim-proj { display: flex; align-items: baseline; gap: 10px; margin-top: 4px; }
+  .sim-proj .pv { font-size: 1.6rem; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--blue); }
+  .sim-proj .pd { font-size: 0.8rem; font-weight: 700; }
+  .pd.up { color: var(--green); } .pd.down { color: var(--red); }
+
+  /* ---------- chart ---------- */
+  #gpaChart { width: 100%; height: 190px; display: block; }
+  .chart-legend { display: flex; gap: 14px; font-size: 0.66rem; color: var(--mut); margin-top: 6px; }
+  .chart-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 4px; vertical-align: -1px; }
+
+  /* ---------- Done ---------- */
   .done-course { display: flex; align-items: center; gap: 10px; background: var(--card); border: 1px solid var(--line); border-radius: 11px; padding: 11px 12px; margin-bottom: 7px; }
-  .grade-badge {
-    width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 800; font-size: 0.95rem; color: #fff;
-  }
-  .g-a { background: var(--green); }
-  .g-b { background: var(--blue); }
-  .g-c { background: var(--amber); }
-  .g-df { background: var(--red); }
+  .grade-badge { width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.95rem; color: #fff; }
+  .g-a { background: #2f6b4f; } .g-b { background: #2e5a8f; } .g-c { background: #b5772e; } .g-df { background: #9c3a26; }
   .dc-body { flex: 1; min-width: 0; }
   .dc-name { font-weight: 650; font-size: 0.86rem; }
   .dc-meta { font-size: 0.7rem; color: var(--mut); margin-top: 2px; }
   .dc-warn { font-size: 0.7rem; color: var(--red); font-weight: 600; margin-top: 2px; }
   .dc-actions { display: flex; flex-direction: column; gap: 4px; }
-  .mini-btn { border: 1px solid var(--line); background: #f7f5ef; border-radius: 8px; font-size: 0.64rem; font-weight: 700; padding: 5px 8px; color: var(--mut); cursor: pointer; white-space: nowrap; }
-
+  .mini-btn { border: 1px solid var(--line); background: var(--card2); border-radius: 8px; font-size: 0.64rem; font-weight: 700; padding: 5px 8px; color: var(--mut); cursor: pointer; white-space: nowrap; }
   .dist { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
-  .dist-chip { font-size: 0.7rem; font-weight: 700; padding: 5px 10px; border-radius: 14px; background: #efece3; color: var(--mut); }
-
+  .dist-chip { font-size: 0.7rem; font-weight: 700; padding: 5px 10px; border-radius: 14px; background: var(--line2); color: var(--mut); }
   .stat-grid2 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 10px; }
-  .sg-cell { background: #f7f5ef; border-radius: 9px; padding: 9px; text-align: center; }
+  .sg-cell { background: var(--card2); border-radius: 9px; padding: 9px; text-align: center; }
   .sg-cell .v { font-weight: 800; font-size: 1rem; font-variant-numeric: tabular-nums; }
   .sg-cell .l { font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--mut); margin-top: 2px; }
-
   .big-gpa { font-size: 2.4rem; font-weight: 700; font-variant-numeric: tabular-nums; margin: 4px 0 0; }
-  .big-gpa.ok { color: var(--green); }
-  .big-gpa.warn { color: var(--amber); }
-  .big-gpa.bad { color: var(--red); }
+  .big-gpa.ok { color: var(--green); } .big-gpa.warn { color: var(--amber); } .big-gpa.bad { color: var(--red); }
   .gpa-scale { position: relative; height: 26px; margin: 10px 0 4px; }
-  .gpa-scale .track { position: absolute; top: 11px; left: 0; right: 0; height: 5px; border-radius: 4px;
-    background: linear-gradient(90deg, #d9a08e 0%, #d9a08e 50%, #e2c79c 50%, #e2c79c 70%, #a8c9a0 70%); }
+  .gpa-scale .track { position: absolute; top: 11px; left: 0; right: 0; height: 5px; border-radius: 4px; background: linear-gradient(90deg, #d9a08e 0%, #d9a08e 50%, #e2c79c 50%, #e2c79c 70%, #a8c9a0 70%); }
   .gpa-scale .marker { position: absolute; top: 3px; width: 3px; height: 20px; background: var(--ink); border-radius: 2px; transition: left 0.3s ease; }
-  .gpa-ticks { display: flex; justify-content: space-between; font-size: 0.62rem; color: #9a937f; }
-
+  .gpa-ticks { display: flex; justify-content: space-between; font-size: 0.62rem; color: var(--mut2); }
   .whatif-row { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
   .whatif-row label { font-size: 0.76rem; color: var(--mut); flex: 1; }
-  .whatif-row select { padding: 7px 9px; border-radius: 8px; border: 1px solid var(--line); font-size: 0.8rem; font-weight: 700; }
+  .whatif-row select { padding: 7px 9px; border-radius: 8px; border: 1px solid var(--line); font-size: 0.8rem; font-weight: 700; background: var(--card); color: var(--ink); }
   .whatif-out { font-size: 0.8rem; margin-top: 10px; line-height: 1.5; }
 
-  /* reqs */
-  .req-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #efece3; }
-  .req-row:last-child { border-bottom: none; }
-  .req-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-  .req-dot.done { background: var(--green); }
-  .req-dot.part { background: var(--amber); }
-  .req-dot.no { background: #ccc4b1; }
-  .req-text { font-size: 0.8rem; flex: 1; }
-  .req-stat { font-size: 0.74rem; color: var(--mut); font-variant-numeric: tabular-nums; }
+  /* ---------- GE ---------- */
+  .ge-area { background: var(--card); border: 1px solid var(--line); border-radius: 11px; padding: 12px; margin-bottom: 8px; }
+  .ge-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .ge-name { font-weight: 650; font-size: 0.86rem; }
+  .ge-count { font-size: 0.7rem; color: var(--mut); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .ge-hint { font-size: 0.7rem; color: var(--mut); margin-top: 3px; line-height: 1.4; }
+  .ge-boxes { display: flex; gap: 8px; margin-top: 9px; }
+  .ge-box { width: 34px; height: 34px; border-radius: 9px; border: 2px solid var(--line); background: var(--card2); cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: 800; color: transparent; transition: all 0.12s; font-size: 0.9rem; }
+  .ge-box.on { background: #2f6b4f; border-color: #2f6b4f; color: #fff; }
+  .ge-progress { height: 6px; background: var(--line2); border-radius: 4px; overflow: hidden; margin-bottom: 14px; }
+  .ge-progress .f { height: 100%; background: linear-gradient(90deg,#7fa88a,#cfe0b8); border-radius: 4px; transition: width 0.3s; }
 
-  /* timeline */
+  /* ---------- App ---------- */
+  .chk-row { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--line2); cursor: pointer; }
+  .chk-row:last-child { border-bottom: none; }
+  .chk-box { width: 22px; height: 22px; border-radius: 7px; border: 2px solid var(--mut2); flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; background: var(--card); transition: all 0.12s; }
+  .chk-row.on .chk-box { background: #2f6b4f; border-color: #2f6b4f; }
+  .chk-row.on .chk-box::after { content: "✓"; color: #fff; font-size: 13px; font-weight: 700; }
+  .chk-body { flex: 1; }
+  .chk-text { font-size: 0.82rem; font-weight: 600; }
+  .chk-row.on .chk-text { text-decoration: line-through; color: var(--mut); }
+  .chk-when { font-size: 0.68rem; color: var(--mut); margin-top: 1px; }
+  .chk-when.overdue { color: var(--red); font-weight: 700; }
+
+  .piq { border: 1px solid var(--line); border-radius: 11px; margin-bottom: 8px; overflow: hidden; background: var(--card); }
+  .piq-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 11px 12px; cursor: pointer; }
+  .piq-title { font-size: 0.8rem; font-weight: 650; line-height: 1.35; flex: 1; }
+  .piq-tag { font-size: 0.58rem; font-weight: 700; text-transform: uppercase; padding: 3px 7px; border-radius: 10px; background: #f2dbd4; color: #9c3a26; white-space: nowrap; }
+  .piq-tag.opt { background: var(--line2); color: var(--mut); }
+  .piq-wc { font-size: 0.64rem; color: var(--mut2); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .piq-body { display: none; padding: 0 12px 12px; }
+  .piq.open .piq-body { display: block; }
+  .piq-body textarea { width: 100%; min-height: 110px; padding: 9px 10px; border-radius: 9px; border: 1px solid var(--line); font-size: 0.8rem; font-family: inherit; background: var(--card2); color: var(--ink); resize: vertical; }
+  .piq-body .wc { font-size: 0.66rem; color: var(--mut2); margin-top: 4px; text-align: right; }
+  .piq-body .wc.over { color: var(--red); font-weight: 700; }
+  .piq-status { display: flex; gap: 5px; margin: 8px 0 2px; }
+  .piq-status button { flex: 1; border: 1px solid var(--line); background: var(--card2); border-radius: 8px; font-size: 0.62rem; font-weight: 700; padding: 6px 2px; color: var(--mut); cursor: pointer; }
+  .piq-status button.on { background: #2e5a8f; border-color: #2e5a8f; color: #fff; }
+  .piq-bar { height: 4px; border-radius: 3px; background: var(--line2); margin-top: 8px; overflow: hidden; }
+  .piq-bar .f { height: 100%; background: #7ba3d0; border-radius: 3px; }
+  .piq-ts { font-size: 0.6rem; color: var(--mut2); margin-top: 4px; }
+
+  .act { background: var(--card); border: 1px solid var(--line); border-radius: 11px; padding: 12px; margin-bottom: 8px; }
+  .act-head { display: flex; justify-content: space-between; gap: 8px; align-items: flex-start; }
+  .act-name { font-weight: 650; font-size: 0.86rem; }
+  .act-role { font-size: 0.72rem; color: var(--blue); font-weight: 600; margin-top: 1px; }
+  .act-desc { font-size: 0.74rem; color: var(--mut); margin-top: 5px; line-height: 1.45; }
+  .act-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+  .act-tag { font-size: 0.62rem; font-weight: 700; background: var(--line2); color: var(--mut); border-radius: 10px; padding: 3px 8px; }
+  .act-complete { height: 4px; border-radius: 3px; background: var(--line2); margin-top: 8px; overflow: hidden; }
+  .act-complete .f { height: 100%; background: #7fa88a; border-radius: 3px; }
+
+  .link-item { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--line2); }
+  .link-item:last-child { border-bottom: none; }
+  .link-body { flex: 1; min-width: 0; }
+  .link-title { font-size: 0.82rem; font-weight: 650; }
+  .link-title a { color: var(--blue); text-decoration: none; word-break: break-all; }
+  .link-note { font-size: 0.7rem; color: var(--mut); margin-top: 2px; }
+
+  /* ---------- goals ---------- */
+  .goal { padding: 9px 0; border-bottom: 1px solid var(--line2); }
+  .goal:last-child { border-bottom: none; }
+  .goal-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .goal-title { font-size: 0.82rem; font-weight: 650; flex: 1; }
+  .goal-title.done { text-decoration: line-through; color: var(--mut); }
+  .goal-pct { font-size: 0.7rem; color: var(--mut); font-variant-numeric: tabular-nums; }
+  .goal input[type=range] { width: 100%; margin-top: 6px; accent-color: #2f6b4f; }
+  .goal-presets { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+  .preset { border: 1px dashed var(--mut2); background: none; border-radius: 12px; font-size: 0.64rem; font-weight: 700; color: var(--mut); padding: 5px 9px; cursor: pointer; }
+
+  /* ---------- timeline ---------- */
   .tl-item { display: flex; gap: 12px; }
   .tl-rail { display: flex; flex-direction: column; align-items: center; }
-  .tl-dot { width: 12px; height: 12px; border-radius: 50%; background: #ccc4b1; flex-shrink: 0; margin-top: 4px; }
-  .tl-dot.next { background: var(--amber); box-shadow: 0 0 0 4px #f4e3cc; }
-  .tl-dot.past { background: var(--green); }
-  .tl-line { width: 2px; flex: 1; background: #e2ddd0; min-height: 26px; }
+  .tl-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--mut2); flex-shrink: 0; margin-top: 4px; }
+  .tl-dot.next { background: #b5772e; box-shadow: 0 0 0 4px #f4e3cc; }
+  .tl-dot.past { background: #2f6b4f; }
+  .tl-line { width: 2px; flex: 1; background: var(--line); min-height: 26px; }
   .tl-body { padding-bottom: 16px; flex: 1; }
   .tl-date { font-size: 0.66rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--mut); }
   .tl-what { font-size: 0.86rem; font-weight: 650; margin: 2px 0; }
   .tl-note { font-size: 0.73rem; color: var(--mut); line-height: 1.4; }
-  .countdown-strip { background: var(--ink); color: var(--paper); border-radius: 12px; padding: 13px 15px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; }
+  .countdown-strip { background: #141b28; color: #f4f2ec; border-radius: 12px; padding: 13px 15px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; }
   .cd-label { font-size: 0.7rem; opacity: 0.7; }
   .cd-days { font-size: 1.3rem; font-weight: 700; font-variant-numeric: tabular-nums; }
 
-  /* backup */
   .bk-row { display: flex; gap: 8px; margin-top: 8px; }
-  .bk-btn { flex: 1; padding: 9px; border-radius: 9px; border: 1px solid var(--line); background: #f7f5ef; font-size: 0.76rem; font-weight: 700; color: var(--ink); cursor: pointer; }
-  .bk-area { width: 100%; margin-top: 8px; padding: 8px; border-radius: 8px; border: 1px solid var(--line); font-size: 0.68rem; font-family: monospace; min-height: 60px; display: none; }
+  .bk-btn { flex: 1; padding: 9px; border-radius: 9px; border: 1px solid var(--line); background: var(--card2); font-size: 0.76rem; font-weight: 700; color: var(--ink); cursor: pointer; }
+  .bk-area { width: 100%; margin-top: 8px; padding: 8px; border-radius: 8px; border: 1px solid var(--line); font-size: 0.68rem; font-family: monospace; min-height: 60px; display: none; background: var(--card2); color: var(--ink); }
   .bk-area.open { display: block; }
-
   .reset-btn { display: block; margin: 22px auto 0; background: none; border: 1px solid var(--line); color: var(--mut); font-size: 0.76rem; padding: 9px 18px; border-radius: 20px; cursor: pointer; }
 
-  /* toast */
-  #toast {
-    position: fixed; bottom: max(20px, env(safe-area-inset-bottom)); left: 50%;
-    transform: translateX(-50%) translateY(20px);
-    background: var(--ink); color: var(--paper);
-    font-size: 0.8rem; font-weight: 600; padding: 11px 18px; border-radius: 22px;
-    opacity: 0; pointer-events: none; transition: all 0.25s ease; z-index: 50;
-    box-shadow: 0 8px 24px rgba(20,27,40,0.3); white-space: nowrap;
-  }
+  #toast { position: fixed; bottom: max(20px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%) translateY(20px); background: #141b28; color: #f4f2ec; font-size: 0.8rem; font-weight: 600; padding: 11px 18px; border-radius: 22px; opacity: 0; pointer-events: none; transition: all 0.25s ease; z-index: 50; box-shadow: 0 8px 24px rgba(20,27,40,0.3); white-space: nowrap; }
   #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ---------- search ---------- */
+  #searchOverlay { position: fixed; inset: 0; background: rgba(244,242,236,0.97); z-index: 40; display: none; padding: max(16px, env(safe-area-inset-top)) 14px 20px; overflow-y: auto; }
+  #searchOverlay.open { display: block; }
+  .search-bar { display: flex; gap: 8px; max-width: 680px; margin: 0 auto 14px; }
+  .search-bar input { flex: 1; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line); font-size: 0.95rem; background: var(--card); color: var(--ink); }
+  .search-close { border: none; background: var(--card); border-radius: 12px; padding: 0 16px; font-size: 1rem; color: var(--mut); cursor: pointer; border: 1px solid var(--line); }
+  .search-results { max-width: 680px; margin: 0 auto; }
+  .sr { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 11px 13px; margin-bottom: 7px; cursor: pointer; }
+  .sr-kind { font-size: 0.58rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--blue); }
+  .sr-title { font-size: 0.84rem; font-weight: 650; margin-top: 2px; }
+  .sr-snip { font-size: 0.7rem; color: var(--mut); margin-top: 2px; }
+
+  /* ---------- confetti ---------- */
+  #confetti { position: fixed; inset: 0; pointer-events: none; z-index: 60; }
+
+  /* ---------- print / counselor report ---------- */
+  #printReport { display: none; }
+  @media print {
+    body > *:not(#printReport) { display: none !important; }
+    #printReport { display: block !important; font-family: Georgia, serif; color: #000; padding: 20px; }
+    #printReport h1 { font-size: 18pt; margin: 0 0 4px; }
+    #printReport h2 { font-size: 13pt; margin: 18px 0 6px; border-bottom: 1px solid #999; padding-bottom: 3px; }
+    #printReport p, #printReport li { font-size: 10.5pt; line-height: 1.5; }
+    #printReport table { width: 100%; border-collapse: collapse; font-size: 10pt; }
+    #printReport td, #printReport th { border: 1px solid #bbb; padding: 5px 8px; text-align: left; }
+  }
 </style>
 </head>
 <body>
 
 <header>
   <div class="wrap">
-    <div class="hd-title">SMC → UCI Business Admin</div>
-    <div class="hd-sub">Merage School · no TAG · competitive review · target 3.4+</div>
-    <div class="stats">
-      <div class="stat"><div class="v" id="stGpa">–</div><div class="l">UC GPA</div></div>
-      <div class="stat"><div class="v" id="stUnits">0</div><div class="l">Units / 60</div></div>
-      <div class="stat"><div class="v" id="stPrep">0/7</div><div class="l">Major Prep</div></div>
-      <div class="stat"><div class="v" id="stDays">–</div><div class="l">Days to App</div></div>
+    <div class="hd-row">
+      <div>
+        <div class="hd-title">SMC → UCI Business Admin</div>
+        <div class="hd-sub">Merage School · no TAG for this major · target 3.4+</div>
+      </div>
+      <div class="hd-tools">
+        <button class="tool-btn" id="btnSearch">🔍 Search</button>
+        <button class="tool-btn" id="btnReport">🖨 Report</button>
+      </div>
     </div>
-    <div class="readiness-bar-track"><div class="readiness-bar" id="readyBar" style="width:0%"></div></div>
-    <div class="readiness-label" id="readyLabel">Transfer readiness: 0%</div>
+    <div class="stats">
+      <div class="stat" data-go="done"><div class="v" id="stGpa">–</div><div class="l">UC GPA</div></div>
+      <div class="stat" data-go="plan"><div class="v" id="stUnits">0</div><div class="l">Units / 60</div></div>
+      <div class="stat" data-go="plan"><div class="v" id="stPrep">0/7</div><div class="l">Major Prep</div></div>
+      <div class="stat" data-go="dates"><div class="v" id="stDays">–</div><div class="l">Days to App</div></div>
+    </div>
+    <div class="rings">
+      <div class="ring r1"><svg width="54" height="54"><circle class="bg" cx="27" cy="27" r="23" fill="none" stroke-width="5"/><circle class="fg" id="ringPrep" cx="27" cy="27" r="23" fill="none" stroke-width="5" stroke-dasharray="144.5" stroke-dashoffset="144.5"/></svg><div class="rv"><b id="ringPrepV">0%</b><span>Prep</span></div></div>
+      <div class="ring r2"><svg width="54" height="54"><circle class="bg" cx="27" cy="27" r="23" fill="none" stroke-width="5"/><circle class="fg" id="ringGe" cx="27" cy="27" r="23" fill="none" stroke-width="5" stroke-dasharray="144.5" stroke-dashoffset="144.5"/></svg><div class="rv"><b id="ringGeV">0%</b><span>GE</span></div></div>
+      <div class="ring r3"><svg width="54" height="54"><circle class="bg" cx="27" cy="27" r="23" fill="none" stroke-width="5"/><circle class="fg" id="ringApp" cx="27" cy="27" r="23" fill="none" stroke-width="5" stroke-dasharray="144.5" stroke-dashoffset="144.5"/></svg><div class="rv"><b id="ringAppV">0%</b><span>App</span></div></div>
+      <div class="ready-side">
+        <div class="readiness-bar-track"><div class="readiness-bar" id="readyBar" style="width:0%"></div></div>
+        <div class="readiness-label" id="readyLabel">Transfer readiness: 0%</div>
+      </div>
+    </div>
   </div>
 </header>
 
 <div class="wrap">
   <div class="tabs">
     <div class="tab active" data-panel="plan">Plan<span class="n" id="nPlan" style="display:none"></span></div>
-    <div class="tab" data-panel="done">Finished<span class="n" id="nDone" style="display:none"></span></div>
-    <div class="tab" data-panel="reqs">Reqs</div>
+    <div class="tab" data-panel="done">Done<span class="n" id="nDone" style="display:none"></span></div>
+    <div class="tab" data-panel="ge">GE</div>
+    <div class="tab" data-panel="app">App<span class="n red" id="nApp" style="display:none"></span></div>
     <div class="tab" data-panel="dates">Dates</div>
   </div>
 
   <!-- ============ PLAN ============ -->
   <div class="panel active" id="panel-plan">
+    <div class="card" id="insightsCard">
+      <h3>Insights</h3>
+      <div id="insightsList"></div>
+    </div>
     <div id="termsContainer"></div>
     <button class="add-btn" id="openAdd">+ Add a course</button>
     <div class="add-form" id="addForm">
@@ -278,15 +409,22 @@
     <button class="reset-btn" id="resetBtn">Reset everything</button>
   </div>
 
-  <!-- ============ FINISHED ============ -->
+  <!-- ============ DONE ============ -->
   <div class="panel" id="panel-done">
+    <div class="card">
+      <h3>Profile strength</h3>
+      <div class="strength-band">
+        <div class="strength-label" id="strengthLabel">–</div>
+        <div class="strength-meter"><div class="strength-pin" id="strengthPin" style="left:0%"></div></div>
+      </div>
+      <div class="reasons" id="strengthReasons"></div>
+      <div class="hint" style="margin-top:8px">Rough read of your profile vs Merage's competitive range — not a real admission probability. Nobody outside UCI has that formula.</div>
+    </div>
+
     <div class="card">
       <h3>UC-transferable GPA</h3>
       <div class="big-gpa" id="gpaBig">–</div>
-      <div class="gpa-scale">
-        <div class="track"></div>
-        <div class="marker" id="gpaMarker" style="left:0%"></div>
-      </div>
+      <div class="gpa-scale"><div class="track"></div><div class="marker" id="gpaMarker" style="left:0%"></div></div>
       <div class="gpa-ticks"><span>2.0</span><span>3.0 min</span><span>3.4</span><span>4.0</span></div>
       <div class="hint" id="gpaVerdict" style="margin-top:8px"></div>
       <div class="stat-grid2">
@@ -297,16 +435,45 @@
       <div class="dist" id="gradeDist"></div>
     </div>
 
+    <div class="card clps" id="simCard">
+      <h3>Grade simulator</h3>
+      <div class="clps-body">
+        <div class="hint">Tap hypothetical grades on unfinished courses — nothing is submitted, it just projects.</div>
+        <div class="sim-proj">
+          <div class="pv" id="simProj">–</div>
+          <div class="pd" id="simDelta"></div>
+          <button class="mini-btn" id="simClear" style="margin-left:auto">Clear all</button>
+        </div>
+        <div id="simList"></div>
+      </div>
+    </div>
+
+    <div class="card clps closed" id="chartCard">
+      <h3>GPA trend</h3>
+      <div class="clps-body">
+        <canvas id="gpaChart"></canvas>
+        <div class="chart-legend">
+          <span><i style="background:#7fa88a"></i>Cumulative</span>
+          <span><i style="background:#7ba3d0"></i>Term GPA</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card clps closed" id="scoreCard">
+      <h3>Transfer score</h3>
+      <div class="clps-body">
+        <div class="score-total"><span id="scoreTotal">0</span><small> / 1000</small></div>
+        <div id="scoreRows"></div>
+      </div>
+    </div>
+
     <div class="card">
       <h3>What do I need from here?</h3>
       <div class="whatif-row">
         <label>Target cumulative GPA at application:</label>
         <select id="targetGpa">
-          <option value="3.0">3.0</option>
-          <option value="3.2">3.2</option>
-          <option value="3.4" selected>3.4</option>
-          <option value="3.6">3.6</option>
-          <option value="3.8">3.8</option>
+          <option value="3.0">3.0</option><option value="3.2">3.2</option>
+          <option value="3.4" selected>3.4</option><option value="3.6">3.6</option><option value="3.8">3.8</option>
         </select>
       </div>
       <div class="whatif-out" id="whatifOut"></div>
@@ -314,9 +481,28 @@
 
     <div id="doneList"></div>
 
+    <div class="card clps closed" id="goalsCard">
+      <h3>Goals</h3>
+      <div class="clps-body">
+        <div id="goalsList"></div>
+        <div class="goal-presets">
+          <button class="preset" data-g="Hit 3.5+ cumulative GPA">3.5+ GPA</button>
+          <button class="preset" data-g="Finish Cal-GETC by Winter 2028">Cal-GETC by W28</button>
+          <button class="preset" data-g="All 4 PIQs final before October 2027">PIQs by Oct</button>
+          <button class="preset" data-g="Apply to 4+ campuses">4+ campuses</button>
+        </div>
+        <div class="add-form open" style="margin-top:10px; border:none; padding:0; background:none">
+          <div class="af-row">
+            <input type="text" id="goalName" placeholder="Custom goal…">
+            <button class="af-save" id="goalAdd" style="flex:0 0 80px">Add</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="card">
       <h3>Backup & restore</h3>
-      <div class="hint">Saves live on this device only. Export before switching phones or clearing browser data.</div>
+      <div class="hint">Saves live on this device only. Export before switching phones or clearing browser data. Covers courses, grades, GE, app checklist, PIQ drafts, activities, goals, and links.</div>
       <div class="bk-row">
         <button class="bk-btn" id="bkExport">Export data</button>
         <button class="bk-btn" id="bkImport">Import data</button>
@@ -325,29 +511,83 @@
     </div>
   </div>
 
-  <!-- ============ REQS ============ -->
-  <div class="panel" id="panel-reqs">
+  <!-- ============ GE ============ -->
+  <div class="panel" id="panel-ge">
     <div class="card">
-      <h3>UCI admission requirements</h3>
-      <div id="reqList"></div>
+      <h3>Cal-GETC general education</h3>
+      <div class="hint">Cal-GETC replaced IGETC for CCC → UC transfers starting Fall 2025. Tap a box per completed course in each area. <b>Verify every course against SMC's Cal-GETC list or a counselor</b> — this tracks progress, it doesn't certify it. Also ask whether Merage wants full Cal-GETC or major prep + minimum GE.</div>
     </div>
+    <div class="ge-progress"><div class="f" id="geBar" style="width:0%"></div></div>
+    <div id="geList"></div>
+  </div>
+
+  <!-- ============ APP ============ -->
+  <div class="panel" id="panel-app">
     <div class="card">
-      <h3>Course → UCI mapping (from ASSIST)</h3>
-      <div class="hint">
-        MATH 7 → MATH 2A · MATH 8 → MATH 2B<br>
-        ECON micro + macro → ECON 20A-20B<br>
-        STAT C1000 → MGMT 7<br>
-        ACCTG 1 → MGMT 30A · ACCTG 2 → MGMT 30B<br>
-        BUS 1 → MGMT 1 (optional, can take at UCI)
+      <h3>Application checklist</h3>
+      <div id="appChecklist"></div>
+    </div>
+
+    <div class="card">
+      <h3>Personal Insight Questions</h3>
+      <div class="hint" style="margin-bottom:10px">Transfers answer the required question + 3 of the others. 350 words max each. Track each one from outline → final. Your SMMZOLO / Mikye Media story is strong material for the required prompt and the leadership/creativity ones.</div>
+      <div id="piqList"></div>
+    </div>
+
+    <div class="card">
+      <h3>Activities & experience</h3>
+      <div class="hint" style="margin-bottom:8px">Mirrors the UC app format. Descriptions cap at 350 characters there — keep them concrete: revenue, clients, what you built. Completion bar shows how filled-out each entry is.</div>
+      <div id="actList"></div>
+      <button class="add-btn" id="actAddBtn">+ Add activity</button>
+      <div class="add-form" id="actForm">
+        <input type="text" id="acName" placeholder="Organization / activity name">
+        <input type="text" id="acRole" placeholder="Your position (e.g. Founder)">
+        <div class="af-row">
+          <select id="acCat">
+            <option>Business</option><option>Work</option><option>Leadership</option>
+            <option>Volunteer</option><option>Research</option><option>Other</option>
+          </select>
+          <input type="text" id="acHrs" placeholder="Hrs/week">
+          <input type="text" id="acWeeks" placeholder="Weeks/yr">
+        </div>
+        <textarea id="acDesc" placeholder="Description — 350 char max on the UC app" rows="2" maxlength="350"></textarea>
+        <button class="af-save" id="acSave">Add activity</button>
       </div>
     </div>
+
+    <div class="card clps closed" id="linksCard">
+      <h3>Links & notes vault</h3>
+      <div class="clps-body">
+        <div class="hint" style="margin-bottom:6px">Keep your ASSIST agreement, Merage pages, counselor portal, and notes in one place.</div>
+        <div id="linksList"></div>
+        <button class="add-btn" id="linkAddBtn">+ Add link or note</button>
+        <div class="add-form" id="linkForm">
+          <input type="text" id="lkTitle" placeholder="Title (e.g. ASSIST agreement)">
+          <input type="url" id="lkUrl" placeholder="https:// (optional)">
+          <input type="text" id="lkNote" placeholder="Note (optional)">
+          <button class="af-save" id="lkSave">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Strategy: TAG & backups</h3>
+      <div class="hint">
+        <b>The TAG question:</b> Business Admin has no TAG, but Business Economics at UCI does (needs 3.4 GPA + econ and calc with B or better — verify current-year rules). Catch: your TAG major must match your primary major on the UC app, so TAG'ing Business Econ means applying to <i>that</i> at UCI, not Business Admin. One or the other at UCI — decide with a counselor by Sep 2027.<br><br>
+        <b>Spread the risk:</b> One UC app covers all campuses — adding more is cheap. Consider UCLA (Business Econ), UCR/UCSB (Econ), and a CSU app (CSULB/CSUF business are strong + ADT-friendly). Fee waivers cover up to 4 UC campuses if eligible.<br><br>
+        <b>Your angle:</b> a transfer applicant running two real businesses with revenue is rare. Grades get you past the filter; the story wins the review.
+      </div>
+    </div>
+
     <div class="card">
       <h3>Ask your counselor</h3>
       <div class="hint">
         1. Is ECON C2001 micro or macro under the new numbering — and which second econ course do I take?<br>
-        2. Full IGETC/Cal-GETC or minimum GE + major prep for Merage?<br>
+        2. Full Cal-GETC or minimum GE + major prep for Merage?<br>
         3. Which second English comp course counts, and does it fit Winter 2027?<br>
-        4. On track for 60 UC-transferable units by Spring 2028?
+        4. On track for 60 UC-transferable units by Spring 2028?<br>
+        5. TAG Business Econ vs straight Business Admin app — which is smarter for my GPA?<br>
+        6. Do any of my courses double-count for Cal-GETC areas + major prep?
       </div>
     </div>
   </div>
@@ -355,101 +595,170 @@
   <!-- ============ DATES ============ -->
   <div class="panel" id="panel-dates">
     <div class="countdown-strip">
-      <div>
-        <div class="cd-label">UC application opens</div>
-        <div class="cd-days" id="cdApp">–</div>
-      </div>
-      <div style="text-align:right">
-        <div class="cd-label">Deadline Nov 30, 2027</div>
-        <div class="cd-days" id="cdDeadline">–</div>
-      </div>
+      <div><div class="cd-label">UC application opens</div><div class="cd-days" id="cdApp">–</div></div>
+      <div style="text-align:right"><div class="cd-label">Deadline Nov 30, 2027</div><div class="cd-days" id="cdDeadline">–</div></div>
     </div>
     <div id="timeline"></div>
   </div>
 </div>
 
 <div id="toast"></div>
+<canvas id="confetti"></canvas>
+
+<div id="searchOverlay">
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Search courses, notes, PIQs, deadlines…">
+    <button class="search-close" id="searchClose">✕</button>
+  </div>
+  <div class="search-results" id="searchResults"></div>
+</div>
+
+<div id="printReport"></div>
 
 <script>
-/* ================= data ================= */
+/* ================= constants ================= */
 const GRADES = { "A": 4.0, "A-": 3.7, "B+": 3.3, "B": 3.0, "B-": 2.7, "C+": 2.3, "C": 2.0, "C-": 1.7, "D": 1.0, "F": 0 };
 const GRADE_LIST = Object.keys(GRADES);
+const SIM_GRADES = ["A", "A-", "B+", "B", "B-", "C+", "C"];
 
 const DEFAULT_COURSES = [
   { id: "acctg1",  name: "ACCTG 1 — Intro Financial Accounting", uci: "MGMT 30A", units: 5, cat: "major", term: "fall26", status: "progress", grade: null, note: "" },
   { id: "econ1",   name: "ECON C2001 (confirm micro/macro)",     uci: "ECON 20A/B", units: 3, cat: "major", term: "fall26", status: "progress", grade: null, note: "" },
   { id: "engl1",   name: "ENGL C1000",                            uci: "English comp 1/2", units: 3, cat: "english", term: "fall26", status: "progress", grade: null, note: "" },
-  { id: "ahis11",  name: "AHIS 11",                               uci: "GE only", units: 3, cat: "ge", term: "fall26", status: "progress", grade: null, note: "" },
-  { id: "engl2",   name: "Second English comp course",            uci: "English comp 2/2", units: 3, cat: "english", term: "win27", status: "planned", grade: null, note: "" },
+  { id: "ahis11",  name: "AHIS 11",                               uci: "GE — likely Cal-GETC 3A Arts", units: 3, cat: "ge", term: "fall26", status: "progress", grade: null, note: "" },
+  { id: "engl2",   name: "Second English comp course",            uci: "English comp 2/2 · Cal-GETC 1B", units: 3, cat: "english", term: "win27", status: "planned", grade: null, note: "" },
   { id: "math7",   name: "MATH 7 — Calculus 1",                   uci: "MATH 2A", units: 5, cat: "major", term: "spr27", status: "planned", grade: null, note: "" },
   { id: "acctg2",  name: "ACCTG 2 — Corp Fin & Managerial Acctg", uci: "MGMT 30B", units: 5, cat: "major", term: "spr27", status: "planned", grade: null, note: "" },
   { id: "econ2",   name: "Second ECON (micro or macro)",          uci: "ECON 20A/B", units: 3, cat: "major", term: "spr27", status: "planned", grade: null, note: "" },
   { id: "math8",   name: "MATH 8 — Calculus 2",                   uci: "MATH 2B", units: 5, cat: "major", term: "fall27", status: "planned", grade: null, note: "" },
-  { id: "stat",    name: "STAT C1000 — Intro Statistics",         uci: "MGMT 7", units: 4, cat: "major", term: "fall27", status: "planned", grade: null, note: "" },
+  { id: "stat",    name: "STAT C1000 — Intro Statistics",         uci: "MGMT 7 · Cal-GETC area 2", units: 4, cat: "major", term: "fall27", status: "planned", grade: null, note: "" },
   { id: "ge1",     name: "GE / elective (pick w/ counselor)",     uci: "units toward 60", units: 3, cat: "ge", term: "win28", status: "planned", grade: null, note: "" },
   { id: "ge2",     name: "Remaining GE / electives",              uci: "units toward 60", units: 6, cat: "ge", term: "spr28", status: "planned", grade: null, note: "" },
   { id: "bus1",    name: "BUS 1 — Intro to Business",             uci: "MGMT 1 (optional)", units: 3, cat: "opt", term: "spr28", status: "planned", grade: null, note: "" },
 ];
 
 const TERMS = [
-  { id: "fall26", label: "Fall 2026 — current" },
-  { id: "win27",  label: "Winter 2027" },
-  { id: "spr27",  label: "Spring 2027" },
-  { id: "sum27",  label: "Summer 2027" },
-  { id: "fall27", label: "Fall 2027" },
-  { id: "win28",  label: "Winter 2028" },
-  { id: "spr28",  label: "Spring 2028" },
+  { id: "fall26", label: "Fall 2026 — current", short: "F26" },
+  { id: "win27",  label: "Winter 2027", short: "W27" },
+  { id: "spr27",  label: "Spring 2027", short: "S27" },
+  { id: "sum27",  label: "Summer 2027", short: "Su27" },
+  { id: "fall27", label: "Fall 2027", short: "F27" },
+  { id: "win28",  label: "Winter 2028", short: "W28" },
+  { id: "spr28",  label: "Spring 2028", short: "S28" },
 ];
-const termLabel = id => (TERMS.find(t => t.id === id) || {}).label || id;
+const termIdx = id => TERMS.findIndex(t => t.id === id);
+
+const GE_AREAS = [
+  { id: "1a", name: "1A — English Composition", need: 1, hint: "ENGL C1000 covers this." },
+  { id: "1b", name: "1B — Critical Thinking & Composition", need: 1, hint: "Your second English comp usually lands here — confirm the specific course." },
+  { id: "1c", name: "1C — Oral Communication", need: 1, hint: "A speech/comm course (e.g. COMM). Not in your plan yet — good Winter 2028 filler." },
+  { id: "2",  name: "2 — Math / Quantitative Reasoning", need: 1, hint: "STAT C1000 or MATH 7 covers this. Double-counts with major prep." },
+  { id: "3a", name: "3A — Arts", need: 1, hint: "AHIS 11 likely covers this — verify." },
+  { id: "3b", name: "3B — Humanities", need: 1, hint: "Lit, philosophy, history, etc." },
+  { id: "4",  name: "4 — Social & Behavioral Sciences", need: 2, hint: "Two courses, two different disciplines. Your ECON courses likely count — verify both apply." },
+  { id: "5a", name: "5A — Physical Science", need: 1, hint: "Chem, physics, geology, astronomy…" },
+  { id: "5b", name: "5B — Biological Science", need: 1, hint: "One of 5A/5B must include a lab (5C)." },
+  { id: "6",  name: "6 — Ethnic Studies", need: 1, hint: "Required area — pick an SMC ethnic studies course." },
+];
+
+const PIQS = [
+  { id: "req", req: true, title: "Required: how you've prepared for your intended major and your readiness for upper-division work" },
+  { id: "p1", req: false, title: "A leadership experience where you influenced others or helped resolve something over time" },
+  { id: "p2", req: false, title: "How you express your creative side" },
+  { id: "p3", req: false, title: "Your greatest talent or skill and how you've developed it" },
+  { id: "p4", req: false, title: "A significant educational opportunity you took, or a barrier you've worked to overcome" },
+  { id: "p5", req: false, title: "The most significant challenge you've faced and how it affected your academics" },
+  { id: "p6", req: false, title: "An academic subject that inspires you and how you've furthered that interest" },
+  { id: "p7", req: false, title: "What you've done to make your school or community a better place" },
+];
+const PIQ_STATUSES = ["outline", "draft", "revision", "final"];
+const PIQ_VAL = { outline: 0.25, draft: 0.5, revision: 0.75, final: 1 };
+
+const APP_CHECKS = [
+  { id: "counselor", text: "Meet with SMC transfer counselor (bring the checklist questions)", when: "ASAP — then once per term", due: null },
+  { id: "tagdecide", text: "Decide: TAG Business Econ vs straight Business Admin application", when: "By Sep 2027 (TAG window: Sep 1–30)", due: "2027-09-30" },
+  { id: "merage", text: "Register for Merage transfer advising + submit their google form", when: "~Jun 2027 — watch merage.uci.edu", due: "2027-06-15" },
+  { id: "ucacct", text: "Create UC application account, start filling it out", when: "Aug 2027", due: "2027-08-31" },
+  { id: "piqs", text: "Draft all 4 PIQs (required + 3)", when: "Aug–Oct 2027", due: "2027-10-31" },
+  { id: "acts", text: "Fill activities & awards section", when: "Aug–Oct 2027", due: "2027-10-31" },
+  { id: "feewaiver", text: "Check fee waiver eligibility (covers up to 4 UC campuses)", when: "Before submitting", due: "2027-11-15" },
+  { id: "submit", text: "Submit UC application", when: "Oct 1 – Nov 30, 2027 — don't wait for the last day", due: "2027-11-30" },
+  { id: "fafsa", text: "FAFSA or CADAA + Cal Grant", when: "By Mar 2, 2028 priority deadline", due: "2028-03-02" },
+  { id: "tau", text: "Transfer Academic Update (fall grades + spring courses)", when: "By Jan 31, 2028", due: "2028-01-31" },
+  { id: "transcripts", text: "Send final official transcripts after committing", when: "Jul 2028", due: "2028-07-01" },
+];
 
 const TIMELINE = [
   { date: new Date("2026-09-13"), label: "Sep 13, 2026", what: "Fall refund deadline", note: "Last day to drop fall classes with refund." },
   { date: new Date("2026-12-22"), label: "Dec 2026", what: "Fall 2026 grades post", note: "First 4 grades enter your UC GPA. Submit them from the Plan tab." },
   { date: new Date("2027-06-07"), label: "Jun 2027", what: "Merage transfer advising window (typical)", note: "Merage runs its own advising sessions + google form in early June — watch merage.uci.edu." },
-  { date: new Date("2027-08-01"), label: "Aug 2027", what: "UC app opens for editing", note: "Start drafting Personal Insight Questions. Your SMMZOLO/Mikye Media story is strong PIQ material." },
+  { date: new Date("2027-08-01"), label: "Aug 2027", what: "UC app opens for editing", note: "Create account, start PIQ drafts in the App tab." },
+  { date: new Date("2027-09-01"), label: "Sep 1–30, 2027", what: "UCI TAG window (if going Business Econ route)", note: "TAG major must match your primary UC app major. Decide before this window." },
   { date: new Date("2027-10-01"), label: "Oct 1, 2027", what: "UC application submission opens", note: "Submit window: Oct 1 – Nov 30." },
   { date: new Date("2027-11-30"), label: "Nov 30, 2027", what: "UC APPLICATION DEADLINE", note: "Hard deadline for Fall 2028 transfer. Don't submit on the last day." },
   { date: new Date("2028-01-31"), label: "Jan 31, 2028", what: "Transfer Academic Update", note: "Report fall grades + planned spring courses in your UC app." },
+  { date: new Date("2028-03-02"), label: "Mar 2, 2028", what: "FAFSA / CADAA + Cal Grant priority deadline", note: "File even if you think you won't qualify — Cal Grant + Blue & Gold need it." },
   { date: new Date("2028-04-30"), label: "Spring 2028", what: "Decisions + finish coursework", note: "Complete all major prep + 60 UC-transferable units by end of spring." },
 ];
 
+const DEFAULT_META = {
+  ge: {}, appChecks: {}, piqs: {}, sim: {}, celebrated: false,
+  goals: [],
+  links: [
+    { id: "l1", title: "ASSIST — SMC → UCI BusAdmin agreement", url: "https://assist.org", note: "Re-check each academic year" },
+    { id: "l2", title: "Merage transfer page", url: "https://merage.uci.edu/programs/undergraduate/transfer-students.html", note: "Advising form posts ~June" },
+  ],
+  acts: [
+    { id: "a1", name: "SMMZOLO", role: "Founder & Operator", cat: "Business", hrs: "", weeks: "", desc: "Run a social media marketing panel — built the entire frontend myself, handle payments, support, and service fulfillment." },
+    { id: "a2", name: "Mikye Media", role: "Founder", cat: "Business", hrs: "", weeks: "", desc: "Social media marketing agency serving clients." },
+  ],
+};
+
 /* ================= state ================= */
-let courses = [];
-let pendingGrade = {};   // courseId -> currently selected grade before submit (not persisted)
-let gradeOpen = {};      // courseId -> submit row visible
-let noteOpen = {};       // courseId -> note editor visible
+let courses = [], meta = null;
+let pendingGrade = {}, gradeOpen = {}, noteOpen = {};
 const KEY = "uci-transfer-dashboard-v2";
-const OLD_KEY = "uci-transfer-dashboard-v1";
+const META_KEY = "uci-transfer-meta-v4";
+const OLD_META_KEY = "uci-transfer-meta-v3";
+
+function migrateMeta(m) {
+  m.ge = m.ge || {};
+  m.appChecks = m.appChecks || {};
+  m.sim = m.sim || {};
+  m.goals = m.goals || [];
+  m.links = m.links || JSON.parse(JSON.stringify(DEFAULT_META.links));
+  m.celebrated = m.celebrated || false;
+  const piqs = {};
+  Object.keys(m.piqs || {}).forEach(k => {
+    const v = m.piqs[k];
+    piqs[k] = typeof v === "string" ? { text: v, status: v.trim() ? "draft" : "outline", updated: null } : v;
+  });
+  m.piqs = piqs;
+  m.acts = (m.acts || JSON.parse(JSON.stringify(DEFAULT_META.acts))).map(a => ({ cat: "Business", weeks: "", ...a }));
+  return m;
+}
 
 function load() {
   try {
-    let r = localStorage.getItem(KEY);
-    if (!r) {
-      const old = localStorage.getItem(OLD_KEY);
-      if (old) {
-        courses = JSON.parse(old).map(c => ({ note: "", ...c }));
-        save();
-        renderAll();
-        return;
-      }
-    }
+    const r = localStorage.getItem(KEY);
     courses = r ? JSON.parse(r) : JSON.parse(JSON.stringify(DEFAULT_COURSES));
-  } catch (e) {
-    courses = JSON.parse(JSON.stringify(DEFAULT_COURSES));
-  }
+  } catch (e) { courses = JSON.parse(JSON.stringify(DEFAULT_COURSES)); }
+  try {
+    let m = localStorage.getItem(META_KEY) || localStorage.getItem(OLD_META_KEY);
+    meta = migrateMeta(m ? JSON.parse(m) : JSON.parse(JSON.stringify(DEFAULT_META)));
+  } catch (e) { meta = migrateMeta(JSON.parse(JSON.stringify(DEFAULT_META))); }
   renderAll();
 }
 function save() {
-  try { localStorage.setItem(KEY, JSON.stringify(courses)); }
-  catch (e) { console.error("save failed", e); toast("Couldn't save — storage blocked?"); }
+  try {
+    localStorage.setItem(KEY, JSON.stringify(courses));
+    localStorage.setItem(META_KEY, JSON.stringify(meta));
+  } catch (e) { console.error("save failed", e); toast("Couldn't save — storage blocked?"); }
 }
-
 function toast(msg) {
   const t = document.getElementById("toast");
-  t.textContent = msg;
-  t.classList.add("show");
-  clearTimeout(t._h);
-  t._h = setTimeout(() => t.classList.remove("show"), 2200);
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("show"), 2200);
 }
 
 /* ================= computations ================= */
@@ -457,15 +766,25 @@ function gpaData(filterCat) {
   let pts = 0, units = 0;
   courses.forEach(c => {
     if (c.status === "done" && c.grade && GRADES[c.grade] !== undefined && (!filterCat || c.cat === filterCat)) {
-      pts += GRADES[c.grade] * c.units;
-      units += c.units;
+      pts += GRADES[c.grade] * c.units; units += c.units;
     }
   });
   return { gpa: units ? pts / units : null, gradedUnits: units, points: pts };
 }
-function completedUnits() {
-  return courses.filter(c => c.status === "done" && c.grade !== "F").reduce((s, c) => s + c.units, 0);
+function projectedGpa() {
+  let { points, gradedUnits } = gpaData();
+  let simUnits = 0, simActive = false;
+  courses.forEach(c => {
+    if (c.status !== "done" && meta.sim[c.id] && GRADES[meta.sim[c.id]] !== undefined) {
+      points += GRADES[meta.sim[c.id]] * c.units;
+      simUnits += c.units; simActive = true;
+    }
+  });
+  const total = gradedUnits + simUnits;
+  return { gpa: total ? points / total : null, simActive };
 }
+function completedUnits() { return courses.filter(c => c.status === "done" && c.grade !== "F").reduce((s, c) => s + c.units, 0); }
+function plannedUnits() { return courses.filter(c => c.status !== "done").reduce((s, c) => s + c.units, 0); }
 function majorPrepDone() {
   const major = courses.filter(c => c.cat === "major");
   const done = major.filter(c => c.status === "done" && c.grade && GRADES[c.grade] >= 2.0);
@@ -475,60 +794,225 @@ function englishDone() {
   const eng = courses.filter(c => c.cat === "english");
   return { done: eng.filter(c => c.status === "done" && c.grade !== "F").length, total: Math.max(eng.length, 2) };
 }
+function gePct() {
+  const total = GE_AREAS.reduce((s, a) => s + a.need, 0);
+  const done = GE_AREAS.reduce((s, a) => s + Math.min(meta.ge[a.id] || 0, a.need), 0);
+  return { done, total, pct: done / total };
+}
+function appPct() {
+  const done = APP_CHECKS.filter(c => meta.appChecks[c.id]).length;
+  return { done, total: APP_CHECKS.length, pct: done / APP_CHECKS.length };
+}
+function piqScorePct() {
+  const val = p => { const d = meta.piqs[p.id]; return d && d.text && d.text.trim() ? (PIQ_VAL[d.status] || 0.25) : 0; };
+  const reqV = val(PIQS[0]);
+  const others = PIQS.slice(1).map(val).sort((a, b) => b - a).slice(0, 3);
+  return (reqV * 2 + others.reduce((s, v) => s + v, 0)) / 5;
+}
+function actCompleteness(a) {
+  const fields = [a.name, a.role, a.cat, a.hrs, a.weeks, a.desc];
+  return fields.filter(f => f && String(f).trim()).length / fields.length;
+}
+function overdueChecks() {
+  const now = new Date();
+  return APP_CHECKS.filter(c => c.due && !meta.appChecks[c.id] && new Date(c.due) < now);
+}
 function daysUntil(d) { return Math.ceil((d - new Date()) / 86400000); }
-function gradeClass(g) {
-  const v = GRADES[g];
-  return v >= 3.7 ? "g-a" : v >= 2.7 ? "g-b" : v >= 1.7 ? "g-c" : "g-df";
+function gradeClass(g) { const v = GRADES[g]; return v >= 3.7 ? "g-a" : v >= 2.7 ? "g-b" : v >= 1.7 ? "g-c" : "g-df"; }
+function wordCount(s) { return (s || "").trim() ? s.trim().split(/\s+/).length : 0; }
+function esc(s) { return String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+
+/* ---------- score /1000 ---------- */
+function scoreBreakdown() {
+  const { gpa } = gpaData();
+  const prep = majorPrepDone();
+  const eng = englishDone();
+  const rows = [
+    { name: "Major prep courses", max: 250, val: 250 * (prep.done / prep.total) },
+    { name: "GPA strength", max: 150, val: gpa === null ? 0 : 150 * Math.min(gpa / 3.7, 1) },
+    { name: "App checklist", max: 130, val: 130 * appPct().pct },
+    { name: "Cal-GETC", max: 130, val: 130 * gePct().pct },
+    { name: "PIQs", max: 120, val: 120 * piqScorePct() },
+    { name: "Units toward 60", max: 100, val: 100 * Math.min(completedUnits() / 60, 1) },
+    { name: "Activities", max: 80, val: (Math.min(meta.acts.length / 4, 1) * 40) + (meta.acts.length ? (meta.acts.reduce((s, a) => s + actCompleteness(a), 0) / meta.acts.length) * 40 : 0) },
+    { name: "English comp", max: 40, val: 40 * (eng.done / eng.total) },
+  ];
+  return { rows, total: Math.round(rows.reduce((s, r) => s + r.val, 0)) };
+}
+
+/* ---------- profile strength ---------- */
+function strength() {
+  const { gpa, gradedUnits } = gpaData();
+  const prep = majorPrepDone();
+  const prepPct = prep.done / prep.total;
+  if (gpa === null || gradedUnits < 6) {
+    return { label: "Too early", cls: "s-early", pos: 8, reasons: ["Not enough graded units yet — the read starts once fall grades post."] };
+  }
+  let label, cls, pos;
+  if (gpa >= 3.6 && prepPct >= 0.5) { label = "Strong"; cls = "s-strong"; pos = 88; }
+  else if (gpa >= 3.4) { label = "Competitive"; cls = "s-comp"; pos = 70; }
+  else if (gpa >= 3.0) { label = "Building"; cls = "s-build"; pos = 45; }
+  else { label = "At risk"; cls = "s-risk"; pos = 18; }
+  const reasons = [];
+  reasons.push(gpa >= 3.4 ? `GPA ${gpa.toFixed(2)} is in Merage's competitive range` : gpa >= 3.0 ? `GPA ${gpa.toFixed(2)} clears the 3.0 floor but sits below the 3.4 competitive line` : `GPA ${gpa.toFixed(2)} is below the 3.0 minimum — fixing this is priority #1`);
+  reasons.push(prepPct >= 1 ? "All major prep complete" : `${prep.done}/${prep.total} major prep courses done — reviewers want most/all done by fall before transfer`);
+  if (meta.acts.length >= 2) reasons.push("Running real businesses is a genuine differentiator in review");
+  return { label, cls, pos, reasons };
+}
+
+/* ---------- insights engine ---------- */
+function insights() {
+  const out = [];
+  const now = new Date();
+  const prep = majorPrepDone();
+  const { gpa, gradedUnits } = gpaData();
+
+  // below-C major prep
+  courses.filter(c => c.cat === "major" && c.status === "done" && c.grade && GRADES[c.grade] < 2.0)
+    .forEach(c => out.push({ level: "red", text: `${c.name.split(" — ")[0]} finished below C — it does not satisfy major prep.`, fix: "Plan a retake; UCI needs C or better in all seven." }));
+
+  // calc sequencing
+  const m7 = courses.find(c => c.id === "math7"), m8 = courses.find(c => c.id === "math8");
+  if (m7 && m8 && m7.status !== "done" && m8.status !== "done" && termIdx(m8.term) <= termIdx(m7.term)) {
+    out.push({ level: "red", text: "Calc 2 is scheduled before or alongside Calc 1.", fix: "MATH 8 needs MATH 7 first — move one of them." });
+  }
+
+  // english comp deadline
+  const e2 = courses.find(c => c.id === "engl2");
+  if (e2 && e2.status !== "done") {
+    if (termIdx(e2.term) >= termIdx("spr28")) out.push({ level: "amber", text: "Second English comp is parked in the last allowed term (Spring 2028).", fix: "UC requires both English comps done by spring before transfer — earlier is safer." });
+  } else if (!e2 && englishDone().done < 2) {
+    out.push({ level: "red", text: "Second English comp course is missing from the plan.", fix: "Add it — hard requirement, due by Spring 2028." });
+  }
+
+  // unit load per term
+  TERMS.forEach(t => {
+    const list = courses.filter(c => c.term === t.id && c.status !== "done");
+    const u = list.reduce((s, c) => s + c.units, 0);
+    if (u > 16) out.push({ level: "amber", text: `${t.label.replace(" — current","")} is loaded at ${u} units.`, fix: "Over 16 usually needs a petition at SMC and risks your GPA — consider moving a course." });
+  });
+
+  // heavy pairing
+  TERMS.forEach(t => {
+    const list = courses.filter(c => c.term === t.id && c.status !== "done").map(c => c.name);
+    const hasCalc = list.some(n => n.includes("MATH")), hasAcctg = list.some(n => n.includes("ACCTG"));
+    if (hasCalc && hasAcctg) out.push({ level: "blue", text: `${t.label.replace(" — current","")} pairs calculus with accounting — the two heaviest prep courses.`, fix: "Doable, but protect that term: keep the rest light." });
+  });
+
+  // total units
+  const totalPlanned = completedUnits() + plannedUnits();
+  if (totalPlanned < 60) out.push({ level: "amber", text: `Current plan totals ${totalPlanned} units — short of the 60 required.`, fix: `Add ${60 - totalPlanned} more transferable units (electives/GE count).` });
+
+  // GE gaps
+  const untouched = GE_AREAS.filter(a => !(meta.ge[a.id] > 0));
+  if (untouched.length >= 4) out.push({ level: "amber", text: `${untouched.length} Cal-GETC areas have nothing done yet (incl. ${untouched.slice(0,3).map(a => a.name.split(" — ")[1]).join(", ")}).`, fix: "Slot these into Winter/Spring 2028 or verify current courses double-count." });
+  else if (untouched.length > 0) out.push({ level: "blue", text: `${untouched.length} Cal-GETC area${untouched.length > 1 ? "s" : ""} still open: ${untouched.map(a => a.name.split(" — ")[1]).join(", ")}.` });
+
+  // GPA pace
+  if (gpa !== null && gradedUnits >= 6 && gpa < 3.4) out.push({ level: "blue", text: `Cumulative ${gpa.toFixed(2)} is below the 3.4 competitive target.`, fix: "Open \"What do I need from here?\" on the Done tab for the exact average required." });
+
+  // PIQ timing
+  const reqPiq = meta.piqs.req;
+  if (now >= new Date("2027-08-01") && (!reqPiq || !reqPiq.text || !["revision","final"].includes(reqPiq.status))) {
+    out.push({ level: "amber", text: "Required PIQ (major preparation) isn't near final yet.", fix: "It's the one every reader weighs most for Merage — get it to revision before October." });
+  }
+
+  // overdue app checks
+  const od = overdueChecks();
+  if (od.length) out.push({ level: "amber", text: `${od.length} application task${od.length > 1 ? "s are" : " is"} past due: ${od[0].text}${od.length > 1 ? " +" + (od.length - 1) + " more" : ""}.`, fix: "Check them off in the App tab or catch up now." });
+
+  // deadline urgency
+  const dl = daysUntil(new Date("2027-11-30"));
+  if (dl > 0 && dl <= 60 && !meta.appChecks.submit) out.push({ level: "red", text: `${dl} days to the UC deadline and the app isn't submitted.`, fix: "Submit early — the site slows badly in the final days." });
+
+  // activities
+  if (meta.acts.length < 3) out.push({ level: "blue", text: "Only " + meta.acts.length + " activities logged — the UC app holds up to 20 entries.", fix: "Add work, projects, volunteering — SMC clubs count too." });
+
+  // sim notice
+  if (Object.keys(meta.sim).some(k => meta.sim[k])) out.push({ level: "blue", text: "Grade simulator is active — projected numbers include hypothetical grades." });
+
+  // all prep done
+  if (prep.done >= prep.total) out.push({ level: "green", text: "All 7 major prep courses complete. That's the hard part." });
+
+  if (!out.length) out.push({ level: "green", text: "No issues detected. Plan is clean — keep executing." });
+  return out;
 }
 
 /* ================= render ================= */
-function renderAll() { renderHeader(); renderPlan(); renderDone(); renderReqs(); renderDates(); }
+function renderAll() { renderHeader(); renderInsights(); renderPlan(); renderDone(); renderGe(); renderApp(); renderDates(); maybeCelebrate(); }
+
+function setRing(id, vId, pct) {
+  const C = 144.5;
+  document.getElementById(id).style.strokeDashoffset = C * (1 - Math.min(pct, 1));
+  document.getElementById(vId).textContent = Math.round(pct * 100) + "%";
+}
 
 function renderHeader() {
   const { gpa } = gpaData();
   const units = completedUnits();
   const prep = majorPrepDone();
+  const ge = gePct(), app = appPct();
 
   const gEl = document.getElementById("stGpa");
   gEl.textContent = gpa === null ? "–" : gpa.toFixed(2);
   gEl.className = "v " + (gpa === null ? "" : gpa >= 3.4 ? "ok" : gpa >= 3.0 ? "warn" : "bad");
-
   const uEl = document.getElementById("stUnits");
   uEl.textContent = units;
   uEl.className = "v " + (units >= 60 ? "ok" : "");
-
   document.getElementById("stPrep").textContent = prep.done + "/" + prep.total;
-
   const dApp = daysUntil(new Date("2027-11-30"));
   document.getElementById("stDays").textContent = dApp > 0 ? dApp : "0";
+
+  setRing("ringPrep", "ringPrepV", prep.done / prep.total);
+  setRing("ringGe", "ringGeV", ge.pct);
+  setRing("ringApp", "ringAppV", app.pct);
 
   const eng = englishDone();
   const prepPct = prep.done / prep.total;
   const unitPct = Math.min(units / 60, 1);
   const engPct = eng.done / eng.total;
-  let gpaPct = gpa === null ? null : Math.min(gpa / 3.4, 1);
+  const gpaPct = gpa === null ? null : Math.min(gpa / 3.4, 1);
   let ready;
-  if (gpaPct === null) ready = prepPct * 0.55 + unitPct * 0.33 + engPct * 0.12;
-  else ready = prepPct * 0.45 + unitPct * 0.28 + engPct * 0.10 + gpaPct * 0.17;
-  const pct = Math.round(ready * 100);
-  document.getElementById("readyBar").style.width = pct + "%";
-  document.getElementById("readyLabel").textContent = "Transfer readiness: " + pct + "%";
+  if (gpaPct === null) ready = prepPct * 0.38 + unitPct * 0.24 + engPct * 0.08 + ge.pct * 0.20 + app.pct * 0.10;
+  else ready = prepPct * 0.32 + unitPct * 0.20 + engPct * 0.07 + gpaPct * 0.15 + ge.pct * 0.17 + app.pct * 0.09;
+  document.getElementById("readyBar").style.width = Math.round(ready * 100) + "%";
+  document.getElementById("readyLabel").textContent = "Transfer readiness: " + Math.round(ready * 100) + "%";
 
-  // tab counters
   const active = courses.filter(c => c.status !== "done").length;
   const finished = courses.filter(c => c.status === "done").length;
-  const nP = document.getElementById("nPlan"), nD = document.getElementById("nDone");
+  const nP = document.getElementById("nPlan"), nD = document.getElementById("nDone"), nA = document.getElementById("nApp");
   nP.style.display = active ? "flex" : "none"; nP.textContent = active;
   nD.style.display = finished ? "flex" : "none"; nD.textContent = finished;
+  const od = overdueChecks().length;
+  nA.style.display = od ? "flex" : "none"; nA.textContent = od;
+}
+
+function renderInsights() {
+  const list = document.getElementById("insightsList");
+  const items = insights();
+  const order = { red: 0, amber: 1, blue: 2, green: 3 };
+  items.sort((a, b) => order[a.level] - order[b.level]);
+  list.innerHTML = items.map(i => `
+    <div class="insight">
+      <div class="ins-dot ${i.level}"></div>
+      <div class="ins-text">${i.text}${i.fix ? `<span class="fix">→ ${i.fix}</span>` : ""}</div>
+    </div>`).join("");
+}
+
+/* ---------- Plan ---------- */
+function loadPill(u) {
+  if (u > 16) return '<span class="load-pill load-over">Overload</span>';
+  if (u >= 14) return '<span class="load-pill load-heavy">Heavy</span>';
+  if (u >= 9)  return '<span class="load-pill load-solid">Solid</span>';
+  return '<span class="load-pill load-light">Light</span>';
 }
 
 function renderPlan() {
   const container = document.getElementById("termsContainer");
   container.innerHTML = "";
   const activeCourses = courses.filter(c => c.status !== "done");
-
   if (!activeCourses.length) {
-    container.innerHTML = `<div class="empty">Everything's submitted. 🎓<br>Check the Finished tab for your stats.</div>`;
+    container.innerHTML = `<div class="empty">Everything's submitted. 🎓<br>Check the Done tab for your stats.</div>`;
   } else {
     TERMS.forEach(term => {
       const list = activeCourses.filter(c => c.term === term.id);
@@ -536,15 +1020,12 @@ function renderPlan() {
       const totUnits = list.reduce((s, c) => s + c.units, 0);
       const wrap = document.createElement("div");
       wrap.className = "term";
-      wrap.innerHTML = `<div class="term-head">
-        <div class="term-title">${term.label}</div>
-        <div class="term-units">${totUnits} units</div></div>`;
+      wrap.innerHTML = `<div class="term-head"><div class="term-title">${term.label}</div>${loadPill(totUnits)}<div class="term-units">${totUnits} u</div></div>`;
       list.forEach(c => wrap.appendChild(courseCard(c)));
       container.appendChild(wrap);
     });
   }
-  const sel = document.getElementById("afTerm");
-  sel.innerHTML = TERMS.map(t => `<option value="${t.id}">${t.label}</option>`).join("");
+  document.getElementById("afTerm").innerHTML = TERMS.map(t => `<option value="${t.id}">${t.label}</option>`).join("");
 }
 
 function courseCard(c) {
@@ -552,12 +1033,11 @@ function courseCard(c) {
   el.className = "course" + (c.status === "progress" ? " taking" : "");
   const catPill = { major: ["cat-major","Major"], english: ["cat-english","English"], ge: ["cat-ge","GE"], opt: ["cat-opt","Opt"] }[c.cat];
   const showSubmit = gradeOpen[c.id];
-
   el.innerHTML = `
     <div class="c-top">
       <div>
         <div class="c-name">${c.name} <span class="uci">→ ${c.uci}</span></div>
-        <div class="c-meta">${c.units} units</div>
+        <div class="c-meta">${c.units} units${meta.sim[c.id] ? ' · sim: ' + meta.sim[c.id] : ''}</div>
       </div>
       <div class="c-side">
         <span class="cat-pill ${catPill[0]}">${catPill[1]}</span>
@@ -574,27 +1054,17 @@ function courseCard(c) {
     </div>
     ${showSubmit ? `
     <div class="submit-row">
-      <select class="grade-sel">
-        <option value="">Grade…</option>
-        ${GRADE_LIST.map(g => `<option value="${g}" ${pendingGrade[c.id] === g ? "selected" : ""}>${g}</option>`).join("")}
-      </select>
+      <select class="grade-sel"><option value="">Grade…</option>${GRADE_LIST.map(g => `<option value="${g}" ${pendingGrade[c.id] === g ? "selected" : ""}>${g}</option>`).join("")}</select>
       <button class="submit-btn" ${pendingGrade[c.id] ? "" : "disabled"}>Submit ✓</button>
     </div>` : ""}
-    ${noteOpen[c.id] ? `<textarea class="note-area" placeholder="Notes — professor, section #, reminders…">${c.note || ""}</textarea>`
-      : (c.note ? `<div class="note-preview">✎ ${c.note}</div>` : "")}
+    ${noteOpen[c.id] ? `<textarea class="note-area" placeholder="Notes — professor, section #, reminders…">${esc(c.note)}</textarea>`
+      : (c.note ? `<div class="note-preview">✎ ${esc(c.note)}</div>` : "")}
   `;
-
   el.querySelectorAll(".seg button").forEach(btn => {
     btn.addEventListener("click", () => {
       const s = btn.dataset.s;
-      if (s === "grade") {
-        gradeOpen[c.id] = !gradeOpen[c.id];
-      } else {
-        gradeOpen[c.id] = false;
-        delete pendingGrade[c.id];
-        c.status = s;
-        save();
-      }
+      if (s === "grade") gradeOpen[c.id] = !gradeOpen[c.id];
+      else { gradeOpen[c.id] = false; delete pendingGrade[c.id]; c.status = s; save(); }
       renderAll();
     });
   });
@@ -603,18 +1073,13 @@ function courseCard(c) {
   const sb = el.querySelector(".submit-btn");
   if (sb) sb.addEventListener("click", () => {
     if (!pendingGrade[c.id]) return;
-    c.grade = pendingGrade[c.id];
-    c.status = "done";
-    delete pendingGrade[c.id];
-    delete gradeOpen[c.id];
-    save();
-    renderAll();
+    c.grade = pendingGrade[c.id]; c.status = "done";
+    delete meta.sim[c.id];
+    delete pendingGrade[c.id]; delete gradeOpen[c.id];
+    save(); renderAll();
     toast(`${c.name.split(" — ")[0]} submitted · ${c.grade}`);
   });
-  el.querySelector(".note-toggle").addEventListener("click", () => {
-    noteOpen[c.id] = !noteOpen[c.id];
-    renderAll();
-  });
+  el.querySelector(".note-toggle").addEventListener("click", () => { noteOpen[c.id] = !noteOpen[c.id]; renderAll(); });
   const na = el.querySelector(".note-area");
   if (na) na.addEventListener("change", e => { c.note = e.target.value; save(); });
   const del = el.querySelector(".c-del");
@@ -626,45 +1091,49 @@ function courseCard(c) {
   return el;
 }
 
-/* ================= Finished tab ================= */
+/* ---------- Done tab ---------- */
 function renderDone() {
   const { gpa, gradedUnits } = gpaData();
   const prepGpa = gpaData("major").gpa;
   const doneCourses = courses.filter(c => c.status === "done");
 
+  // strength
+  const st = strength();
+  const sl = document.getElementById("strengthLabel");
+  sl.textContent = st.label; sl.className = "strength-label " + st.cls;
+  document.getElementById("strengthPin").style.left = "calc(" + st.pos + "% - 2px)";
+  document.getElementById("strengthReasons").innerHTML = st.reasons.map(r => `<div class="reason">${r}</div>`).join("");
+
+  // gpa card
   const big = document.getElementById("gpaBig");
   const verdict = document.getElementById("gpaVerdict");
   const marker = document.getElementById("gpaMarker");
   if (gpa === null) {
-    big.textContent = "–";
-    big.className = "big-gpa";
+    big.textContent = "–"; big.className = "big-gpa";
     verdict.textContent = "Nothing graded yet. When grades post, hit \"Enter grade\" on the Plan tab and submit.";
     marker.style.left = "0%";
   } else {
     big.textContent = gpa.toFixed(2);
     big.className = "big-gpa " + (gpa >= 3.4 ? "ok" : gpa >= 3.0 ? "warn" : "bad");
-    const pos = Math.max(0, Math.min(1, (gpa - 2.0) / 2.0)) * 100;
-    marker.style.left = "calc(" + pos + "% - 1px)";
-    verdict.textContent = gpa >= 3.4
-      ? "In the competitive range for Merage. Keep it here."
-      : gpa >= 3.0
-      ? "Above the 3.0 minimum, below the competitive 3.4 target — still very fixable."
+    marker.style.left = "calc(" + (Math.max(0, Math.min(1, (gpa - 2.0) / 2.0)) * 100) + "% - 1px)";
+    verdict.textContent = gpa >= 3.4 ? "In the competitive range for Merage. Keep it here."
+      : gpa >= 3.0 ? "Above the 3.0 minimum, below the competitive 3.4 target — still very fixable."
       : "Below the 3.0 minimum right now. Every remaining course moves this a lot.";
   }
   document.getElementById("sgUnits").textContent = gradedUnits;
   document.getElementById("sgPrepGpa").textContent = prepGpa === null ? "–" : prepGpa.toFixed(2);
   document.getElementById("sgCount").textContent = doneCourses.length;
 
-  // grade distribution
   const dist = {};
   doneCourses.forEach(c => { if (c.grade) dist[c.grade] = (dist[c.grade] || 0) + 1; });
-  document.getElementById("gradeDist").innerHTML = GRADE_LIST
-    .filter(g => dist[g])
-    .map(g => `<span class="dist-chip">${g} × ${dist[g]}</span>`).join("");
+  document.getElementById("gradeDist").innerHTML = GRADE_LIST.filter(g => dist[g]).map(g => `<span class="dist-chip">${g} × ${dist[g]}</span>`).join("");
 
+  renderSim();
+  renderScore();
   renderWhatif();
+  renderGoals();
+  drawChart();
 
-  // course list grouped by term with per-term GPA
   const listEl = document.getElementById("doneList");
   if (!doneCourses.length) {
     listEl.innerHTML = `<div class="empty">No finished courses yet.<br>Submit grades from the Plan tab and they land here.</div>`;
@@ -679,9 +1148,7 @@ function renderDone() {
     const tGpa = un ? (pts / un).toFixed(2) : "–";
     const wrap = document.createElement("div");
     wrap.className = "term";
-    wrap.innerHTML = `<div class="term-head">
-      <div class="term-title">${term.label.replace(" — current","")}</div>
-      <div class="term-units">term GPA ${tGpa}</div></div>`;
+    wrap.innerHTML = `<div class="term-head"><div class="term-title">${term.label.replace(" — current","")}</div><div class="term-units">term GPA ${tGpa}</div></div>`;
     list.forEach(c => {
       const belowC = c.cat === "major" && c.grade && GRADES[c.grade] < 2.0;
       const row = document.createElement("div");
@@ -700,22 +1167,122 @@ function renderDone() {
       row.querySelector(".edit").addEventListener("click", () => {
         const g = prompt("New grade for " + c.name + " (A, A-, B+, B, B-, C+, C, C-, D, F):", c.grade || "");
         if (g === null) return;
-        const clean = g.trim().toUpperCase().replace("＋","+");
+        const clean = g.trim().toUpperCase();
         if (GRADES[clean] === undefined) { toast("Not a valid grade"); return; }
-        c.grade = clean;
-        save(); renderAll();
-        toast("Grade updated · " + clean);
+        c.grade = clean; save(); renderAll(); toast("Grade updated · " + clean);
       });
       row.querySelector(".back").addEventListener("click", () => {
-        c.status = "progress";
-        c.grade = null;
-        save(); renderAll();
-        toast("Moved back to plan");
+        c.status = "progress"; c.grade = null;
+        save(); renderAll(); toast("Moved back to plan");
       });
       wrap.appendChild(row);
     });
     listEl.appendChild(wrap);
   });
+}
+
+function renderSim() {
+  const proj = projectedGpa();
+  const { gpa } = gpaData();
+  const pv = document.getElementById("simProj");
+  const pd = document.getElementById("simDelta");
+  pv.textContent = proj.gpa === null ? "–" : proj.gpa.toFixed(2);
+  if (proj.simActive && gpa !== null && proj.gpa !== null) {
+    const d = proj.gpa - gpa;
+    pd.textContent = (d >= 0 ? "+" : "") + d.toFixed(2) + " vs current";
+    pd.className = "pd " + (d >= 0 ? "up" : "down");
+  } else if (proj.simActive) {
+    pd.textContent = "projected"; pd.className = "pd";
+  } else { pd.textContent = "no sim grades set"; pd.className = "pd"; }
+
+  const list = document.getElementById("simList");
+  const targets = courses.filter(c => c.status !== "done" && c.cat !== "opt");
+  list.innerHTML = "";
+  targets.forEach(c => {
+    const row = document.createElement("div");
+    row.className = "sim-row";
+    row.innerHTML = `
+      <div class="sim-name">${c.name.split(" — ")[0]} <span style="color:var(--mut2);font-weight:600">· ${c.units}u</span></div>
+      <div class="sim-chips">${SIM_GRADES.map(g => `<button class="sim-chip ${meta.sim[c.id] === g ? "on" : ""}" data-g="${g}">${g}</button>`).join("")}</div>`;
+    row.querySelectorAll(".sim-chip").forEach(ch => {
+      ch.addEventListener("click", () => {
+        meta.sim[c.id] = meta.sim[c.id] === ch.dataset.g ? null : ch.dataset.g;
+        save(); renderAll();
+      });
+    });
+    list.appendChild(row);
+  });
+}
+
+function drawChart() {
+  const cv = document.getElementById("gpaChart");
+  if (!cv || !cv.getContext) return;
+  const x = cv.getContext("2d");
+  if (!x) return;
+  const dpr = window.devicePixelRatio || 1;
+  const W = cv.clientWidth || 600, H = 190;
+  cv.width = W * dpr; cv.height = H * dpr;
+  x.scale(dpr, dpr);
+  x.clearRect(0, 0, W, H);
+
+  const termData = [];
+  let cumP = 0, cumU = 0;
+  TERMS.forEach(t => {
+    const list = courses.filter(c => c.term === t.id && c.status === "done" && c.grade);
+    if (!list.length) return;
+    let p = 0, u = 0;
+    list.forEach(c => { p += GRADES[c.grade] * c.units; u += c.units; });
+    cumP += p; cumU += u;
+    termData.push({ short: t.short, term: p / u, cum: cumP / cumU });
+  });
+
+  const mutedLine = getComputedStyle(document.documentElement).getPropertyValue("--line2").trim() || "#efece3";
+  const mutedText = getComputedStyle(document.documentElement).getPropertyValue("--mut2").trim() || "#9a937f";
+  const pad = { l: 30, r: 10, t: 10, b: 22 };
+  const y = v => pad.t + (4.0 - v) / 2.0 * (H - pad.t - pad.b);
+
+  // grid
+  x.strokeStyle = mutedLine; x.fillStyle = mutedText;
+  x.font = "10px -apple-system, sans-serif"; x.lineWidth = 1;
+  [2.0, 2.5, 3.0, 3.5, 4.0].forEach(v => {
+    x.beginPath(); x.moveTo(pad.l, y(v)); x.lineTo(W - pad.r, y(v)); x.stroke();
+    x.fillText(v.toFixed(1), 4, y(v) + 3);
+  });
+
+  if (!termData.length) {
+    x.fillText("No graded terms yet", pad.l + 10, H / 2);
+    return;
+  }
+  const xs = i => termData.length === 1 ? (pad.l + W - pad.r) / 2 : pad.l + i * (W - pad.l - pad.r) / (termData.length - 1);
+
+  // cumulative line
+  x.strokeStyle = "#7fa88a"; x.lineWidth = 2.5;
+  x.beginPath();
+  termData.forEach((d, i) => i ? x.lineTo(xs(i), y(d.cum)) : x.moveTo(xs(i), y(d.cum)));
+  x.stroke();
+  // term points + thin line
+  x.strokeStyle = "#7ba3d0"; x.lineWidth = 1.2;
+  x.beginPath();
+  termData.forEach((d, i) => i ? x.lineTo(xs(i), y(d.term)) : x.moveTo(xs(i), y(d.term)));
+  x.stroke();
+  termData.forEach((d, i) => {
+    x.fillStyle = "#7ba3d0";
+    x.beginPath(); x.arc(xs(i), y(d.term), 3.5, 0, 7); x.fill();
+    x.fillStyle = "#7fa88a";
+    x.beginPath(); x.arc(xs(i), y(d.cum), 3.5, 0, 7); x.fill();
+    x.fillStyle = mutedText;
+    x.fillText(d.short, xs(i) - 10, H - 6);
+  });
+}
+
+function renderScore() {
+  const { rows, total } = scoreBreakdown();
+  document.getElementById("scoreTotal").textContent = total;
+  document.getElementById("scoreRows").innerHTML = rows.map(r => `
+    <div class="score-row">
+      <div class="score-head"><span>${r.name}</span><span>${Math.round(r.val)} / ${r.max}</span></div>
+      <div class="score-track"><div class="score-fill" style="width:${(r.val / r.max) * 100}%"></div></div>
+    </div>`).join("");
 }
 
 function renderWhatif() {
@@ -736,28 +1303,170 @@ function renderWhatif() {
   out.innerHTML = msg;
 }
 
-/* ================= reqs / dates ================= */
-function renderReqs() {
-  const prep = majorPrepDone();
-  const eng = englishDone();
-  const units = completedUnits();
-  const { gpa } = gpaData();
-  const rows = [
-    { text: "7 major prep courses, C or better each", stat: prep.done + "/" + prep.total, state: prep.done >= prep.total ? "done" : prep.done > 0 ? "part" : "no" },
-    { text: "2 English composition courses (by spring before transfer)", stat: eng.done + "/" + eng.total, state: eng.done >= eng.total ? "done" : eng.done > 0 ? "part" : "no" },
-    { text: "60 UC-transferable semester units by Spring 2028", stat: units + "/60", state: units >= 60 ? "done" : units > 0 ? "part" : "no" },
-    { text: "3.0 GPA minimum · 3.4+ competitive", stat: gpa === null ? "–" : gpa.toFixed(2), state: gpa === null ? "no" : gpa >= 3.4 ? "done" : gpa >= 3.0 ? "part" : "no" },
-    { text: "Junior standing at application (on track w/ plan)", stat: "", state: "part" },
-    { text: "No TAG available — competitive review only", stat: "", state: "no" },
-  ];
-  document.getElementById("reqList").innerHTML = rows.map(r => `
-    <div class="req-row">
-      <div class="req-dot ${r.state}"></div>
-      <div class="req-text">${r.text}</div>
-      <div class="req-stat">${r.stat}</div>
-    </div>`).join("");
+function renderGoals() {
+  const list = document.getElementById("goalsList");
+  if (!meta.goals.length) {
+    list.innerHTML = `<div class="hint" style="padding:4px 0 2px">No goals yet — add one below or tap a preset.</div>`;
+  } else {
+    list.innerHTML = "";
+    meta.goals.forEach(g => {
+      const el = document.createElement("div");
+      el.className = "goal";
+      el.innerHTML = `
+        <div class="goal-head">
+          <div class="goal-title ${g.progress >= 100 ? "done" : ""}">${esc(g.title)}</div>
+          <div class="goal-pct">${g.progress}%</div>
+          <button class="icon-btn g-del">✕</button>
+        </div>
+        <input type="range" min="0" max="100" step="5" value="${g.progress}">`;
+      el.querySelector("input").addEventListener("change", e => {
+        g.progress = parseInt(e.target.value);
+        save(); renderGoals();
+        if (g.progress >= 100) toast("Goal hit: " + g.title);
+      });
+      el.querySelector(".g-del").addEventListener("click", () => {
+        meta.goals = meta.goals.filter(x => x.id !== g.id);
+        save(); renderGoals();
+      });
+      list.appendChild(el);
+    });
+  }
 }
 
+/* ---------- GE ---------- */
+function renderGe() {
+  const list = document.getElementById("geList");
+  list.innerHTML = "";
+  GE_AREAS.forEach(a => {
+    const cur = Math.min(meta.ge[a.id] || 0, a.need);
+    const el = document.createElement("div");
+    el.className = "ge-area";
+    el.innerHTML = `
+      <div class="ge-head"><div class="ge-name">${a.name}</div><div class="ge-count">${cur}/${a.need}</div></div>
+      <div class="ge-hint">${a.hint}</div>
+      <div class="ge-boxes">${Array.from({length: a.need}, (_, i) => `<div class="ge-box ${i < cur ? "on" : ""}" data-i="${i}">✓</div>`).join("")}</div>`;
+    el.querySelectorAll(".ge-box").forEach(box => {
+      box.addEventListener("click", () => {
+        const i = parseInt(box.dataset.i);
+        meta.ge[a.id] = (i < (meta.ge[a.id] || 0)) ? i : i + 1;
+        save(); renderAll();
+      });
+    });
+    list.appendChild(el);
+  });
+  document.getElementById("geBar").style.width = Math.round(gePct().pct * 100) + "%";
+}
+
+/* ---------- App ---------- */
+function renderApp() {
+  const now = new Date();
+  const cl = document.getElementById("appChecklist");
+  cl.innerHTML = "";
+  APP_CHECKS.forEach(c => {
+    const on = !!meta.appChecks[c.id];
+    const overdue = c.due && !on && new Date(c.due) < now;
+    const row = document.createElement("div");
+    row.className = "chk-row" + (on ? " on" : "");
+    row.innerHTML = `<div class="chk-box"></div>
+      <div class="chk-body"><div class="chk-text">${c.text}</div><div class="chk-when ${overdue ? "overdue" : ""}">${overdue ? "⚠ Past due · " : ""}${c.when}</div></div>`;
+    row.addEventListener("click", () => { meta.appChecks[c.id] = !meta.appChecks[c.id]; save(); renderAll(); });
+    cl.appendChild(row);
+  });
+
+  // PIQs
+  const pl = document.getElementById("piqList");
+  pl.innerHTML = "";
+  PIQS.forEach(p => {
+    const d = meta.piqs[p.id] || { text: "", status: "outline", updated: null };
+    const wc = wordCount(d.text);
+    const prog = d.text && d.text.trim() ? (PIQ_VAL[d.status] || 0.25) : 0;
+    const el = document.createElement("div");
+    el.className = "piq";
+    el.innerHTML = `
+      <div class="piq-head">
+        <div class="piq-title">${p.title}</div>
+        <span class="piq-tag ${p.req ? "" : "opt"}">${p.req ? "Required" : "Pick 3"}</span>
+        <span class="piq-wc">${wc ? wc + "w" : ""}</span>
+      </div>
+      <div class="piq-body">
+        <div class="piq-status">${PIQ_STATUSES.map(s => `<button class="${d.status === s ? "on" : ""}" data-s="${s}">${s[0].toUpperCase() + s.slice(1)}</button>`).join("")}</div>
+        <textarea placeholder="Draft here — 350 words max. Bullet points are fine to start.">${esc(d.text)}</textarea>
+        <div class="wc ${wc > 350 ? "over" : ""}">${wc} / 350 words</div>
+        <div class="piq-bar"><div class="f" style="width:${prog * 100}%"></div></div>
+        ${d.updated ? `<div class="piq-ts">Last saved ${new Date(d.updated).toLocaleString()}</div>` : ""}
+      </div>`;
+    el.querySelector(".piq-head").addEventListener("click", () => el.classList.toggle("open"));
+    el.querySelectorAll(".piq-status button").forEach(b => {
+      b.addEventListener("click", () => {
+        meta.piqs[p.id] = { ...d, status: b.dataset.s, updated: Date.now() };
+        save(); renderApp(); renderInsights();
+        // keep this one open
+        pl.querySelectorAll(".piq").forEach(x => { if (x.querySelector(".piq-title").textContent === p.title) x.classList.add("open"); });
+      });
+    });
+    const ta = el.querySelector("textarea");
+    ta.addEventListener("input", () => {
+      const w = wordCount(ta.value);
+      const wcEl = el.querySelector(".wc");
+      wcEl.textContent = w + " / 350 words";
+      wcEl.className = "wc" + (w > 350 ? " over" : "");
+      el.querySelector(".piq-wc").textContent = w ? w + "w" : "";
+    });
+    ta.addEventListener("change", () => {
+      meta.piqs[p.id] = { text: ta.value, status: (meta.piqs[p.id] && meta.piqs[p.id].status) || (ta.value.trim() ? "draft" : "outline"), updated: Date.now() };
+      save(); toast("Draft saved");
+    });
+    pl.appendChild(el);
+  });
+
+  // activities
+  const al = document.getElementById("actList");
+  al.innerHTML = "";
+  meta.acts.forEach(a => {
+    const comp = actCompleteness(a);
+    const el = document.createElement("div");
+    el.className = "act";
+    el.innerHTML = `
+      <div class="act-head">
+        <div><div class="act-name">${esc(a.name)}</div><div class="act-role">${esc(a.role)}</div></div>
+        <button class="icon-btn a-del">✕</button>
+      </div>
+      ${a.desc ? `<div class="act-desc">${esc(a.desc)}</div>` : ""}
+      <div class="act-tags">
+        ${a.cat ? `<span class="act-tag">${esc(a.cat)}</span>` : ""}
+        ${a.hrs ? `<span class="act-tag">${esc(a.hrs)} hrs/wk</span>` : ""}
+        ${a.weeks ? `<span class="act-tag">${esc(a.weeks)} wks/yr</span>` : ""}
+      </div>
+      <div class="act-complete"><div class="f" style="width:${comp * 100}%"></div></div>`;
+    el.querySelector(".a-del").addEventListener("click", () => {
+      if (!confirm(`Remove ${a.name}?`)) return;
+      meta.acts = meta.acts.filter(x => x.id !== a.id);
+      save(); renderAll();
+    });
+    al.appendChild(el);
+  });
+
+  // links
+  const ll = document.getElementById("linksList");
+  ll.innerHTML = "";
+  meta.links.forEach(l => {
+    const el = document.createElement("div");
+    el.className = "link-item";
+    el.innerHTML = `
+      <div class="link-body">
+        <div class="link-title">${l.url ? `<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.title)}</a>` : esc(l.title)}</div>
+        ${l.note ? `<div class="link-note">${esc(l.note)}</div>` : ""}
+      </div>
+      <button class="icon-btn l-del">✕</button>`;
+    el.querySelector(".l-del").addEventListener("click", () => {
+      meta.links = meta.links.filter(x => x.id !== l.id);
+      save(); renderApp();
+    });
+    ll.appendChild(el);
+  });
+}
+
+/* ---------- Dates ---------- */
 function renderDates() {
   const now = new Date();
   const open = daysUntil(new Date("2027-10-01"));
@@ -780,18 +1489,143 @@ function renderDates() {
   }).join("");
 }
 
-/* ================= UI wiring ================= */
+/* ---------- confetti ---------- */
+function maybeCelebrate() {
+  const prep = majorPrepDone();
+  if (prep.done >= prep.total && !meta.celebrated) {
+    meta.celebrated = true; save();
+    confettiBurst();
+    toast("All major prep done 🎓");
+  }
+  if (prep.done < prep.total && meta.celebrated) { meta.celebrated = false; save(); }
+}
+function confettiBurst() {
+  const cv = document.getElementById("confetti");
+  const dpr = window.devicePixelRatio || 1;
+  cv.width = innerWidth * dpr; cv.height = innerHeight * dpr;
+  cv.style.width = innerWidth + "px"; cv.style.height = innerHeight + "px";
+  const x = cv.getContext("2d"); x.scale(dpr, dpr);
+  const colors = ["#7fa88a", "#7ba3d0", "#e8b46a", "#d3765c", "#cfe0b8"];
+  const parts = Array.from({length: 90}, () => ({
+    px: innerWidth / 2, py: innerHeight * 0.3,
+    vx: (Math.random() - 0.5) * 10, vy: -Math.random() * 9 - 3,
+    s: Math.random() * 6 + 3, c: colors[(Math.random() * colors.length) | 0],
+    r: Math.random() * 6.28, vr: (Math.random() - 0.5) * 0.3,
+  }));
+  let frames = 0;
+  (function tick() {
+    x.clearRect(0, 0, innerWidth, innerHeight);
+    parts.forEach(p => {
+      p.vy += 0.25; p.px += p.vx; p.py += p.vy; p.r += p.vr;
+      x.save(); x.translate(p.px, p.py); x.rotate(p.r);
+      x.fillStyle = p.c; x.fillRect(-p.s / 2, -p.s / 2, p.s, p.s * 0.6);
+      x.restore();
+    });
+    if (++frames < 90) requestAnimationFrame(tick);
+    else x.clearRect(0, 0, innerWidth, innerHeight);
+  })();
+}
+
+/* ---------- counselor report ---------- */
+function buildReport() {
+  const { gpa, gradedUnits } = gpaData();
+  const prepGpa = gpaData("major").gpa;
+  const prep = majorPrepDone();
+  const units = completedUnits();
+  const ge = gePct();
+  const doneCourses = courses.filter(c => c.status === "done");
+  const active = courses.filter(c => c.status !== "done");
+  const issues = insights().filter(i => i.level === "red" || i.level === "amber");
+  const d = new Date();
+
+  document.getElementById("printReport").innerHTML = `
+    <h1>Transfer Progress Report — SMC → UCI Business Administration</h1>
+    <p>Prepared ${d.toLocaleDateString()} · Target: Fall 2028 · Paul Merage School of Business (no TAG for this major)</p>
+    <h2>Summary</h2>
+    <p>
+      Cumulative UC GPA: <b>${gpa === null ? "no grades yet" : gpa.toFixed(2)}</b> (${gradedUnits} graded units) ·
+      Major prep GPA: <b>${prepGpa === null ? "—" : prepGpa.toFixed(2)}</b> ·
+      Major prep done: <b>${prep.done}/${prep.total}</b> ·
+      UC-transferable units: <b>${units}/60</b> ·
+      Cal-GETC: <b>${ge.done}/${ge.total}</b> courses checked
+    </p>
+    <h2>Completed courses</h2>
+    ${doneCourses.length ? `<table><tr><th>Course</th><th>UCI equiv</th><th>Units</th><th>Grade</th></tr>
+      ${doneCourses.map(c => `<tr><td>${esc(c.name)}</td><td>${esc(c.uci)}</td><td>${c.units}</td><td>${c.grade || "—"}</td></tr>`).join("")}</table>` : "<p>None yet.</p>"}
+    <h2>Planned / in progress</h2>
+    <table><tr><th>Term</th><th>Course</th><th>UCI equiv</th><th>Units</th><th>Status</th></tr>
+      ${active.map(c => `<tr><td>${TERMS.find(t => t.id === c.term).label.replace(" — current","")}</td><td>${esc(c.name)}</td><td>${esc(c.uci)}</td><td>${c.units}</td><td>${c.status === "progress" ? "Taking" : "Planned"}</td></tr>`).join("")}</table>
+    <h2>Flags to discuss</h2>
+    ${issues.length ? `<ul>${issues.map(i => `<li>${i.text}${i.fix ? " — " + i.fix : ""}</li>`).join("")}</ul>` : "<p>No open flags.</p>"}
+    <h2>Questions for this meeting</h2>
+    <ul>
+      <li>Is ECON C2001 micro or macro under the new numbering — and which second econ course should I take?</li>
+      <li>Full Cal-GETC or minimum GE + major prep for Merage?</li>
+      <li>Which second English comp course counts, and does it fit Winter 2027?</li>
+      <li>Am I on track for 60 UC-transferable units by Spring 2028?</li>
+      <li>TAG Business Econ vs straight Business Admin application — which is smarter for my numbers?</li>
+      <li>Do any of my courses double-count for Cal-GETC areas and major prep?</li>
+    </ul>`;
+  window.print();
+}
+
+/* ---------- search ---------- */
+function buildSearchIndex() {
+  const idx = [];
+  courses.forEach(c => idx.push({ kind: "Course", title: c.name, snip: `${TERMS.find(t => t.id === c.term).label} · ${c.units}u · ${c.status}${c.grade ? " · " + c.grade : ""}${c.note ? " · " + c.note : ""}`, tab: c.status === "done" ? "done" : "plan", text: (c.name + " " + c.uci + " " + (c.note || "")).toLowerCase() }));
+  PIQS.forEach(p => { const d = meta.piqs[p.id]; idx.push({ kind: "PIQ", title: p.title, snip: d && d.text ? d.text.slice(0, 90) : "No draft yet", tab: "app", text: (p.title + " " + (d ? d.text : "")).toLowerCase() }); });
+  APP_CHECKS.forEach(c => idx.push({ kind: "Checklist", title: c.text, snip: c.when, tab: "app", text: (c.text + " " + c.when).toLowerCase() }));
+  GE_AREAS.forEach(a => idx.push({ kind: "Cal-GETC", title: a.name, snip: a.hint, tab: "ge", text: (a.name + " " + a.hint).toLowerCase() }));
+  TIMELINE.forEach(t => idx.push({ kind: "Deadline", title: t.what, snip: t.label + " · " + t.note, tab: "dates", text: (t.what + " " + t.label + " " + t.note).toLowerCase() }));
+  meta.acts.forEach(a => idx.push({ kind: "Activity", title: a.name, snip: a.role + (a.desc ? " · " + a.desc.slice(0, 70) : ""), tab: "app", text: (a.name + " " + a.role + " " + a.desc).toLowerCase() }));
+  meta.links.forEach(l => idx.push({ kind: "Link", title: l.title, snip: l.note || l.url || "", tab: "app", text: (l.title + " " + (l.note || "") + " " + (l.url || "")).toLowerCase() }));
+  meta.goals.forEach(g => idx.push({ kind: "Goal", title: g.title, snip: g.progress + "% complete", tab: "done", text: g.title.toLowerCase() }));
+  return idx;
+}
+function runSearch(q) {
+  const res = document.getElementById("searchResults");
+  q = q.trim().toLowerCase();
+  if (!q) { res.innerHTML = ""; return; }
+  const hits = buildSearchIndex().filter(i => i.text.includes(q)).slice(0, 25);
+  res.innerHTML = hits.length ? hits.map((h, i) => `
+    <div class="sr" data-tab="${h.tab}">
+      <div class="sr-kind">${h.kind}</div>
+      <div class="sr-title">${esc(h.title)}</div>
+      <div class="sr-snip">${esc(h.snip)}</div>
+    </div>`).join("") : `<div class="empty">No matches for "${esc(q)}"</div>`;
+  res.querySelectorAll(".sr").forEach(el => {
+    el.addEventListener("click", () => {
+      document.getElementById("searchOverlay").classList.remove("open");
+      document.querySelector(`.tab[data-panel="${el.dataset.tab}"]`).click();
+    });
+  });
+}
+
+/* ================= wiring ================= */
 document.querySelectorAll(".tab").forEach(tab => {
   tab.addEventListener("click", () => {
     document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
     document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
     tab.classList.add("active");
     document.getElementById("panel-" + tab.dataset.panel).classList.add("active");
+    if (tab.dataset.panel === "done") drawChart();
   });
 });
-document.getElementById("openAdd").addEventListener("click", () => {
-  document.getElementById("addForm").classList.toggle("open");
+document.querySelectorAll(".stat").forEach(s => {
+  s.addEventListener("click", () => {
+    const tab = document.querySelector(`.tab[data-panel="${s.dataset.go}"]`);
+    if (tab) tab.click();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
 });
+document.querySelectorAll(".card.clps h3").forEach(h => {
+  h.addEventListener("click", () => {
+    const card = h.parentElement;
+    card.classList.toggle("closed");
+    if (card.id === "chartCard" && !card.classList.contains("closed")) drawChart();
+  });
+});
+document.getElementById("openAdd").addEventListener("click", () => document.getElementById("addForm").classList.toggle("open"));
 document.getElementById("afSave").addEventListener("click", () => {
   const name = document.getElementById("afName").value.trim();
   if (!name) return;
@@ -804,22 +1638,68 @@ document.getElementById("afSave").addEventListener("click", () => {
   });
   document.getElementById("afName").value = "";
   document.getElementById("addForm").classList.remove("open");
-  save(); renderAll();
-  toast("Course added");
+  save(); renderAll(); toast("Course added");
 });
+document.getElementById("actAddBtn").addEventListener("click", () => document.getElementById("actForm").classList.toggle("open"));
+document.getElementById("acSave").addEventListener("click", () => {
+  const name = document.getElementById("acName").value.trim();
+  if (!name) return;
+  meta.acts.push({
+    id: "a" + Date.now(), name,
+    role: document.getElementById("acRole").value.trim(),
+    cat: document.getElementById("acCat").value,
+    hrs: document.getElementById("acHrs").value.trim(),
+    weeks: document.getElementById("acWeeks").value.trim(),
+    desc: document.getElementById("acDesc").value.trim(),
+  });
+  ["acName","acRole","acHrs","acWeeks","acDesc"].forEach(id => document.getElementById(id).value = "");
+  document.getElementById("actForm").classList.remove("open");
+  save(); renderAll(); toast("Activity added");
+});
+document.getElementById("linkAddBtn").addEventListener("click", () => document.getElementById("linkForm").classList.toggle("open"));
+document.getElementById("lkSave").addEventListener("click", () => {
+  const title = document.getElementById("lkTitle").value.trim();
+  if (!title) return;
+  meta.links.push({ id: "l" + Date.now(), title, url: document.getElementById("lkUrl").value.trim(), note: document.getElementById("lkNote").value.trim() });
+  ["lkTitle","lkUrl","lkNote"].forEach(id => document.getElementById(id).value = "");
+  document.getElementById("linkForm").classList.remove("open");
+  save(); renderApp(); toast("Saved to vault");
+});
+document.querySelectorAll(".preset").forEach(p => {
+  p.addEventListener("click", () => {
+    meta.goals.push({ id: "g" + Date.now(), title: p.dataset.g, progress: 0 });
+    save(); renderGoals(); toast("Goal added");
+  });
+});
+document.getElementById("goalAdd").addEventListener("click", () => {
+  const t = document.getElementById("goalName").value.trim();
+  if (!t) return;
+  meta.goals.push({ id: "g" + Date.now(), title: t, progress: 0 });
+  document.getElementById("goalName").value = "";
+  save(); renderGoals(); toast("Goal added");
+});
+document.getElementById("simClear").addEventListener("click", () => { meta.sim = {}; save(); renderAll(); });
 document.getElementById("targetGpa").addEventListener("change", renderWhatif);
+document.getElementById("btnReport").addEventListener("click", buildReport);
+document.getElementById("btnSearch").addEventListener("click", () => {
+  document.getElementById("searchOverlay").classList.add("open");
+  const inp = document.getElementById("searchInput");
+  inp.value = ""; document.getElementById("searchResults").innerHTML = "";
+  setTimeout(() => inp.focus(), 50);
+});
+document.getElementById("searchClose").addEventListener("click", () => document.getElementById("searchOverlay").classList.remove("open"));
+document.getElementById("searchInput").addEventListener("input", e => runSearch(e.target.value));
 document.getElementById("resetBtn").addEventListener("click", () => {
-  if (!confirm("Reset all courses, statuses, grades, and notes back to the default plan?")) return;
+  if (!confirm("Reset ALL data — courses, grades, GE checks, app checklist, PIQ drafts, activities, goals, links?")) return;
   courses = JSON.parse(JSON.stringify(DEFAULT_COURSES));
+  meta = migrateMeta(JSON.parse(JSON.stringify(DEFAULT_META)));
   pendingGrade = {}; gradeOpen = {}; noteOpen = {};
   save(); renderAll();
 });
-
-/* backup / restore */
 document.getElementById("bkExport").addEventListener("click", () => {
   const area = document.getElementById("bkArea");
   area.classList.add("open");
-  area.value = JSON.stringify(courses);
+  area.value = JSON.stringify({ courses, meta });
   area.select();
   try { document.execCommand("copy"); toast("Copied to clipboard"); }
   catch (e) { toast("Copy manually from the box"); }
@@ -829,12 +1709,16 @@ document.getElementById("bkImport").addEventListener("click", () => {
   if (!area.classList.contains("open")) { area.classList.add("open"); area.value = ""; area.focus(); return; }
   try {
     const data = JSON.parse(area.value);
-    if (!Array.isArray(data) || !data.every(c => c.id && c.name)) throw new Error("bad shape");
-    courses = data.map(c => ({ note: "", ...c }));
+    if (data.courses && Array.isArray(data.courses)) { courses = data.courses; meta = migrateMeta(data.meta || meta); }
+    else if (Array.isArray(data)) { courses = data; }
+    else throw new Error("bad shape");
     save(); renderAll();
     area.classList.remove("open");
     toast("Data imported");
   } catch (e) { toast("Invalid data — paste an export"); }
+});
+window.addEventListener("resize", () => {
+  if (!document.getElementById("chartCard").classList.contains("closed")) drawChart();
 });
 
 load();
