@@ -9,527 +9,606 @@
 <meta name="theme-color" content="#0a0d13">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;600;700;800;900&family=Overpass+Mono:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <title>405 South — SMC → UCI</title>
 <style>
-  /* ═══════════════ 405 SOUTH — NIGHT DRIVE ═══════════════
-     palette: asphalt blues · retroreflective sign green · lane-paint amber
-     type: Overpass (open-source Highway Gothic) + Overpass Mono (odometer) */
+  /* ═══════════════ 405 SOUTH — DEPARTURES ═══════════════
+     A split-flap departure board for one journey: SMC → a UC.
+     palette: warm board charcoal · signal amber · jade cleared · coral fault · sky data
+     type: Archivo (industrial signage grotesk) + JetBrains Mono (board numerals) */
   :root {
-    --road: #0a0d13; --road2: #0f1420;
-    --panel: #131a27; --panel2: #1a2434; --panel3: #212e42;
-    --edge: #243048; --edge2: #1b2436;
-    --ink: #eff3fa; --dim: #94a1b8; --dim2: #5f6c85;
-    --signal: #2bd07e; --signal2: #17b467;
-    --sign: #0e6b42; --sign2: #0a5334; --signtext: #f2f7f2;
-    --lane: #f6c544;
-    --red: #ff6b57; --amber: #f0a44a; --blue: #6ea8ff; --green: #2bd07e;
-    --mut: #94a1b8; --mut2: #5f6c85;
-    --card: #131a27; --card2: #1a2434; --line: #243048; --line2: #1b2436;
-    --paper: #0a0d13; --asphalt: #0a0d13; --asphalt2: #1a2434;
-    --glow-g: 0 0 22px rgba(43,208,126,0.22);
-    --glow-a: 0 0 20px rgba(246,197,68,0.18);
-    --ease: cubic-bezier(0.22, 0.9, 0.3, 1);
-    --disp: "Overpass", -apple-system, sans-serif;
-    --mono: "Overpass Mono", ui-monospace, monospace;
+    --board: #100e0c; --board2: #17140f;
+    --tile: #1c1916; --tile2: #241f19; --tile3: #2e271f;
+    --edge: #342c22; --edge2: #241f19;
+    --ivory: #f6f1e7; --dim: #a4988a; --dim2: #6e6558;
+    --amber: #ffb02e; --amber2: #d98c14;
+    --jade: #47d6a0; --jade2: #1fa877;
+    --coral: #ff6f5b; --sky: #7cc4ff; --plum: #c79bff;
+    /* aliases so every legacy class keeps working */
+    --ink: var(--ivory); --mut: var(--dim); --mut2: var(--dim2);
+    --card: var(--tile); --card2: var(--tile2); --line: var(--edge); --line2: var(--edge2);
+    --paper: var(--board); --asphalt: var(--board); --asphalt2: var(--tile2);
+    --green: var(--jade); --red: var(--coral); --blue: var(--sky); --lane: var(--amber);
+    --sign: #17564a; --sign2: #0f3d34; --signtext: #eef7f3; --signal: var(--jade); --signal2: var(--jade2);
+    --glow-a: 0 0 24px rgba(255,176,46,0.28);
+    --glow-j: 0 0 20px rgba(71,214,160,0.25);
+    --ease: cubic-bezier(0.2, 0.85, 0.25, 1);
+    --snap: cubic-bezier(0.34, 1.4, 0.5, 1);
+    --disp: "Archivo", -apple-system, BlinkMacSystemFont, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, monospace;
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body { margin: 0; }
   html { color-scheme: dark; }
   body {
-    background: var(--road);
-    background-image: radial-gradient(1100px 420px at 50% -140px, #131c2e 0%, transparent 62%);
-    color: var(--ink);
-    font-family: var(--disp);
-    font-size: 15px;
-    padding-bottom: calc(96px + env(safe-area-inset-bottom));
+    background: var(--board);
+    background-image:
+      radial-gradient(900px 380px at 50% -120px, #1d1913 0%, transparent 70%),
+      repeating-linear-gradient(180deg, rgba(255,255,255,0.014) 0 1px, transparent 1px 3px);
+    color: var(--ivory);
+    font-family: var(--disp); font-size: 15px; letter-spacing: -0.005em;
+    padding-bottom: calc(94px + env(safe-area-inset-bottom));
     overflow-x: hidden;
   }
-  ::selection { background: rgba(43,208,126,0.3); }
-  .wrap { max-width: 680px; margin: 0 auto; padding: 0 14px; }
+  ::selection { background: rgba(255,176,46,0.32); }
+  .wrap { max-width: 700px; margin: 0 auto; padding: 0 14px; }
   button { font-family: var(--disp); }
-  button, .tab, .stat, .sr, .chk-row, .ge-box, .hero { transition: transform 0.14s var(--ease), background 0.18s, border-color 0.18s, opacity 0.18s, box-shadow 0.25s; }
-  button:active, .tab:active, .stat:active, .ge-box:active, .hero:active, .sr:active { transform: scale(0.96); }
-  :focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; border-radius: 6px; }
-  input, select, textarea { background: var(--panel2); color: var(--ink); border: 1px solid var(--edge); font-family: var(--disp); accent-color: var(--signal); }
+  button, .tab, .stat, .sr, .chk-row, .ge-box, .hero, .rq-t, .pk-f, .sim-chip {
+    transition: transform 0.14s var(--ease), background 0.2s, border-color 0.2s, color 0.2s, opacity 0.2s, box-shadow 0.28s;
+  }
+  button:active, .tab:active, .stat:active, .ge-box:active, .hero:active, .sr:active, .rq-t:active { transform: scale(0.965); }
+  :focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; border-radius: 6px; }
+  input, select, textarea {
+    background: var(--board2); color: var(--ivory); border: 1px solid var(--edge);
+    font-family: var(--disp); accent-color: var(--amber);
+  }
   input::placeholder, textarea::placeholder { color: var(--dim2); }
 
-  /* ═══════════════ header: the night road ═══════════════ */
+  /* flip-in: the split-flap signature */
+  @keyframes flap { from { transform: perspective(320px) rotateX(-88deg); opacity: 0; } 60% { opacity: 1; } to { transform: none; opacity: 1; } }
+  @keyframes rise { from { opacity: 0; transform: translateY(13px); } to { opacity: 1; transform: none; } }
+  @keyframes glowIn { from { opacity: 0; filter: blur(6px); } to { opacity: 1; filter: none; } }
+
+  /* ═══════════════ header: the board ═══════════════ */
   header {
-    background: linear-gradient(180deg, #0b101c 0%, #0d1322 46%, #0a0d13 100%);
-    color: var(--ink);
-    padding: max(18px, env(safe-area-inset-top)) 14px 30px;
+    background: linear-gradient(180deg, #16120d 0%, #100e0c 100%);
+    border-bottom: 1px solid var(--edge);
+    padding: max(16px, env(safe-area-inset-top)) 14px 20px;
     position: relative; overflow: hidden;
-    border-bottom: 1px solid var(--edge2);
   }
-  /* road surface in perspective */
   header::before {
-    content: ""; position: absolute; left: -25%; right: -25%; top: 46%; bottom: -6%;
-    background: linear-gradient(180deg, #10182a 0%, #0a0e18 90%);
-    transform: perspective(320px) rotateX(60deg); transform-origin: top center;
-    border-top: 1px solid #1d2942;
+    content: ""; position: absolute; inset: 0;
+    background: repeating-linear-gradient(180deg, rgba(255,176,46,0.05) 0 1px, transparent 1px 4px);
+    pointer-events: none;
   }
-  /* animated center lane dashes driving toward you */
+  /* light sweep across the board */
   header::after {
-    content: ""; position: absolute; left: 50%; top: 46%; bottom: -6%; width: 9px; margin-left: -4.5px;
-    background: repeating-linear-gradient(180deg, var(--lane) 0 22px, transparent 22px 58px);
-    transform: perspective(320px) rotateX(60deg); transform-origin: top center;
-    animation: drive 1.5s linear infinite;
-    opacity: 0.8; box-shadow: 0 0 14px rgba(246,197,68,0.35);
+    content: ""; position: absolute; top: 0; bottom: 0; width: 42%;
+    background: linear-gradient(100deg, transparent, rgba(255,214,138,0.07), transparent);
+    animation: sweep 7s var(--ease) infinite; pointer-events: none;
   }
-  @keyframes drive { to { background-position: 0 58px; } }
+  @keyframes sweep { 0% { left: -50%; } 55%, 100% { left: 115%; } }
   header .wrap { padding: 0; position: relative; z-index: 2; }
 
-  .hd-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; animation: dropIn 0.5s var(--ease) both; }
-  .route-shield { display: flex; align-items: center; gap: 10px; }
-  /* interstate shield: red crest, blue field */
+  .hd-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; animation: rise 0.5s var(--ease) both; }
+  .route-shield { display: flex; align-items: center; gap: 11px; }
   .shield {
-    width: 46px; height: 44px; background: #2456b0; color: #fff;
-    border-radius: 7px 7px 52% 52% / 7px 7px 64% 64%;
-    display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+    width: 44px; height: 44px; border-radius: 10px;
+    background: linear-gradient(165deg, var(--amber), var(--amber2)); color: #191206;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
     font-weight: 900; line-height: 1; overflow: hidden;
-    border: 2px solid #e8edf6; box-shadow: 0 4px 14px rgba(0,0,0,0.5), inset 0 -6px 12px rgba(0,0,0,0.28);
+    box-shadow: 0 6px 18px rgba(255,176,46,0.24), inset 0 1px 0 rgba(255,255,255,0.4), inset 0 -1px 0 rgba(0,0,0,0.25);
+    position: relative;
   }
-  .shield small { font-size: 0.36rem; letter-spacing: 0.07em; background: #c8372e; width: 100%; text-align: center; padding: 2.5px 0 2px; }
-  .shield b { font-size: 1.02rem; margin-top: 4px; font-family: var(--disp); letter-spacing: 0.01em; }
-  .route-name { font-size: 0.8rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.16em; }
-  .route-name span { display: block; font-size: 0.58rem; font-weight: 600; letter-spacing: 0.08em; color: var(--dim); text-transform: none; margin-top: 3px; }
+  .shield::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgba(25,18,6,0.32); }
+  .shield small { font-size: 0.34rem; letter-spacing: 0.18em; font-weight: 800; opacity: 0.85; }
+  .shield b { font-size: 1.14rem; font-family: var(--mono); font-weight: 700; margin-top: 2px; }
+  .route-name { font-size: 0.82rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.2em; }
+  .route-name span { display: block; font-family: var(--mono); font-size: 0.56rem; font-weight: 500; letter-spacing: 0.08em; color: var(--dim); text-transform: none; margin-top: 4px; }
   .hd-tools { display: flex; gap: 7px; }
-  .tool-btn { border: 1px solid var(--edge); background: rgba(26,36,52,0.72); backdrop-filter: blur(8px); color: var(--ink); border-radius: 14px; font-size: 0.68rem; font-weight: 700; padding: 7px 12px; cursor: pointer; }
-
-  /* destination guide sign — retroreflective */
-  .guide-sign {
-    background: linear-gradient(168deg, #10744a 0%, var(--sign) 55%, #0b5837 100%);
-    border: 2px solid rgba(242,247,242,0.92); outline: 2px solid rgba(9,40,26,0.9); outline-offset: -6px;
-    border-radius: 14px; padding: 15px 16px 14px; color: var(--signtext);
-    box-shadow: 0 14px 34px rgba(0,0,0,0.55), var(--glow-g), inset 0 1px 0 rgba(255,255,255,0.22);
-    position: relative; overflow: hidden;
-    animation: dropIn 0.55s 0.06s var(--ease) both;
+  .tool-btn {
+    border: 1px solid var(--edge); background: var(--tile); color: var(--ivory);
+    border-radius: 10px; font-size: 0.66rem; font-weight: 700; padding: 8px 12px; cursor: pointer;
+    letter-spacing: 0.04em;
   }
-  .guide-sign::after { content: ""; position: absolute; inset: 0; background: linear-gradient(115deg, rgba(255,255,255,0.1) 0%, transparent 34%); pointer-events: none; }
-  .gs-row { display: flex; justify-content: space-between; align-items: baseline; }
-  .gs-dest { font-size: 1.5rem; font-weight: 900; letter-spacing: 0.01em; }
-  .gs-dest small { display: block; font-size: 0.6rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.78; margin-top: 2px; }
+
+  /* main destination board */
+  .guide-sign {
+    background: linear-gradient(178deg, var(--tile2), var(--tile));
+    border: 1px solid var(--edge); border-radius: 14px; padding: 15px 16px 14px;
+    box-shadow: 0 16px 38px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
+    position: relative; overflow: hidden;
+    animation: flap 0.6s 0.05s var(--ease) both; transform-origin: top center;
+  }
+  .guide-sign::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--amber), transparent); opacity: 0.55; }
+  .gs-row { display: flex; justify-content: space-between; align-items: flex-end; }
+  .gs-dest { font-size: 1.55rem; font-weight: 900; letter-spacing: -0.015em; line-height: 1; }
+  .gs-dest small { display: block; font-family: var(--mono); font-size: 0.56rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--amber); margin-top: 6px; }
   .gs-miles { text-align: right; }
-  .gs-miles b { font-size: 1.65rem; font-weight: 700; font-family: var(--mono); }
-  .gs-miles span { display: block; font-size: 0.54rem; text-transform: uppercase; letter-spacing: 0.14em; opacity: 0.78; }
-  .lane { height: 10px; border-radius: 6px; background: rgba(6,20,13,0.65); margin-top: 12px; position: relative; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.5); }
-  .lane::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, transparent 0 14px, rgba(246,197,68,0.5) 14px 24px); mix-blend-mode: screen; }
-  .lane .gone { position: absolute; top: 0; bottom: 0; left: 0; background: linear-gradient(90deg, var(--signal2), #7ff0b6); border-radius: 6px; transition: width 0.8s var(--ease); z-index: 1; box-shadow: 0 0 12px rgba(43,208,126,0.55); }
-  .lane-caption { display: flex; justify-content: space-between; font-size: 0.58rem; opacity: 0.82; margin-top: 6px; letter-spacing: 0.06em; font-family: var(--mono); font-weight: 600; }
+  .gs-miles b { font-size: 1.9rem; font-weight: 700; font-family: var(--mono); color: var(--amber); text-shadow: 0 0 26px rgba(255,176,46,0.35); line-height: 1; }
+  .gs-miles span { display: block; font-size: 0.5rem; text-transform: uppercase; letter-spacing: 0.18em; color: var(--dim); margin-top: 5px; font-weight: 800; }
+  .lane { height: 8px; border-radius: 4px; background: var(--board); margin-top: 13px; position: relative; overflow: hidden; border: 1px solid var(--edge2); }
+  .lane::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, transparent 0 5px, rgba(255,255,255,0.05) 5px 6px); }
+  .lane .gone { position: absolute; top: 0; bottom: 0; left: 0; background: linear-gradient(90deg, var(--amber2), var(--amber)); border-radius: 4px; transition: width 0.9s var(--ease); z-index: 1; box-shadow: var(--glow-a); }
+  .lane-caption { display: flex; justify-content: space-between; font-size: 0.56rem; color: var(--dim); margin-top: 7px; letter-spacing: 0.1em; font-family: var(--mono); font-weight: 600; text-transform: uppercase; }
 
-  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 14px; }
-  .stat { background: rgba(19,26,39,0.82); backdrop-filter: blur(8px); border: 1px solid var(--edge); border-radius: 12px; padding: 9px 6px 8px; text-align: center; cursor: pointer; animation: dropIn 0.5s var(--ease) both; }
-  .stat:nth-child(1) { animation-delay: 0.12s; } .stat:nth-child(2) { animation-delay: 0.17s; }
-  .stat:nth-child(3) { animation-delay: 0.22s; } .stat:nth-child(4) { animation-delay: 0.27s; }
-  .stat .v { font-size: 1.02rem; font-weight: 700; font-family: var(--mono); }
-  .stat .l { font-size: 0.52rem; text-transform: uppercase; letter-spacing: 0.11em; color: var(--dim); margin-top: 3px; font-weight: 800; }
-  .stat .v.ok { color: var(--signal); text-shadow: 0 0 12px rgba(43,208,126,0.5); }
-  .stat .v.warn { color: var(--lane); } .stat .v.bad { color: var(--red); }
-  @keyframes dropIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; margin-top: 12px; }
+  .stat {
+    background: var(--tile); border: 1px solid var(--edge); border-radius: 11px;
+    padding: 10px 5px 8px; text-align: center; cursor: pointer; position: relative; overflow: hidden;
+    animation: flap 0.5s var(--ease) both; transform-origin: top center;
+  }
+  .stat::after { content: ""; position: absolute; left: 8px; right: 8px; top: 50%; height: 1px; background: rgba(0,0,0,0.45); }
+  .stat:nth-child(1) { animation-delay: 0.16s; } .stat:nth-child(2) { animation-delay: 0.23s; }
+  .stat:nth-child(3) { animation-delay: 0.3s; } .stat:nth-child(4) { animation-delay: 0.37s; }
+  .stat .v { font-size: 1.06rem; font-weight: 700; font-family: var(--mono); }
+  .stat .l { font-size: 0.48rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--dim2); margin-top: 4px; font-weight: 800; }
+  .stat .v.ok { color: var(--jade); text-shadow: 0 0 14px rgba(71,214,160,0.45); }
+  .stat .v.warn { color: var(--amber); } .stat .v.bad { color: var(--coral); }
 
-  /* ═══════════════ bottom dock nav ═══════════════ */
+  /* ═══════════════ bottom dock ═══════════════ */
   .tabs {
     position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
-    display: flex; justify-content: center; gap: 2px;
-    margin: 0; padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
-    background: rgba(10,13,19,0.82); backdrop-filter: blur(18px) saturate(1.3); -webkit-backdrop-filter: blur(18px) saturate(1.3);
-    border-top: 1px solid var(--edge2);
-    box-shadow: 0 -14px 34px rgba(0,0,0,0.45);
+    display: flex; justify-content: center; gap: 1px; margin: 0;
+    padding: 7px 5px calc(7px + env(safe-area-inset-bottom));
+    background: rgba(16,14,12,0.9); backdrop-filter: blur(20px) saturate(1.25); -webkit-backdrop-filter: blur(20px) saturate(1.25);
+    border-top: 1px solid var(--edge);
+    box-shadow: 0 -16px 36px rgba(0,0,0,0.5);
   }
   .tab {
-    flex: 1; max-width: 104px; text-align: center; cursor: pointer; position: relative;
-    display: flex; flex-direction: column; align-items: center; gap: 3px;
-    font-size: 0.56rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase;
-    padding: 7px 2px 5px; border-radius: 13px; border: none; background: none; color: var(--dim2);
+    flex: 1; max-width: 92px; cursor: pointer; position: relative;
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    font-size: 0.5rem; font-weight: 800; letter-spacing: 0.09em; text-transform: uppercase;
+    padding: 7px 1px 5px; border-radius: 10px; border: none; background: none; color: var(--dim2);
   }
-  .tab svg { width: 21px; height: 21px; stroke: currentColor; fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
-  .tab.active { color: var(--signal); background: rgba(43,208,126,0.1); text-shadow: 0 0 14px rgba(43,208,126,0.6); }
-  .tab.active svg { filter: drop-shadow(0 0 7px rgba(43,208,126,0.6)); }
-  .tab .n { position: absolute; top: 1px; right: calc(50% - 21px); background: var(--amber); color: #12100a; font-size: 0.54rem; font-weight: 800; min-width: 15px; height: 15px; border-radius: 8px; display: flex; align-items: center; justify-content: center; padding: 0 3px; font-family: var(--mono); }
-  .tab .n.red { background: var(--red); color: #1a0c09; }
+  .tab svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+  .tab.active { color: var(--amber); background: rgba(255,176,46,0.09); }
+  .tab.active svg { filter: drop-shadow(0 0 8px rgba(255,176,46,0.55)); }
+  .tab.active::before { content: ""; position: absolute; top: 0; left: 26%; right: 26%; height: 2px; border-radius: 2px; background: var(--amber); box-shadow: var(--glow-a); }
+  .tab .n { position: absolute; top: 2px; right: calc(50% - 20px); background: var(--amber); color: #191206; font-size: 0.5rem; font-weight: 800; min-width: 14px; height: 14px; border-radius: 7px; display: flex; align-items: center; justify-content: center; padding: 0 3px; font-family: var(--mono); }
+  .tab .n.red { background: var(--coral); color: #1c0906; }
 
-  /* panels: switch + stagger */
   .panel { display: none; }
-  .panel.active { display: block; animation: panelIn 0.3s var(--ease); }
-  @keyframes panelIn { from { opacity: 0; transform: translateY(12px) scale(0.995); } to { opacity: 1; transform: none; } }
-  .panel.active > * { animation: rise 0.45s var(--ease) both; }
+  .panel.active { display: block; animation: rise 0.28s var(--ease); }
+  .panel.active > * { animation: rise 0.42s var(--ease) both; }
   .panel.active > *:nth-child(1) { animation-delay: 0.02s; }
   .panel.active > *:nth-child(2) { animation-delay: 0.06s; }
   .panel.active > *:nth-child(3) { animation-delay: 0.1s; }
   .panel.active > *:nth-child(4) { animation-delay: 0.14s; }
-  .panel.active > *:nth-child(5) { animation-delay: 0.18s; }
-  .panel.active > *:nth-child(n+6) { animation-delay: 0.22s; }
-  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  .panel.active > *:nth-child(n+5) { animation-delay: 0.18s; }
 
   /* ═══════════════ cards ═══════════════ */
   .card {
-    background: linear-gradient(180deg, #151d2c 0%, var(--panel) 100%);
-    border: 1px solid var(--edge); border-radius: 16px; padding: 16px; margin-bottom: 12px;
-    box-shadow: 0 6px 22px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.035);
+    background: linear-gradient(180deg, var(--tile2) 0%, var(--tile) 100%);
+    border: 1px solid var(--edge); border-radius: 14px; padding: 16px; margin-bottom: 11px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04);
+    position: relative;
   }
-  .card h3 { margin: 0 0 5px; font-size: 0.86rem; font-weight: 800; letter-spacing: 0.02em; display: flex; justify-content: space-between; align-items: center; }
+  .card h3 { margin: 0 0 6px; font-size: 0.72rem; font-weight: 900; letter-spacing: 0.13em; text-transform: uppercase; color: var(--dim); display: flex; justify-content: space-between; align-items: center; }
   .card .hint { font-size: 0.73rem; color: var(--dim); line-height: 1.6; }
-  .card .hint b { color: var(--ink); }
+  .card .hint b { color: var(--ivory); }
   .card.clps h3 { cursor: pointer; }
-  .card.clps h3::after { content: "▾"; font-size: 0.8rem; color: var(--dim2); transition: transform 0.22s var(--ease); }
+  .card.clps h3::after { content: "▾"; font-size: 0.75rem; color: var(--dim2); transition: transform 0.24s var(--ease); }
   .card.clps.closed h3::after { transform: rotate(-90deg); }
   .card.clps.closed h3 { margin-bottom: 0; }
   .card.clps.closed .clps-body { display: none; }
 
-  /* ═══════════════ hero — roadside beacon ═══════════════ */
-  .hero { border-radius: 16px; padding: 16px; margin-bottom: 14px; color: #fff; cursor: pointer; position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.14); }
-  .hero::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: rgba(255,255,255,0.55); box-shadow: 0 0 16px rgba(255,255,255,0.5); }
-  .hero.red   { background: linear-gradient(140deg, #b3402c, #6f2114); box-shadow: 0 12px 30px rgba(179,64,44,0.35); }
-  .hero.amber { background: linear-gradient(140deg, #b07a28, #6f4a12); box-shadow: 0 12px 30px rgba(176,122,40,0.3); }
-  .hero.blue  { background: linear-gradient(140deg, #2e5fa8, #1a3a70); box-shadow: 0 12px 30px rgba(46,95,168,0.32); }
-  .hero.green { background: linear-gradient(140deg, #14895a, #0a5031); box-shadow: 0 12px 30px rgba(20,137,90,0.32); }
-  .hero-kicker { font-size: 0.56rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.2em; opacity: 0.85; }
-  .hero-text { font-size: 0.96rem; font-weight: 800; line-height: 1.42; margin-top: 6px; }
-  .hero-fix { font-size: 0.74rem; opacity: 0.88; margin-top: 5px; line-height: 1.5; }
-  .hero-go { display: inline-block; margin-top: 10px; font-size: 0.64rem; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; border: 1.5px solid rgba(255,255,255,0.55); border-radius: 13px; padding: 6px 13px; background: rgba(255,255,255,0.08); }
+  /* ═══════════════ hero ═══════════════ */
+  .hero { border-radius: 14px; padding: 16px; margin-bottom: 12px; cursor: pointer; position: relative; overflow: hidden; border: 1px solid var(--edge); background: var(--tile2); color: var(--ivory); }
+  .hero::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; }
+  .hero::after { content: ""; position: absolute; right: -30px; top: -30px; width: 130px; height: 130px; border-radius: 50%; opacity: 0.14; filter: blur(24px); }
+  .hero.red::before, .hero.red::after { background: var(--coral); }
+  .hero.amber::before, .hero.amber::after { background: var(--amber); }
+  .hero.blue::before, .hero.blue::after { background: var(--sky); }
+  .hero.green::before, .hero.green::after { background: var(--jade); }
+  .hero-kicker { font-size: 0.53rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.24em; color: var(--amber); }
+  .hero.red .hero-kicker { color: var(--coral); } .hero.blue .hero-kicker { color: var(--sky); } .hero.green .hero-kicker { color: var(--jade); }
+  .hero-text { font-size: 0.97rem; font-weight: 800; line-height: 1.4; margin-top: 7px; letter-spacing: -0.01em; }
+  .hero-fix { font-size: 0.74rem; color: var(--dim); margin-top: 6px; line-height: 1.55; }
+  .hero-go { display: inline-block; margin-top: 11px; font-size: 0.6rem; font-weight: 900; letter-spacing: 0.14em; text-transform: uppercase; border: 1px solid var(--edge); background: var(--board); border-radius: 9px; padding: 7px 13px; color: var(--ivory); }
 
-  /* insights */
-  .insight { display: flex; gap: 10px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid var(--edge2); }
+  .insight { display: flex; gap: 11px; align-items: flex-start; padding: 11px 0; border-bottom: 1px solid var(--edge2); }
   .insight:last-child { border-bottom: none; padding-bottom: 0; }
   .insight:first-child { padding-top: 0; }
-  .ins-dot { width: 9px; height: 9px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
-  .ins-dot.red { background: var(--red); box-shadow: 0 0 10px rgba(255,107,87,0.6); }
-  .ins-dot.amber { background: var(--amber); box-shadow: 0 0 10px rgba(240,164,74,0.5); }
-  .ins-dot.blue { background: var(--blue); box-shadow: 0 0 10px rgba(110,168,255,0.5); }
-  .ins-dot.green { background: var(--signal); box-shadow: 0 0 10px rgba(43,208,126,0.5); }
+  .ins-dot { width: 8px; height: 8px; border-radius: 2px; margin-top: 6px; flex-shrink: 0; transform: rotate(45deg); }
+  .ins-dot.red { background: var(--coral); box-shadow: 0 0 10px rgba(255,111,91,0.6); }
+  .ins-dot.amber { background: var(--amber); box-shadow: 0 0 10px rgba(255,176,46,0.5); }
+  .ins-dot.blue { background: var(--sky); box-shadow: 0 0 10px rgba(124,196,255,0.5); }
+  .ins-dot.green { background: var(--jade); box-shadow: 0 0 10px rgba(71,214,160,0.5); }
   .ins-text { font-size: 0.79rem; line-height: 1.5; flex: 1; }
-  .ins-text .fix { display: block; font-size: 0.7rem; color: var(--dim); margin-top: 2px; }
+  .ins-text .fix { display: block; font-size: 0.71rem; color: var(--dim); margin-top: 3px; }
 
   /* ═══════════════ THE ROAD ═══════════════ */
-  .road { position: relative; padding-left: 36px; }
-  .road::before { content: ""; position: absolute; left: 10px; top: 0; bottom: 0; width: 15px; background: linear-gradient(180deg, #151d2e, #10151f); border-radius: 8px; border: 1px solid var(--edge2); }
-  .road::after { content: ""; position: absolute; left: 16.5px; top: 8px; bottom: 8px; width: 2.5px; background: repeating-linear-gradient(180deg, var(--lane) 0 12px, transparent 12px 26px); border-radius: 2px; opacity: 0.9; }
+  .road { position: relative; padding-left: 34px; }
+  .road::before { content: ""; position: absolute; left: 11px; top: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, var(--amber), var(--edge) 22%, var(--edge)); opacity: 0.8; }
+  .road::after { content: none; }
 
-  .youarehere { position: relative; margin: 2px 0 16px; display: flex; align-items: center; gap: 10px; }
-  .yah-pin { position: absolute; left: -33px; width: 22px; height: 22px; background: var(--red); border: 3px solid var(--ink); border-radius: 50% 50% 50% 0; transform: rotate(-45deg); box-shadow: 0 0 0 5px rgba(255,107,87,0.18), 0 4px 12px rgba(0,0,0,0.6); z-index: 2; animation: pinPulse 2.2s var(--ease) infinite; }
-  @keyframes pinPulse { 0%, 100% { box-shadow: 0 0 0 5px rgba(255,107,87,0.18), 0 4px 12px rgba(0,0,0,0.6); } 50% { box-shadow: 0 0 0 10px rgba(255,107,87,0.06), 0 4px 12px rgba(0,0,0,0.6); } }
-  .yah-label { background: var(--red); color: #1c0d09; font-size: 0.58rem; font-weight: 900; letter-spacing: 0.14em; text-transform: uppercase; padding: 6px 12px; border-radius: 11px; box-shadow: 0 0 18px rgba(255,107,87,0.35); }
-  .yah-sub { font-size: 0.68rem; color: var(--dim); }
+  .youarehere { position: relative; margin: 2px 0 16px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .yah-pin { position: absolute; left: -30px; width: 14px; height: 14px; background: var(--amber); border-radius: 3px; transform: rotate(45deg); box-shadow: 0 0 0 4px rgba(255,176,46,0.16), 0 0 16px rgba(255,176,46,0.5); z-index: 2; animation: pinPulse 2.4s var(--ease) infinite; }
+  @keyframes pinPulse { 50% { box-shadow: 0 0 0 9px rgba(255,176,46,0.05), 0 0 16px rgba(255,176,46,0.5); } }
+  .yah-label { background: var(--amber); color: #191206; font-size: 0.54rem; font-weight: 900; letter-spacing: 0.18em; text-transform: uppercase; padding: 6px 11px; border-radius: 7px; }
+  .yah-sub { font-size: 0.68rem; color: var(--dim); font-family: var(--mono); }
 
-  .exit { position: relative; margin-bottom: 20px; }
-  .exit-dot { position: absolute; left: -31px; top: 16px; width: 12px; height: 12px; background: var(--road); border: 3px solid var(--lane); border-radius: 50%; z-index: 2; box-shadow: 0 0 10px rgba(246,197,68,0.4); }
-  .exit.past .exit-dot { border-color: var(--signal); background: var(--signal); box-shadow: 0 0 10px rgba(43,208,126,0.5); }
+  .exit { position: relative; margin-bottom: 18px; }
+  .exit-dot { position: absolute; left: -28px; top: 18px; width: 10px; height: 10px; background: var(--board); border: 2px solid var(--amber); border-radius: 2px; transform: rotate(45deg); z-index: 2; }
+  .exit.past .exit-dot { border-color: var(--jade); background: var(--jade); }
 
   .exit-sign {
-    background: linear-gradient(168deg, #10744a 0%, var(--sign) 55%, #0b5837 100%);
-    color: var(--signtext); border: 2px solid rgba(242,247,242,0.9); outline: 2px solid rgba(9,40,26,0.9); outline-offset: -6px;
-    border-radius: 13px; padding: 13px 14px; position: relative; overflow: hidden;
-    box-shadow: 0 10px 26px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.2);
+    background: linear-gradient(178deg, var(--tile2), var(--tile)); color: var(--ivory);
+    border: 1px solid var(--edge); border-radius: 12px; padding: 13px 14px; position: relative; overflow: hidden;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.4);
   }
-  .exit-sign::after { content: ""; position: absolute; inset: 0; background: linear-gradient(115deg, rgba(255,255,255,0.09) 0%, transparent 32%); pointer-events: none; }
-  .exit.past .exit-sign { background: linear-gradient(168deg, #0c5b3a, #084527); opacity: 0.82; }
+  .exit-sign::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: linear-gradient(90deg, var(--amber), transparent 70%); }
+  .exit.past .exit-sign { opacity: 0.72; }
+  .exit.past .exit-sign::before { background: linear-gradient(90deg, var(--jade), transparent 70%); }
   .es-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-  .es-exitno { font-size: 0.52rem; font-weight: 900; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.78; }
-  .es-name { font-size: 1.08rem; font-weight: 900; letter-spacing: 0.01em; margin-top: 2px; }
-  .es-dates { font-size: 0.62rem; opacity: 0.82; margin-top: 4px; font-family: var(--mono); }
-  .es-right { display: flex; align-items: center; gap: 10px; }
+  .es-exitno { font-family: var(--mono); font-size: 0.5rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--amber); }
+  .es-name { font-size: 1.1rem; font-weight: 900; letter-spacing: -0.015em; margin-top: 3px; }
+  .es-dates { font-size: 0.6rem; color: var(--dim); margin-top: 5px; font-family: var(--mono); letter-spacing: 0.02em; }
+  .es-right { display: flex; align-items: center; gap: 9px; }
   .es-ring { position: relative; width: 40px; height: 40px; flex-shrink: 0; }
   .es-ring svg { transform: rotate(-90deg); width: 40px; height: 40px; }
-  .es-ring .bg { stroke: rgba(242,247,242,0.22); }
-  .es-ring .fg { stroke: #fff; stroke-linecap: round; transition: stroke-dashoffset 0.8s var(--ease); filter: drop-shadow(0 0 4px rgba(255,255,255,0.5)); }
-  .es-ring b { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 0.56rem; font-weight: 700; font-family: var(--mono); }
-  .load-pill { font-size: 0.52rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 9px; border-radius: 10px; background: rgba(242,247,242,0.14); border: 1px solid rgba(242,247,242,0.35); }
-  .load-pill.over { background: rgba(255,107,87,0.32); border-color: rgba(255,158,143,0.7); }
-  .es-focus { font-size: 0.67rem; opacity: 0.88; margin-top: 8px; padding-top: 8px; border-top: 1px dashed rgba(242,247,242,0.3); line-height: 1.5; }
-  .es-enroll { font-size: 0.64rem; margin-top: 7px; background: rgba(246,197,68,0.14); border: 1px dashed rgba(246,197,68,0.55); border-radius: 9px; padding: 7px 10px; line-height: 1.45; }
+  .es-ring .bg { stroke: var(--edge); }
+  .es-ring .fg { stroke: var(--amber); stroke-linecap: round; transition: stroke-dashoffset 0.9s var(--ease); filter: drop-shadow(0 0 5px rgba(255,176,46,0.5)); }
+  .es-ring b { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 0.54rem; font-weight: 700; font-family: var(--mono); }
+  .load-pill { font-size: 0.5rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; padding: 5px 9px; border-radius: 7px; background: var(--board); border: 1px solid var(--edge); color: var(--dim); }
+  .load-pill.over { background: rgba(255,111,91,0.14); border-color: rgba(255,111,91,0.5); color: var(--coral); }
+  .es-focus { font-size: 0.67rem; color: var(--dim); margin-top: 9px; padding-top: 9px; border-top: 1px solid var(--edge2); line-height: 1.55; }
+  .es-enroll { font-size: 0.64rem; margin-top: 8px; background: rgba(255,176,46,0.07); border: 1px solid rgba(255,176,46,0.28); border-radius: 8px; padding: 8px 10px; line-height: 1.5; color: var(--ivory); }
 
   .exit-courses { padding: 10px 0 0 2px; }
 
   .dest { position: relative; margin-top: 4px; }
-  .dest-dot { position: absolute; left: -31px; top: 22px; width: 12px; height: 12px; background: var(--lane); border: 3px solid var(--lane); border-radius: 50%; z-index: 2; box-shadow: 0 0 14px rgba(246,197,68,0.6); }
+  .dest-dot { position: absolute; left: -28px; top: 24px; width: 10px; height: 10px; background: var(--amber); border-radius: 2px; transform: rotate(45deg); z-index: 2; box-shadow: 0 0 16px rgba(255,176,46,0.6); }
   .dest-sign {
-    background: linear-gradient(155deg, #17457c, #0d2b54); color: #fff;
-    border: 2px solid rgba(242,247,242,0.92); outline: 2px solid rgba(10,26,50,0.9); outline-offset: -6px;
-    border-radius: 14px; padding: 18px; text-align: center; position: relative; overflow: hidden;
-    box-shadow: 0 14px 34px rgba(0,0,0,0.5), 0 0 26px rgba(110,168,255,0.16), inset 0 1px 0 rgba(255,255,255,0.2);
+    background: linear-gradient(170deg, var(--tile3), var(--tile)); color: var(--ivory);
+    border: 1px solid var(--amber2); border-radius: 14px; padding: 20px 16px; text-align: center;
+    position: relative; overflow: hidden;
+    box-shadow: 0 14px 34px rgba(0,0,0,0.5), 0 0 30px rgba(255,176,46,0.12);
   }
-  .dest-sign::after { content: ""; position: absolute; inset: 0; background: linear-gradient(115deg, rgba(255,255,255,0.1) 0%, transparent 36%); pointer-events: none; }
-  .dest-sign .d1 { font-size: 0.56rem; font-weight: 900; letter-spacing: 0.26em; text-transform: uppercase; opacity: 0.78; }
-  .dest-sign .d2 { font-size: 1.5rem; font-weight: 900; margin-top: 4px; }
-  .dest-sign .d3 { font-size: 0.68rem; opacity: 0.84; margin-top: 5px; line-height: 1.45; }
+  .dest-sign::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--amber), transparent); }
+  .dest-sign .d1 { font-family: var(--mono); font-size: 0.52rem; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--amber); }
+  .dest-sign .d2 { font-size: 1.55rem; font-weight: 900; margin-top: 7px; letter-spacing: -0.02em; }
+  .dest-sign .d3 { font-size: 0.68rem; color: var(--dim); margin-top: 7px; line-height: 1.5; }
 
   /* course cards */
-  .course { background: var(--panel2); border: 1px solid var(--edge); border-radius: 13px; padding: 13px; margin-bottom: 8px; }
-  .course.taking { border-left: 4px solid var(--lane); box-shadow: -4px 0 16px -6px rgba(246,197,68,0.35); }
+  .course { background: var(--tile); border: 1px solid var(--edge); border-radius: 12px; padding: 13px; margin-bottom: 8px; }
+  .course.taking { border-color: rgba(255,176,46,0.4); box-shadow: 0 0 0 1px rgba(255,176,46,0.12), 0 6px 18px rgba(0,0,0,0.3); }
   .c-top { display: flex; justify-content: space-between; gap: 8px; align-items: flex-start; }
-  .c-name { font-weight: 700; font-size: 0.9rem; line-height: 1.3; }
-  .c-name .uci { color: var(--blue); font-weight: 600; font-size: 0.72rem; }
-  .c-meta { font-size: 0.68rem; color: var(--dim); margin-top: 3px; font-family: var(--mono); }
+  .c-name { font-weight: 700; font-size: 0.88rem; line-height: 1.35; letter-spacing: -0.01em; }
+  .c-name .uci { color: var(--sky); font-weight: 600; font-size: 0.71rem; font-family: var(--mono); }
+  .c-meta { font-size: 0.65rem; color: var(--dim2); margin-top: 4px; font-family: var(--mono); }
   .c-side { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex-shrink: 0; }
-  .cat-pill { font-size: 0.56rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; padding: 3px 8px; border-radius: 11px; }
-  .cat-major { background: rgba(255,107,87,0.16); color: #ff9a89; }
-  .cat-english { background: rgba(110,168,255,0.16); color: #9cc2ff; }
-  .cat-ge { background: rgba(43,208,126,0.14); color: #6fe0a6; }
-  .cat-opt { background: rgba(246,197,68,0.14); color: #f8d47a; }
-  .icon-btn { border: none; background: none; color: var(--dim2); font-size: 0.95rem; cursor: pointer; padding: 0 2px; line-height: 1; }
-  .seg { display: flex; background: var(--road2); border: 1px solid var(--edge2); border-radius: 11px; padding: 3px; margin-top: 10px; }
-  .seg button { flex: 1; border: none; background: none; padding: 8px 4px; font-size: 0.7rem; font-weight: 800; color: var(--dim2); border-radius: 8px; cursor: pointer; }
-  .seg button.on-planned { background: var(--panel3); color: var(--ink); }
-  .seg button.on-taking { background: rgba(246,197,68,0.2); color: var(--lane); box-shadow: 0 0 12px rgba(246,197,68,0.15); }
-  .seg button.on-grade { background: rgba(43,208,126,0.2); color: var(--signal); box-shadow: 0 0 12px rgba(43,208,126,0.15); }
+  .cat-pill { font-size: 0.53rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.09em; padding: 4px 8px; border-radius: 6px; }
+  .cat-major { background: rgba(255,111,91,0.14); color: #ff9b8c; }
+  .cat-english { background: rgba(124,196,255,0.14); color: var(--sky); }
+  .cat-ge { background: rgba(71,214,160,0.13); color: var(--jade); }
+  .cat-opt { background: rgba(199,155,255,0.13); color: var(--plum); }
+  .icon-btn { border: none; background: none; color: var(--dim2); font-size: 0.9rem; cursor: pointer; padding: 0 2px; line-height: 1; }
+  .seg { display: flex; background: var(--board); border: 1px solid var(--edge2); border-radius: 10px; padding: 3px; margin-top: 11px; }
+  .seg button { flex: 1; border: none; background: none; padding: 9px 4px; font-size: 0.68rem; font-weight: 800; color: var(--dim2); border-radius: 7px; cursor: pointer; letter-spacing: 0.02em; }
+  .seg button.on-planned { background: var(--tile3); color: var(--ivory); }
+  .seg button.on-taking { background: rgba(255,176,46,0.16); color: var(--amber); }
+  .seg button.on-grade { background: rgba(71,214,160,0.16); color: var(--jade); }
   .submit-row { display: flex; gap: 8px; margin-top: 10px; animation: rise 0.25s var(--ease); }
-  .grade-sel { flex: 1; font-size: 0.86rem; font-weight: 700; padding: 10px; border-radius: 10px; font-family: var(--mono); }
-  .submit-btn { flex: 1.2; border: none; border-radius: 10px; background: linear-gradient(140deg, var(--signal2), #0e8f52); color: #06130c; font-size: 0.8rem; font-weight: 900; cursor: pointer; padding: 10px; box-shadow: var(--glow-g); }
-  .submit-btn:disabled { background: var(--panel3); color: var(--dim2); box-shadow: none; }
+  .grade-sel { flex: 1; font-size: 0.85rem; font-weight: 700; padding: 10px; border-radius: 9px; font-family: var(--mono); }
+  .submit-btn { flex: 1.2; border: none; border-radius: 9px; background: linear-gradient(165deg, var(--amber), var(--amber2)); color: #191206; font-size: 0.78rem; font-weight: 900; cursor: pointer; padding: 10px; letter-spacing: 0.04em; box-shadow: var(--glow-a); }
+  .submit-btn:disabled { background: var(--tile3); color: var(--dim2); box-shadow: none; }
   .note-area { width: 100%; margin-top: 9px; padding: 9px 11px; border-radius: 9px; font-size: 0.78rem; resize: vertical; min-height: 40px; }
-  .note-preview { font-size: 0.71rem; color: var(--lane); opacity: 0.8; margin-top: 7px; font-style: italic; }
-  .why { margin-top: 8px; }
-  .why-t { font-size: 0.64rem; font-weight: 800; color: var(--blue); cursor: pointer; letter-spacing: 0.04em; }
-  .why-b { display: none; font-size: 0.72rem; color: var(--dim); line-height: 1.55; margin-top: 5px; background: var(--road2); border: 1px solid var(--edge2); border-radius: 9px; padding: 9px 11px; }
+  .note-preview { font-size: 0.7rem; color: var(--amber); opacity: 0.85; margin-top: 8px; font-style: italic; }
+  .why { margin-top: 9px; }
+  .why-t { font-size: 0.62rem; font-weight: 800; color: var(--sky); cursor: pointer; letter-spacing: 0.08em; text-transform: uppercase; }
+  .why-b { display: none; font-size: 0.72rem; color: var(--dim); line-height: 1.6; margin-top: 6px; background: var(--board); border: 1px solid var(--edge2); border-radius: 9px; padding: 10px 11px; }
   .why.open .why-b { display: block; animation: rise 0.22s var(--ease); }
 
-  .add-btn { width: 100%; padding: 12px; border-radius: 13px; border: 1.5px dashed var(--dim2); background: none; color: var(--dim); font-size: 0.78rem; font-weight: 800; cursor: pointer; margin-top: 2px; }
-  .add-form { background: var(--panel); border: 1px solid var(--edge); border-radius: 13px; padding: 13px; margin-top: 8px; display: none; }
+  .add-btn { width: 100%; padding: 12px; border-radius: 11px; border: 1px dashed var(--edge); background: none; color: var(--dim); font-size: 0.72rem; font-weight: 800; cursor: pointer; margin-top: 2px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .add-form { background: var(--tile); border: 1px solid var(--edge); border-radius: 12px; padding: 13px; margin-top: 8px; display: none; }
   .add-form.open { display: block; animation: rise 0.25s var(--ease); }
-  .add-form input, .add-form select, .add-form textarea { width: 100%; padding: 10px 11px; border-radius: 9px; font-size: 0.86rem; margin-bottom: 8px; }
+  .add-form input, .add-form select, .add-form textarea { width: 100%; padding: 10px 11px; border-radius: 9px; font-size: 0.85rem; margin-bottom: 8px; }
   .af-row { display: flex; gap: 8px; }
   .af-row > * { flex: 1; }
-  .af-save { width: 100%; padding: 11px; border-radius: 10px; border: none; background: linear-gradient(140deg, var(--signal2), #0e8f52); color: #06130c; font-weight: 900; font-size: 0.82rem; cursor: pointer; box-shadow: var(--glow-g); }
-  .empty { text-align: center; color: var(--dim); font-size: 0.8rem; padding: 30px 10px; line-height: 1.55; }
+  .af-save { width: 100%; padding: 11px; border-radius: 10px; border: none; background: linear-gradient(165deg, var(--amber), var(--amber2)); color: #191206; font-weight: 900; font-size: 0.78rem; cursor: pointer; letter-spacing: 0.06em; box-shadow: var(--glow-a); }
+  .empty { text-align: center; color: var(--dim2); font-size: 0.78rem; padding: 30px 10px; line-height: 1.6; }
+
+  /* ═══════════════ REQS — the departures board ═══════════════ */
+  .rq-targets { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 9px; }
+  .rq-t { font-size: 0.6rem; font-weight: 800; letter-spacing: 0.06em; padding: 7px 11px; border-radius: 8px; border: 1px solid var(--edge); background: var(--board); color: var(--dim2); cursor: pointer; }
+  .rq-t.on { background: rgba(255,176,46,0.12); border-color: var(--amber2); color: var(--amber); }
+  .rq-card {
+    background: linear-gradient(180deg, var(--tile2), var(--tile)); border: 1px solid var(--edge);
+    border-radius: 13px; padding: 14px; margin-bottom: 9px; position: relative; overflow: hidden;
+    animation: flap 0.5s var(--ease) both; transform-origin: top center;
+  }
+  .rq-card:nth-child(1) { animation-delay: 0.04s; } .rq-card:nth-child(2) { animation-delay: 0.1s; }
+  .rq-card:nth-child(3) { animation-delay: 0.16s; } .rq-card:nth-child(4) { animation-delay: 0.22s; }
+  .rq-card:nth-child(n+5) { animation-delay: 0.28s; }
+  .rq-card.target { border-color: rgba(255,176,46,0.42); box-shadow: 0 0 0 1px rgba(255,176,46,0.1), 0 8px 24px rgba(0,0,0,0.4); }
+  .rq-card.target::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: linear-gradient(90deg, var(--amber), transparent 70%); }
+  .rq-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+  .rq-campus { font-size: 1.02rem; font-weight: 900; letter-spacing: -0.015em; }
+  .rq-major { font-size: 0.7rem; color: var(--dim); margin-top: 3px; font-family: var(--mono); }
+  .rq-ring { position: relative; width: 40px; height: 40px; flex-shrink: 0; }
+  .rq-ring svg { transform: rotate(-90deg); width: 40px; height: 40px; }
+  .rq-ring .bg { stroke: var(--edge); }
+  .rq-ring .fg { stroke: var(--jade); stroke-linecap: round; transition: stroke-dashoffset 0.9s var(--ease); }
+  .rq-ring b { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 0.52rem; font-weight: 700; font-family: var(--mono); }
+  .rq-chips { display: flex; flex-wrap: wrap; gap: 4px; margin: 10px 0 2px; }
+  .rq-chip { font-size: 0.55rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; background: var(--board); border: 1px solid var(--edge); border-radius: 6px; padding: 4px 8px; color: var(--dim); font-family: var(--mono); }
+  .rq-chip.tier { color: var(--plum); border-color: rgba(199,155,255,0.32); }
+  .rq-chip.tag { color: var(--jade); border-color: rgba(71,214,160,0.38); background: rgba(71,214,160,0.07); }
+  .rq-chip.ok { color: var(--jade); border-color: rgba(71,214,160,0.5); }
+  .rq-chip.mid { color: var(--amber); border-color: rgba(255,176,46,0.45); }
+  .rq-chip.bad { color: var(--coral); border-color: rgba(255,111,91,0.45); }
+  .rq-reqs { margin-top: 11px; border-top: 1px solid var(--edge2); padding-top: 9px; }
+  .rq-req { display: flex; align-items: center; gap: 9px; padding: 5px 0; font-size: 0.74rem; flex-wrap: wrap; }
+  .rq-req .rq-dot { width: 7px; height: 7px; border-radius: 2px; transform: rotate(45deg); flex-shrink: 0; background: var(--dim2); }
+  .rq-req.done .rq-dot { background: var(--jade); box-shadow: 0 0 8px rgba(71,214,160,0.6); }
+  .rq-req.taking .rq-dot { background: var(--amber); box-shadow: 0 0 8px rgba(255,176,46,0.6); }
+  .rq-req.planned .rq-dot { background: var(--sky); }
+  .rq-req.missing .rq-dot, .rq-req.fail .rq-dot { background: var(--coral); box-shadow: 0 0 8px rgba(255,111,91,0.5); }
+  .rq-name { flex: 1; min-width: 0; }
+  .rq-req.soft .rq-name { color: var(--dim); }
+  .rq-st { font-family: var(--mono); font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--dim2); }
+  .rq-req.done .rq-st { color: var(--jade); } .rq-req.taking .rq-st { color: var(--amber); }
+  .rq-req.planned .rq-st { color: var(--sky); } .rq-req.missing .rq-st, .rq-req.fail .rq-st { color: var(--coral); }
+  .rq-warn { width: 100%; font-size: 0.67rem; color: var(--amber); background: rgba(255,176,46,0.07); border: 1px solid rgba(255,176,46,0.25); border-radius: 7px; padding: 7px 9px; margin: 4px 0 2px 16px; line-height: 1.5; }
+  .rq-notes { margin-top: 11px; border-top: 1px solid var(--edge2); padding-top: 10px; display: flex; flex-direction: column; gap: 7px; }
+  .rq-note { font-size: 0.72rem; color: var(--dim); line-height: 1.55; padding-left: 12px; position: relative; }
+  .rq-note::before { content: ""; position: absolute; left: 0; top: 7px; width: 5px; height: 5px; border-radius: 1px; transform: rotate(45deg); background: var(--edge); }
+  .rq-floor { display: flex; gap: 10px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid var(--edge2); }
+  .rq-floor:last-child { border-bottom: none; padding-bottom: 0; }
+  .rq-fmark { width: 20px; height: 20px; border-radius: 5px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 0.66rem; font-weight: 900; margin-top: 1px; }
+  .rq-floor.ok .rq-fmark { background: rgba(71,214,160,0.16); color: var(--jade); }
+  .rq-floor.bad .rq-fmark { background: rgba(255,111,91,0.16); color: var(--coral); }
+  .rq-floor.info .rq-fmark { background: var(--board); color: var(--dim2); border: 1px solid var(--edge); }
+  .rq-ftext { font-size: 0.79rem; font-weight: 700; line-height: 1.4; }
+  .rq-fdetail { font-size: 0.7rem; color: var(--dim); margin-top: 4px; line-height: 1.55; }
+  .rq-claim { display: flex; gap: 10px; align-items: flex-start; padding: 11px 0; border-bottom: 1px solid var(--edge2); }
+  .rq-claim:last-child { border-bottom: none; padding-bottom: 0; }
+  .rq-v { font-family: var(--mono); font-size: 0.5rem; font-weight: 700; letter-spacing: 0.1em; padding: 4px 7px; border-radius: 5px; flex-shrink: 0; margin-top: 1px; }
+  .rq-v.true { background: rgba(71,214,160,0.14); color: var(--jade); }
+  .rq-v.false { background: rgba(255,111,91,0.14); color: var(--coral); }
+  .rq-v.mixed { background: rgba(255,176,46,0.14); color: var(--amber); }
+  .rq-ctext { font-size: 0.77rem; font-weight: 700; line-height: 1.45; color: var(--ivory); }
+  .rq-cdetail { font-size: 0.71rem; color: var(--dim); margin-top: 4px; line-height: 1.6; }
 
   /* ═══════════════ stats ═══════════════ */
   .strength-band { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
-  .strength-label { font-size: 1.3rem; font-weight: 900; }
-  .s-strong { color: var(--signal); text-shadow: 0 0 16px rgba(43,208,126,0.4); }
-  .s-comp { color: #56c98d; } .s-build { color: var(--amber); } .s-risk { color: var(--red); } .s-early { color: var(--dim); }
-  .strength-meter { flex: 1; height: 9px; border-radius: 6px; background: linear-gradient(90deg, rgba(255,107,87,0.5), rgba(246,197,68,0.5), rgba(43,208,126,0.55)); position: relative; }
-  .strength-pin { position: absolute; top: -5px; width: 4px; height: 19px; border-radius: 3px; background: var(--ink); box-shadow: 0 0 8px rgba(239,243,250,0.6); transition: left 0.7s var(--ease); }
-  .reasons { margin-top: 10px; }
-  .reason { font-size: 0.75rem; color: var(--dim); line-height: 1.55; display: flex; gap: 7px; }
-  .reason::before { content: "·"; font-weight: 900; color: var(--signal); }
-  .score-total { font-size: 2.1rem; font-weight: 700; font-family: var(--mono); }
-  .score-total small { font-size: 0.9rem; color: var(--dim); font-weight: 700; }
-  .score-row { margin-top: 10px; }
-  .score-head { display: flex; justify-content: space-between; font-size: 0.7rem; font-weight: 800; margin-bottom: 4px; }
-  .score-head span:last-child { color: var(--dim); font-family: var(--mono); }
-  .score-track { height: 6px; border-radius: 4px; background: var(--road2); overflow: hidden; border: 1px solid var(--edge2); }
-  .score-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--signal2), #63e6a4); transition: width 0.8s var(--ease); box-shadow: 0 0 8px rgba(43,208,126,0.5); }
+  .strength-label { font-size: 1.25rem; font-weight: 900; letter-spacing: -0.015em; }
+  .s-strong { color: var(--jade); text-shadow: 0 0 18px rgba(71,214,160,0.35); }
+  .s-comp { color: #63c9a1; } .s-build { color: var(--amber); } .s-risk { color: var(--coral); } .s-early { color: var(--dim2); }
+  .strength-meter { flex: 1; height: 8px; border-radius: 4px; background: linear-gradient(90deg, rgba(255,111,91,0.45), rgba(255,176,46,0.45), rgba(71,214,160,0.5)); position: relative; }
+  .strength-pin { position: absolute; top: -5px; width: 3px; height: 18px; border-radius: 2px; background: var(--ivory); box-shadow: 0 0 8px rgba(246,241,231,0.7); transition: left 0.8s var(--ease); }
+  .reasons { margin-top: 11px; }
+  .reason { font-size: 0.74rem; color: var(--dim); line-height: 1.6; display: flex; gap: 8px; }
+  .reason::before { content: "▸"; color: var(--amber); font-size: 0.6rem; margin-top: 3px; }
+  .score-total { font-size: 2.1rem; font-weight: 700; font-family: var(--mono); color: var(--amber); }
+  .score-total small { font-size: 0.85rem; color: var(--dim2); font-weight: 700; }
+  .score-row { margin-top: 11px; }
+  .score-head { display: flex; justify-content: space-between; font-size: 0.68rem; font-weight: 700; margin-bottom: 5px; }
+  .score-head span:last-child { color: var(--dim2); font-family: var(--mono); }
+  .score-track { height: 5px; border-radius: 3px; background: var(--board); overflow: hidden; border: 1px solid var(--edge2); }
+  .score-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--amber2), var(--amber)); transition: width 0.9s var(--ease); }
   .sim-row { display: flex; align-items: center; gap: 8px; padding: 9px 0; border-bottom: 1px solid var(--edge2); }
   .sim-row:last-child { border-bottom: none; }
-  .sim-name { font-size: 0.75rem; font-weight: 700; flex: 1; min-width: 0; }
+  .sim-name { font-size: 0.74rem; font-weight: 700; flex: 1; min-width: 0; }
   .sim-chips { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
-  .sim-chip { border: 1px solid var(--edge); background: var(--panel2); border-radius: 8px; font-size: 0.64rem; font-weight: 700; padding: 5px 7px; color: var(--dim); cursor: pointer; font-family: var(--mono); }
-  .sim-chip.on { background: var(--blue); border-color: var(--blue); color: #0a1526; box-shadow: 0 0 12px rgba(110,168,255,0.35); }
-  .sim-proj { display: flex; align-items: baseline; gap: 10px; margin-top: 5px; }
-  .sim-proj .pv { font-size: 1.7rem; font-weight: 700; font-family: var(--mono); color: var(--blue); text-shadow: 0 0 16px rgba(110,168,255,0.4); }
-  .sim-proj .pd { font-size: 0.8rem; font-weight: 800; }
-  .pd.up { color: var(--signal); } .pd.down { color: var(--red); }
+  .sim-chip { border: 1px solid var(--edge); background: var(--board); border-radius: 6px; font-size: 0.62rem; font-weight: 700; padding: 5px 7px; color: var(--dim); cursor: pointer; font-family: var(--mono); }
+  .sim-chip.on { background: var(--sky); border-color: var(--sky); color: #08111d; }
+  .sim-proj { display: flex; align-items: baseline; gap: 10px; margin-top: 6px; }
+  .sim-proj .pv { font-size: 1.7rem; font-weight: 700; font-family: var(--mono); color: var(--sky); text-shadow: 0 0 18px rgba(124,196,255,0.35); }
+  .sim-proj .pd { font-size: 0.78rem; font-weight: 800; }
+  .pd.up { color: var(--jade); } .pd.down { color: var(--coral); }
   #gpaChart { width: 100%; height: 190px; display: block; }
-  .chart-legend { display: flex; gap: 14px; font-size: 0.64rem; color: var(--dim); margin-top: 7px; }
-  .chart-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 4px; vertical-align: -1px; }
-  .done-course { display: flex; align-items: center; gap: 10px; background: var(--panel2); border: 1px solid var(--edge); border-radius: 13px; padding: 11px 12px; margin-bottom: 7px; }
-  .grade-badge { width: 42px; height: 42px; border-radius: 11px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1rem; color: #06130c; font-family: var(--mono); }
-  .g-a { background: linear-gradient(140deg, #34dc8a, #14a45c); box-shadow: 0 0 14px rgba(43,208,126,0.35); }
-  .g-b { background: linear-gradient(140deg, #7db2ff, #3f7ad6); color: #0a1526; }
-  .g-c { background: linear-gradient(140deg, #f6bd60, #cd8a2c); color: #1c1206; }
-  .g-df { background: linear-gradient(140deg, #ff8571, #d64a34); color: #1e0b07; }
+  .chart-legend { display: flex; gap: 14px; font-size: 0.62rem; color: var(--dim); margin-top: 8px; font-family: var(--mono); }
+  .chart-legend i { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+  .done-course { display: flex; align-items: center; gap: 11px; background: var(--tile); border: 1px solid var(--edge); border-radius: 12px; padding: 11px 12px; margin-bottom: 7px; }
+  .grade-badge { width: 42px; height: 42px; border-radius: 9px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.98rem; font-family: var(--mono); }
+  .g-a { background: rgba(71,214,160,0.16); color: var(--jade); border: 1px solid rgba(71,214,160,0.4); }
+  .g-b { background: rgba(124,196,255,0.14); color: var(--sky); border: 1px solid rgba(124,196,255,0.35); }
+  .g-c { background: rgba(255,176,46,0.14); color: var(--amber); border: 1px solid rgba(255,176,46,0.4); }
+  .g-df { background: rgba(255,111,91,0.14); color: var(--coral); border: 1px solid rgba(255,111,91,0.4); }
   .dc-body { flex: 1; min-width: 0; }
-  .dc-name { font-weight: 700; font-size: 0.86rem; }
-  .dc-meta { font-size: 0.68rem; color: var(--dim); margin-top: 2px; font-family: var(--mono); }
-  .dc-warn { font-size: 0.7rem; color: var(--red); font-weight: 700; margin-top: 2px; }
+  .dc-name { font-weight: 700; font-size: 0.85rem; }
+  .dc-meta { font-size: 0.65rem; color: var(--dim2); margin-top: 3px; font-family: var(--mono); }
+  .dc-warn { font-size: 0.69rem; color: var(--coral); font-weight: 700; margin-top: 3px; }
   .dc-actions { display: flex; flex-direction: column; gap: 4px; }
-  .mini-btn { border: 1px solid var(--edge); background: var(--panel2); border-radius: 8px; font-size: 0.62rem; font-weight: 800; padding: 5px 9px; color: var(--dim); cursor: pointer; white-space: nowrap; }
-  .dist { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
-  .dist-chip { font-size: 0.68rem; font-weight: 700; padding: 5px 11px; border-radius: 13px; background: var(--panel2); border: 1px solid var(--edge2); color: var(--dim); font-family: var(--mono); }
-  .stat-grid2 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 10px; }
-  .sg-cell { background: var(--panel2); border: 1px solid var(--edge2); border-radius: 11px; padding: 10px; text-align: center; }
+  .mini-btn { border: 1px solid var(--edge); background: var(--board); border-radius: 7px; font-size: 0.6rem; font-weight: 800; padding: 6px 9px; color: var(--dim); cursor: pointer; white-space: nowrap; letter-spacing: 0.04em; }
+  .dist { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 11px; }
+  .dist-chip { font-size: 0.65rem; font-weight: 700; padding: 6px 11px; border-radius: 7px; background: var(--board); border: 1px solid var(--edge2); color: var(--dim); font-family: var(--mono); }
+  .stat-grid2 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 7px; margin-top: 11px; }
+  .sg-cell { background: var(--board); border: 1px solid var(--edge2); border-radius: 10px; padding: 11px 8px; text-align: center; }
   .sg-cell .v { font-weight: 700; font-size: 1rem; font-family: var(--mono); }
-  .sg-cell .l { font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--dim); margin-top: 3px; font-weight: 800; }
-  .big-gpa { font-size: 2.6rem; font-weight: 700; font-family: var(--mono); margin: 4px 0 0; }
-  .big-gpa.ok { color: var(--signal); text-shadow: 0 0 24px rgba(43,208,126,0.45); }
-  .big-gpa.warn { color: var(--lane); text-shadow: 0 0 24px rgba(246,197,68,0.35); }
-  .big-gpa.bad { color: var(--red); text-shadow: 0 0 24px rgba(255,107,87,0.35); }
-  .gpa-scale { position: relative; height: 26px; margin: 10px 0 4px; }
-  .gpa-scale .track { position: absolute; top: 11px; left: 0; right: 0; height: 5px; border-radius: 4px; background: linear-gradient(90deg, rgba(255,107,87,0.55) 0%, rgba(255,107,87,0.55) 50%, rgba(246,197,68,0.55) 50%, rgba(246,197,68,0.55) 70%, rgba(43,208,126,0.6) 70%); }
-  .gpa-scale .marker { position: absolute; top: 3px; width: 3px; height: 20px; background: var(--ink); border-radius: 2px; box-shadow: 0 0 8px rgba(239,243,250,0.6); transition: left 0.6s var(--ease); }
-  .gpa-ticks { display: flex; justify-content: space-between; font-size: 0.6rem; color: var(--dim2); font-family: var(--mono); }
-  .whatif-row { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
-  .whatif-row label { font-size: 0.75rem; color: var(--dim); flex: 1; }
-  .whatif-row select { padding: 8px 10px; border-radius: 9px; font-size: 0.8rem; font-weight: 700; font-family: var(--mono); }
-  .whatif-out { font-size: 0.8rem; margin-top: 10px; line-height: 1.55; }
-  .goal { padding: 10px 0; border-bottom: 1px solid var(--edge2); }
+  .sg-cell .l { font-size: 0.5rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--dim2); margin-top: 4px; font-weight: 800; }
+  .big-gpa { font-size: 2.7rem; font-weight: 700; font-family: var(--mono); margin: 4px 0 0; letter-spacing: -0.02em; }
+  .big-gpa.ok { color: var(--jade); text-shadow: 0 0 26px rgba(71,214,160,0.4); }
+  .big-gpa.warn { color: var(--amber); text-shadow: 0 0 26px rgba(255,176,46,0.3); }
+  .big-gpa.bad { color: var(--coral); text-shadow: 0 0 26px rgba(255,111,91,0.3); }
+  .gpa-scale { position: relative; height: 26px; margin: 11px 0 4px; }
+  .gpa-scale .track { position: absolute; top: 11px; left: 0; right: 0; height: 5px; border-radius: 3px; background: linear-gradient(90deg, rgba(255,111,91,0.5) 0%, rgba(255,111,91,0.5) 50%, rgba(255,176,46,0.5) 50%, rgba(255,176,46,0.5) 70%, rgba(71,214,160,0.55) 70%); }
+  .gpa-scale .marker { position: absolute; top: 3px; width: 3px; height: 20px; background: var(--ivory); border-radius: 2px; box-shadow: 0 0 8px rgba(246,241,231,0.7); transition: left 0.7s var(--ease); }
+  .gpa-ticks { display: flex; justify-content: space-between; font-size: 0.58rem; color: var(--dim2); font-family: var(--mono); }
+  .whatif-row { display: flex; align-items: center; gap: 10px; margin-top: 9px; }
+  .whatif-row label { font-size: 0.74rem; color: var(--dim); flex: 1; }
+  .whatif-row select { padding: 8px 10px; border-radius: 8px; font-size: 0.78rem; font-weight: 700; font-family: var(--mono); }
+  .whatif-out { font-size: 0.79rem; margin-top: 11px; line-height: 1.6; }
+  .goal { padding: 11px 0; border-bottom: 1px solid var(--edge2); }
   .goal:last-child { border-bottom: none; }
   .goal-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-  .goal-title { font-size: 0.82rem; font-weight: 700; flex: 1; }
+  .goal-title { font-size: 0.81rem; font-weight: 700; flex: 1; }
   .goal-title.done { text-decoration: line-through; color: var(--dim2); }
-  .goal-pct { font-size: 0.7rem; color: var(--dim); font-family: var(--mono); }
-  .goal input[type=range] { width: 100%; margin-top: 6px; }
-  .goal-presets { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
-  .preset { border: 1.5px dashed var(--dim2); background: none; border-radius: 12px; font-size: 0.62rem; font-weight: 800; color: var(--dim); padding: 6px 10px; cursor: pointer; }
-  .bk-row { display: flex; gap: 8px; margin-top: 8px; }
-  .bk-btn { flex: 1; padding: 10px; border-radius: 10px; border: 1px solid var(--edge); background: var(--panel2); font-size: 0.74rem; font-weight: 800; color: var(--ink); cursor: pointer; }
-  .bk-area { width: 100%; margin-top: 8px; padding: 9px; border-radius: 9px; font-size: 0.66rem; font-family: var(--mono); min-height: 60px; display: none; }
+  .goal-pct { font-size: 0.68rem; color: var(--dim); font-family: var(--mono); }
+  .goal input[type=range] { width: 100%; margin-top: 7px; }
+  .goal-presets { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 9px; }
+  .preset { border: 1px dashed var(--edge); background: none; border-radius: 8px; font-size: 0.6rem; font-weight: 800; color: var(--dim); padding: 6px 10px; cursor: pointer; letter-spacing: 0.04em; }
+  .bk-row { display: flex; gap: 8px; margin-top: 9px; }
+  .bk-btn { flex: 1; padding: 10px; border-radius: 9px; border: 1px solid var(--edge); background: var(--board); font-size: 0.7rem; font-weight: 800; color: var(--ivory); cursor: pointer; letter-spacing: 0.06em; text-transform: uppercase; }
+  .bk-area { width: 100%; margin-top: 8px; padding: 9px; border-radius: 8px; font-size: 0.62rem; font-family: var(--mono); min-height: 60px; display: none; }
   .bk-area.open { display: block; }
-  .reset-btn { display: block; margin: 24px auto 0; background: none; border: 1px solid var(--edge); color: var(--dim2); font-size: 0.74rem; padding: 10px 20px; border-radius: 20px; cursor: pointer; }
+  .reset-btn { display: block; margin: 26px auto 0; background: none; border: 1px solid var(--edge); color: var(--dim2); font-size: 0.68rem; padding: 10px 20px; border-radius: 10px; cursor: pointer; letter-spacing: 0.1em; text-transform: uppercase; }
 
   /* ═══════════════ GE ═══════════════ */
-  .ge-area { background: var(--panel); border: 1px solid var(--edge); border-radius: 13px; padding: 13px; margin-bottom: 8px; }
+  .ge-area { background: var(--tile); border: 1px solid var(--edge); border-radius: 12px; padding: 13px; margin-bottom: 8px; }
   .ge-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-  .ge-name { font-weight: 700; font-size: 0.85rem; }
-  .ge-count { font-size: 0.68rem; color: var(--dim); font-family: var(--mono); white-space: nowrap; }
-  .ge-hint { font-size: 0.7rem; color: var(--dim); margin-top: 4px; line-height: 1.45; }
-  .ge-boxes { display: flex; gap: 8px; margin-top: 10px; }
-  .ge-box { width: 36px; height: 36px; border-radius: 10px; border: 2px solid var(--edge); background: var(--panel2); cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: 800; color: transparent; font-size: 0.9rem; }
-  .ge-box.on { background: linear-gradient(140deg, var(--signal2), #0e8f52); border-color: var(--signal2); color: #06130c; box-shadow: var(--glow-g); }
-  .ge-progress { height: 7px; background: var(--road2); border: 1px solid var(--edge2); border-radius: 5px; overflow: hidden; margin-bottom: 14px; }
-  .ge-progress .f { height: 100%; background: linear-gradient(90deg, var(--signal2), #63e6a4); border-radius: 5px; transition: width 0.7s var(--ease); box-shadow: 0 0 10px rgba(43,208,126,0.5); }
+  .ge-name { font-weight: 800; font-size: 0.84rem; }
+  .ge-count { font-size: 0.65rem; color: var(--dim); font-family: var(--mono); white-space: nowrap; }
+  .ge-hint { font-size: 0.7rem; color: var(--dim); margin-top: 5px; line-height: 1.5; }
+  .ge-boxes { display: flex; gap: 8px; margin-top: 11px; }
+  .ge-box { width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--edge); background: var(--board); cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: 900; color: transparent; font-size: 0.85rem; }
+  .ge-box.on { background: rgba(71,214,160,0.16); border-color: var(--jade2); color: var(--jade); box-shadow: var(--glow-j); }
+  .ge-progress { height: 6px; background: var(--board); border: 1px solid var(--edge2); border-radius: 4px; overflow: hidden; margin-bottom: 14px; }
+  .ge-progress .f { height: 100%; background: linear-gradient(90deg, var(--jade2), var(--jade)); border-radius: 4px; transition: width 0.8s var(--ease); }
 
   /* ═══════════════ App ═══════════════ */
-  .chk-row { display: flex; align-items: flex-start; gap: 11px; padding: 10px 0; border-bottom: 1px solid var(--edge2); cursor: pointer; }
+  .chk-row { display: flex; align-items: flex-start; gap: 11px; padding: 11px 0; border-bottom: 1px solid var(--edge2); cursor: pointer; }
   .chk-row:last-child { border-bottom: none; }
-  .chk-box { width: 23px; height: 23px; border-radius: 8px; border: 2px solid var(--dim2); flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; background: var(--panel2); transition: all 0.16s var(--ease); }
-  .chk-row.on .chk-box { background: linear-gradient(140deg, var(--signal2), #0e8f52); border-color: var(--signal2); box-shadow: var(--glow-g); }
-  .chk-row.on .chk-box::after { content: "✓"; color: #06130c; font-size: 13px; font-weight: 900; }
+  .chk-box { width: 22px; height: 22px; border-radius: 6px; border: 1px solid var(--edge); flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; background: var(--board); transition: all 0.18s var(--snap); }
+  .chk-row.on .chk-box { background: rgba(71,214,160,0.16); border-color: var(--jade2); box-shadow: var(--glow-j); }
+  .chk-row.on .chk-box::after { content: "✓"; color: var(--jade); font-size: 12px; font-weight: 900; }
   .chk-body { flex: 1; }
-  .chk-text { font-size: 0.82rem; font-weight: 700; }
+  .chk-text { font-size: 0.81rem; font-weight: 700; line-height: 1.4; }
   .chk-row.on .chk-text { text-decoration: line-through; color: var(--dim2); }
-  .chk-when { font-size: 0.66rem; color: var(--dim); margin-top: 2px; font-family: var(--mono); }
-  .chk-when.overdue { color: var(--red); font-weight: 700; }
-  .piq { border: 1px solid var(--edge); border-radius: 13px; margin-bottom: 8px; overflow: hidden; background: var(--panel); }
+  .chk-when { font-size: 0.64rem; color: var(--dim); margin-top: 3px; font-family: var(--mono); }
+  .chk-when.overdue { color: var(--coral); font-weight: 700; }
+  .piq { border: 1px solid var(--edge); border-radius: 12px; margin-bottom: 8px; overflow: hidden; background: var(--tile); }
   .piq-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 12px 13px; cursor: pointer; }
-  .piq-title { font-size: 0.79rem; font-weight: 700; line-height: 1.4; flex: 1; }
-  .piq-tag { font-size: 0.55rem; font-weight: 800; text-transform: uppercase; padding: 3px 8px; border-radius: 10px; background: rgba(255,107,87,0.16); color: #ff9a89; white-space: nowrap; }
-  .piq-tag.opt { background: var(--panel3); color: var(--dim); }
-  .piq-wc { font-size: 0.62rem; color: var(--dim2); white-space: nowrap; font-family: var(--mono); }
+  .piq-title { font-size: 0.78rem; font-weight: 700; line-height: 1.45; flex: 1; }
+  .piq-tag { font-size: 0.52rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 8px; border-radius: 5px; background: rgba(255,111,91,0.14); color: var(--coral); white-space: nowrap; }
+  .piq-tag.opt { background: var(--board); color: var(--dim2); }
+  .piq-wc { font-size: 0.6rem; color: var(--dim2); white-space: nowrap; font-family: var(--mono); }
   .piq-body { display: none; padding: 0 13px 13px; }
   .piq.open .piq-body { display: block; animation: rise 0.25s var(--ease); }
-  .piq-body textarea { width: 100%; min-height: 110px; padding: 10px 11px; border-radius: 10px; font-size: 0.8rem; resize: vertical; }
-  .piq-body .wc { font-size: 0.64rem; color: var(--dim2); margin-top: 5px; text-align: right; font-family: var(--mono); }
-  .piq-body .wc.over { color: var(--red); font-weight: 700; }
-  .piq-status { display: flex; gap: 5px; margin: 8px 0 2px; }
-  .piq-status button { flex: 1; border: 1px solid var(--edge); background: var(--panel2); border-radius: 8px; font-size: 0.6rem; font-weight: 800; padding: 7px 2px; color: var(--dim); cursor: pointer; }
-  .piq-status button.on { background: var(--blue); border-color: var(--blue); color: #0a1526; }
-  .piq-bar { height: 4px; border-radius: 3px; background: var(--road2); margin-top: 8px; overflow: hidden; }
-  .piq-bar .f { height: 100%; background: var(--blue); border-radius: 3px; transition: width 0.5s var(--ease); }
-  .piq-ts { font-size: 0.58rem; color: var(--dim2); margin-top: 5px; font-family: var(--mono); }
-  .act { background: var(--panel); border: 1px solid var(--edge); border-radius: 13px; padding: 13px; margin-bottom: 8px; }
+  .piq-body textarea { width: 100%; min-height: 110px; padding: 10px 11px; border-radius: 9px; font-size: 0.8rem; resize: vertical; line-height: 1.6; }
+  .piq-body .wc { font-size: 0.62rem; color: var(--dim2); margin-top: 5px; text-align: right; font-family: var(--mono); }
+  .piq-body .wc.over { color: var(--coral); font-weight: 700; }
+  .piq-status { display: flex; gap: 5px; margin: 9px 0 2px; }
+  .piq-status button { flex: 1; border: 1px solid var(--edge); background: var(--board); border-radius: 7px; font-size: 0.58rem; font-weight: 800; padding: 7px 2px; color: var(--dim2); cursor: pointer; letter-spacing: 0.06em; text-transform: uppercase; }
+  .piq-status button.on { background: var(--sky); border-color: var(--sky); color: #08111d; }
+  .piq-bar { height: 3px; border-radius: 2px; background: var(--board); margin-top: 9px; overflow: hidden; }
+  .piq-bar .f { height: 100%; background: var(--sky); border-radius: 2px; transition: width 0.6s var(--ease); }
+  .piq-ts { font-size: 0.56rem; color: var(--dim2); margin-top: 5px; font-family: var(--mono); }
+  .act { background: var(--tile); border: 1px solid var(--edge); border-radius: 12px; padding: 13px; margin-bottom: 8px; }
   .act-head { display: flex; justify-content: space-between; gap: 8px; align-items: flex-start; }
-  .act-name { font-weight: 700; font-size: 0.86rem; }
-  .act-role { font-size: 0.71rem; color: var(--blue); font-weight: 700; margin-top: 2px; }
-  .act-desc { font-size: 0.73rem; color: var(--dim); margin-top: 6px; line-height: 1.5; }
-  .act-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 7px; }
-  .act-tag { font-size: 0.6rem; font-weight: 800; background: var(--panel3); color: var(--dim); border-radius: 10px; padding: 3px 9px; }
-  .act-complete { height: 4px; border-radius: 3px; background: var(--road2); margin-top: 9px; overflow: hidden; }
-  .act-complete .f { height: 100%; background: linear-gradient(90deg, var(--signal2), #63e6a4); border-radius: 3px; transition: width 0.5s var(--ease); }
-  .link-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--edge2); }
+  .act-name { font-weight: 800; font-size: 0.85rem; }
+  .act-role { font-size: 0.69rem; color: var(--sky); font-weight: 700; margin-top: 3px; font-family: var(--mono); }
+  .act-desc { font-size: 0.73rem; color: var(--dim); margin-top: 7px; line-height: 1.55; }
+  .act-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+  .act-tag { font-size: 0.58rem; font-weight: 800; background: var(--board); border: 1px solid var(--edge2); color: var(--dim); border-radius: 6px; padding: 4px 9px; font-family: var(--mono); }
+  .act-complete { height: 3px; border-radius: 2px; background: var(--board); margin-top: 10px; overflow: hidden; }
+  .act-complete .f { height: 100%; background: linear-gradient(90deg, var(--jade2), var(--jade)); border-radius: 2px; transition: width 0.6s var(--ease); }
+  .link-item { display: flex; align-items: flex-start; gap: 10px; padding: 11px 0; border-bottom: 1px solid var(--edge2); }
   .link-item:last-child { border-bottom: none; }
   .link-body { flex: 1; min-width: 0; }
-  .link-title { font-size: 0.82rem; font-weight: 700; }
-  .link-title a { color: var(--blue); text-decoration: none; word-break: break-all; }
-  .link-note { font-size: 0.7rem; color: var(--dim); margin-top: 2px; }
-  .gloss dt { font-size: 0.77rem; font-weight: 800; margin-top: 10px; color: var(--signal); }
+  .link-title { font-size: 0.81rem; font-weight: 700; }
+  .link-title a { color: var(--sky); text-decoration: none; word-break: break-all; }
+  .link-note { font-size: 0.69rem; color: var(--dim); margin-top: 3px; }
+  .gloss dt { font-size: 0.75rem; font-weight: 900; margin-top: 11px; color: var(--amber); letter-spacing: 0.02em; }
   .gloss dt:first-child { margin-top: 0; }
-  .gloss dd { font-size: 0.73rem; color: var(--dim); margin: 3px 0 0; line-height: 1.55; }
+  .gloss dd { font-size: 0.72rem; color: var(--dim); margin: 4px 0 0; line-height: 1.6; }
 
   /* ═══════════════ Dates ═══════════════ */
   .countdown-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
   .cd-sign {
-    background: linear-gradient(168deg, #10744a, var(--sign)); color: var(--signtext);
-    border: 2px solid rgba(242,247,242,0.9); outline: 2px solid rgba(9,40,26,0.9); outline-offset: -5px;
-    border-radius: 13px; padding: 12px 14px; box-shadow: 0 8px 22px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.18);
+    background: linear-gradient(178deg, var(--tile2), var(--tile)); color: var(--ivory);
+    border: 1px solid var(--edge); border-radius: 12px; padding: 13px 14px; position: relative; overflow: hidden;
+    animation: flap 0.5s var(--ease) both; transform-origin: top center;
   }
-  .cd-sign.urgent { background: linear-gradient(168deg, #a33822, #7a2414); outline-color: rgba(50,12,6,0.9); }
-  .cd-label { font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.12em; opacity: 0.82; font-weight: 800; }
-  .cd-days { font-size: 1.35rem; font-weight: 700; font-family: var(--mono); margin-top: 3px; }
-  .tl-yr { font-size: 0.64rem; font-weight: 900; letter-spacing: 0.16em; text-transform: uppercase; color: var(--dim2); margin: 18px 0 9px; }
+  .cd-sign::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: var(--amber); opacity: 0.8; }
+  .cd-sign:nth-child(2) { animation-delay: 0.08s; }
+  .cd-sign.urgent::before { background: var(--coral); }
+  .cd-sign.urgent .cd-days { color: var(--coral); }
+  .cd-label { font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--dim2); font-weight: 800; }
+  .cd-days { font-size: 1.4rem; font-weight: 700; font-family: var(--mono); margin-top: 5px; color: var(--amber); }
+  .tl-yr { font-family: var(--mono); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.22em; color: var(--amber); margin: 20px 0 10px; }
   .tl-item { display: flex; gap: 12px; }
   .tl-rail { display: flex; flex-direction: column; align-items: center; }
-  .tl-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--dim2); flex-shrink: 0; margin-top: 4px; }
-  .tl-dot.next { background: var(--lane); box-shadow: 0 0 0 4px rgba(246,197,68,0.16), 0 0 14px rgba(246,197,68,0.5); animation: dotPulse 2s var(--ease) infinite; }
-  @keyframes dotPulse { 50% { box-shadow: 0 0 0 8px rgba(246,197,68,0.06), 0 0 14px rgba(246,197,68,0.5); } }
-  .tl-dot.past { background: var(--signal); }
-  .tl-dot.smc { background: var(--blue); }
-  .tl-dot.smc.past { background: var(--signal); }
-  .tl-line { width: 2px; flex: 1; background: var(--edge); min-height: 24px; }
-  .tl-body { padding-bottom: 16px; flex: 1; }
-  .tl-date { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--dim); font-family: var(--mono); }
-  .tl-what { font-size: 0.86rem; font-weight: 700; margin: 3px 0; }
-  .tl-note { font-size: 0.72rem; color: var(--dim); line-height: 1.45; }
-  .tl-src { font-size: 0.52rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 7px; border-radius: 8px; margin-left: 6px; vertical-align: 1px; }
-  .src-smc { background: rgba(110,168,255,0.16); color: #9cc2ff; }
-  .src-uc { background: rgba(255,107,87,0.16); color: #ff9a89; }
+  .tl-dot { width: 9px; height: 9px; border-radius: 2px; transform: rotate(45deg); background: var(--dim2); flex-shrink: 0; margin-top: 6px; }
+  .tl-dot.next { background: var(--amber); box-shadow: 0 0 0 4px rgba(255,176,46,0.14), 0 0 14px rgba(255,176,46,0.5); animation: pinPulse 2.2s var(--ease) infinite; }
+  .tl-dot.past { background: var(--jade); }
+  .tl-dot.smc { background: var(--sky); }
+  .tl-dot.smc.past { background: var(--jade); }
+  .tl-line { width: 1px; flex: 1; background: var(--edge); min-height: 24px; }
+  .tl-body { padding-bottom: 17px; flex: 1; }
+  .tl-date { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--dim2); font-family: var(--mono); }
+  .tl-what { font-size: 0.85rem; font-weight: 800; margin: 4px 0; letter-spacing: -0.01em; }
+  .tl-note { font-size: 0.71rem; color: var(--dim); line-height: 1.55; }
+  .tl-src { font-size: 0.5rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 7px; border-radius: 5px; margin-left: 7px; vertical-align: 1px; font-family: var(--mono); }
+  .src-smc { background: rgba(124,196,255,0.13); color: var(--sky); }
+  .src-uc { background: rgba(255,111,91,0.13); color: var(--coral); }
 
-  /* ═══════════════ pick tab ═══════════════ */
-  .pk-gap {
-    background: linear-gradient(160deg, #121a2b, #0c111d); color: var(--ink);
-    border: 1px solid var(--edge); border-radius: 16px; padding: 16px; margin-bottom: 12px;
-    position: relative; overflow: hidden; box-shadow: 0 10px 28px rgba(0,0,0,0.4);
-  }
-  .pk-gap::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: var(--lane); box-shadow: 0 0 18px rgba(246,197,68,0.55); }
-  .pk-gap .big { font-size: 1.7rem; font-weight: 700; font-family: var(--mono); color: var(--lane); text-shadow: 0 0 20px rgba(246,197,68,0.35); }
-  .pk-gap .sub { font-size: 0.73rem; color: var(--dim); margin-top: 4px; line-height: 1.55; }
-  .pk-gap .gaps { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
-  .pk-gap .gapchip { font-size: 0.6rem; font-weight: 800; background: var(--panel2); border: 1px solid var(--edge); border-radius: 9px; padding: 4px 9px; color: var(--dim); }
+  /* ═══════════════ pick ═══════════════ */
+  .pk-gap { background: linear-gradient(180deg, var(--tile2), var(--tile)); border: 1px solid var(--edge); border-radius: 14px; padding: 16px; margin-bottom: 11px; position: relative; overflow: hidden; }
+  .pk-gap::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: linear-gradient(90deg, var(--amber), transparent 70%); }
+  .pk-gap .big { font-size: 1.75rem; font-weight: 700; font-family: var(--mono); color: var(--amber); text-shadow: 0 0 22px rgba(255,176,46,0.3); letter-spacing: -0.02em; }
+  .pk-gap .sub { font-size: 0.72rem; color: var(--dim); margin-top: 6px; line-height: 1.6; }
+  .pk-gap .gaps { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 11px; }
+  .pk-gap .gapchip { font-size: 0.58rem; font-weight: 700; background: var(--board); border: 1px solid var(--edge); border-radius: 6px; padding: 5px 9px; color: var(--dim); font-family: var(--mono); }
   .pk-filters { display: flex; gap: 5px; flex-wrap: wrap; margin: 10px 0; }
-  .pk-f { font-size: 0.64rem; font-weight: 800; padding: 7px 11px; border-radius: 13px; border: 1px solid var(--edge); background: var(--panel2); color: var(--dim); cursor: pointer; }
-  .pk-f.on { background: rgba(43,208,126,0.14); border-color: var(--signal2); color: var(--signal); box-shadow: 0 0 12px rgba(43,208,126,0.18); }
-  .pk-subj { font-size: 0.64rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.12em; color: var(--dim2); margin: 15px 2px 7px; }
-  .pk-card { background: var(--panel2); border: 1px solid var(--edge); border-left-width: 4px; border-radius: 13px; padding: 11px 13px; margin-bottom: 8px; }
-  .pk-card.t1 { border-left-color: var(--signal); box-shadow: -4px 0 18px -8px rgba(43,208,126,0.5); }
-  .pk-card.t2 { border-left-color: var(--blue); }
-  .pk-card.t3 { border-left-color: var(--amber); }
-  .pk-card.t4 { border-left-color: var(--red); opacity: 0.82; }
+  .pk-f { font-size: 0.6rem; font-weight: 800; padding: 7px 11px; border-radius: 8px; border: 1px solid var(--edge); background: var(--board); color: var(--dim2); cursor: pointer; letter-spacing: 0.05em; }
+  .pk-f.on { background: rgba(255,176,46,0.12); border-color: var(--amber2); color: var(--amber); }
+  .pk-subj { font-family: var(--mono); font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; color: var(--dim2); margin: 16px 2px 8px; }
+  .pk-card { background: var(--tile); border: 1px solid var(--edge); border-radius: 12px; padding: 12px 13px; margin-bottom: 8px; position: relative; overflow: hidden; }
+  .pk-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
+  .pk-card.t1::before { background: var(--jade); box-shadow: 0 0 14px rgba(71,214,160,0.5); }
+  .pk-card.t2::before { background: var(--sky); }
+  .pk-card.t3::before { background: var(--amber); }
+  .pk-card.t4::before { background: var(--coral); }
+  .pk-card.t4 { opacity: 0.78; }
   .pk-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
-  .pk-name { font-weight: 800; font-size: 0.84rem; line-height: 1.35; }
-  .pk-tier { font-size: 0.52rem; font-weight: 900; letter-spacing: 0.09em; padding: 4px 8px; border-radius: 8px; white-space: nowrap; }
-  .t1 .pk-tier { background: rgba(43,208,126,0.18); color: var(--signal); }
-  .t2 .pk-tier { background: rgba(110,168,255,0.18); color: var(--blue); }
-  .t3 .pk-tier { background: rgba(240,164,74,0.18); color: var(--amber); }
-  .t4 .pk-tier { background: rgba(255,107,87,0.18); color: var(--red); }
-  .pk-chips { display: flex; flex-wrap: wrap; gap: 4px; margin: 7px 0 6px; }
-  .pk-chip { font-size: 0.57rem; font-weight: 700; background: var(--road2); border: 1px solid var(--edge2); border-radius: 8px; padding: 3px 8px; color: var(--dim); font-family: var(--mono); }
-  .pk-chip.hot { background: rgba(43,208,126,0.14); border-color: var(--signal2); color: var(--signal); }
-  .pk-chip.bad { color: var(--red); border-color: rgba(255,107,87,0.5); }
-  .pk-why { font-size: 0.72rem; color: var(--dim); line-height: 1.55; }
-  .pk-add { margin-top: 8px; font-size: 0.64rem; font-weight: 900; background: rgba(43,208,126,0.1); border: 1px solid var(--signal2); color: var(--signal); border-radius: 10px; padding: 6px 12px; cursor: pointer; font-family: var(--disp); letter-spacing: 0.03em; }
+  .pk-name { font-weight: 800; font-size: 0.83rem; line-height: 1.35; }
+  .pk-tier { font-family: var(--mono); font-size: 0.5rem; font-weight: 700; letter-spacing: 0.12em; padding: 4px 8px; border-radius: 5px; white-space: nowrap; }
+  .t1 .pk-tier { background: rgba(71,214,160,0.14); color: var(--jade); }
+  .t2 .pk-tier { background: rgba(124,196,255,0.14); color: var(--sky); }
+  .t3 .pk-tier { background: rgba(255,176,46,0.14); color: var(--amber); }
+  .t4 .pk-tier { background: rgba(255,111,91,0.14); color: var(--coral); }
+  .pk-chips { display: flex; flex-wrap: wrap; gap: 4px; margin: 8px 0 7px; }
+  .pk-chip { font-size: 0.55rem; font-weight: 700; background: var(--board); border: 1px solid var(--edge2); border-radius: 5px; padding: 4px 8px; color: var(--dim); font-family: var(--mono); }
+  .pk-chip.hot { background: rgba(71,214,160,0.11); border-color: rgba(71,214,160,0.4); color: var(--jade); }
+  .pk-chip.bad { color: var(--coral); border-color: rgba(255,111,91,0.4); }
+  .pk-why { font-size: 0.72rem; color: var(--dim); line-height: 1.6; }
+  .pk-add { margin-top: 9px; font-size: 0.6rem; font-weight: 900; background: rgba(255,176,46,0.09); border: 1px solid var(--amber2); color: var(--amber); border-radius: 8px; padding: 7px 12px; cursor: pointer; font-family: var(--disp); letter-spacing: 0.09em; text-transform: uppercase; }
   .pk-add:disabled { border-color: var(--edge); background: none; color: var(--dim2); }
-  .pk-paste { width: 100%; min-height: 110px; border-radius: 11px; padding: 10px; font-size: 0.74rem; resize: vertical; }
-  .pk-legend { font-size: 0.68rem; color: var(--dim); line-height: 1.7; }
-  .pk-legend b { padding: 2px 7px; border-radius: 6px; font-size: 0.58rem; color: #06130c; }
+  .pk-paste { width: 100%; min-height: 110px; border-radius: 10px; padding: 10px; font-size: 0.72rem; resize: vertical; font-family: var(--mono); line-height: 1.55; }
+  .pk-legend { font-size: 0.7rem; color: var(--dim); line-height: 1.75; }
+  .pk-legend b { padding: 3px 7px; border-radius: 5px; font-size: 0.55rem; font-family: var(--mono); letter-spacing: 0.08em; }
+
   /* chat */
-  .chat-log { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; max-height: 46vh; overflow-y: auto; }
-  .chat-msg { max-width: 88%; padding: 9px 12px; border-radius: 14px; font-size: 0.78rem; line-height: 1.55; white-space: pre-wrap; animation: rise 0.25s var(--ease); }
-  .chat-msg.me { align-self: flex-end; background: linear-gradient(140deg, var(--signal2), #0e8f52); color: #06130c; font-weight: 600; border-bottom-right-radius: 4px; }
-  .chat-msg.ai { align-self: flex-start; background: var(--panel2); border: 1px solid var(--edge); border-bottom-left-radius: 4px; }
-  .chat-msg.err { align-self: flex-start; background: rgba(255,107,87,0.08); border: 1.5px dashed rgba(255,107,87,0.6); color: var(--red); }
+  .chat-log { display: flex; flex-direction: column; gap: 8px; margin-bottom: 11px; max-height: 46vh; overflow-y: auto; }
+  .chat-msg { max-width: 88%; padding: 10px 12px; border-radius: 12px; font-size: 0.77rem; line-height: 1.6; white-space: pre-wrap; animation: rise 0.25s var(--ease); }
+  .chat-msg.me { align-self: flex-end; background: linear-gradient(165deg, var(--amber), var(--amber2)); color: #191206; font-weight: 600; border-bottom-right-radius: 3px; }
+  .chat-msg.ai { align-self: flex-start; background: var(--board); border: 1px solid var(--edge); border-bottom-left-radius: 3px; }
+  .chat-msg.err { align-self: flex-start; background: rgba(255,111,91,0.07); border: 1px dashed rgba(255,111,91,0.5); color: var(--coral); }
   .chat-row { display: flex; gap: 6px; }
-  .chat-row input { flex: 1; border-radius: 12px; padding: 10px 12px; font-size: 0.78rem; }
-  .chat-send { background: linear-gradient(140deg, var(--signal2), #0e8f52); color: #06130c; border: none; border-radius: 12px; padding: 0 16px; font-weight: 900; font-size: 0.74rem; cursor: pointer; box-shadow: var(--glow-g); }
-  .chat-send:disabled { background: var(--panel3); color: var(--dim2); box-shadow: none; }
-  .key-row { display: flex; gap: 6px; margin-top: 7px; }
-  .key-row input { flex: 1; border-radius: 10px; padding: 9px 11px; font-size: 0.72rem; font-family: var(--mono); }
+  .chat-row input { flex: 1; border-radius: 10px; padding: 11px 12px; font-size: 0.77rem; }
+  .chat-send { background: linear-gradient(165deg, var(--amber), var(--amber2)); color: #191206; border: none; border-radius: 10px; padding: 0 16px; font-weight: 900; font-size: 0.7rem; cursor: pointer; letter-spacing: 0.06em; text-transform: uppercase; }
+  .chat-send:disabled { background: var(--tile3); color: var(--dim2); }
+  .key-row { display: flex; gap: 6px; margin-top: 8px; }
+  .key-row input { flex: 1; border-radius: 9px; padding: 10px 11px; font-size: 0.7rem; font-family: var(--mono); }
 
   /* ═══════════════ overlays ═══════════════ */
   #toast {
     position: fixed; bottom: calc(96px + env(safe-area-inset-bottom)); left: 50%;
-    transform: translateX(-50%) translateY(16px) scale(0.94);
-    background: var(--panel3); border: 1px solid var(--edge); color: var(--ink);
-    font-size: 0.78rem; font-weight: 700; padding: 12px 19px; border-radius: 22px;
-    opacity: 0; pointer-events: none; transition: all 0.35s cubic-bezier(0.34, 1.56, 0.5, 1); z-index: 50;
-    box-shadow: 0 14px 34px rgba(0,0,0,0.55), var(--glow-g); white-space: nowrap;
+    transform: translateX(-50%) translateY(14px) scale(0.94);
+    background: var(--tile3); border: 1px solid var(--edge); color: var(--ivory);
+    font-size: 0.76rem; font-weight: 700; padding: 12px 19px; border-radius: 10px;
+    opacity: 0; pointer-events: none; transition: all 0.34s var(--snap); z-index: 50;
+    box-shadow: 0 16px 36px rgba(0,0,0,0.6), var(--glow-a); white-space: nowrap; letter-spacing: 0.02em;
   }
   #toast.show { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
 
-  #searchOverlay { position: fixed; inset: 0; background: rgba(7,10,16,0.93); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); z-index: 40; display: none; padding: max(16px, env(safe-area-inset-top)) 14px 20px; overflow-y: auto; }
-  #searchOverlay.open { display: block; animation: fadeBlur 0.22s var(--ease); }
-  @keyframes fadeBlur { from { opacity: 0; } to { opacity: 1; } }
-  .search-bar { display: flex; gap: 8px; max-width: 680px; margin: 0 auto 14px; }
-  .search-bar input { flex: 1; padding: 13px 15px; border-radius: 13px; font-size: 0.95rem; }
-  .search-close { border: 1px solid var(--edge); background: var(--panel2); border-radius: 13px; padding: 0 16px; font-size: 1rem; color: var(--dim); cursor: pointer; }
-  .search-results { max-width: 680px; margin: 0 auto; }
-  .sr { background: var(--panel); border: 1px solid var(--edge); border-radius: 12px; padding: 12px 14px; margin-bottom: 7px; cursor: pointer; }
-  .sr-kind { font-size: 0.55rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; color: var(--signal); }
-  .sr-title { font-size: 0.84rem; font-weight: 700; margin-top: 3px; }
-  .sr-snip { font-size: 0.7rem; color: var(--dim); margin-top: 2px; }
+  #searchOverlay { position: fixed; inset: 0; background: rgba(10,9,8,0.94); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); z-index: 40; display: none; padding: max(16px, env(safe-area-inset-top)) 14px 20px; overflow-y: auto; }
+  #searchOverlay.open { display: block; animation: glowIn 0.24s var(--ease); }
+  .search-bar { display: flex; gap: 8px; max-width: 700px; margin: 0 auto 14px; }
+  .search-bar input { flex: 1; padding: 13px 15px; border-radius: 11px; font-size: 0.94rem; }
+  .search-close { border: 1px solid var(--edge); background: var(--tile); border-radius: 11px; padding: 0 16px; font-size: 1rem; color: var(--dim); cursor: pointer; }
+  .search-results { max-width: 700px; margin: 0 auto; }
+  .sr { background: var(--tile); border: 1px solid var(--edge); border-radius: 11px; padding: 12px 14px; margin-bottom: 7px; cursor: pointer; }
+  .sr-kind { font-family: var(--mono); font-size: 0.53rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--amber); }
+  .sr-title { font-size: 0.83rem; font-weight: 700; margin-top: 4px; }
+  .sr-snip { font-size: 0.69rem; color: var(--dim); margin-top: 3px; }
 
   #confetti { position: fixed; inset: 0; pointer-events: none; z-index: 60; }
 
@@ -546,7 +625,6 @@
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
-    header::after { animation: none; }
   }
 </style>
 </head>
@@ -585,6 +663,7 @@
   <div class="tabs">
     <div class="tab active" data-panel="road"><svg viewBox="0 0 24 24"><path d="M6 19c8 0 4-14 12-14"/><circle cx="6" cy="19" r="1.7"/><circle cx="18" cy="5" r="1.7"/></svg>Road<span class="n" id="nRoad" style="display:none"></span></div>
     <div class="tab" data-panel="stats"><svg viewBox="0 0 24 24"><path d="M4 17a8 8 0 1 1 16 0"/><path d="M12 17l4.5-5.5"/></svg>Stats<span class="n" id="nStats" style="display:none"></span></div>
+    <div class="tab" data-panel="reqs"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h9"/><circle cx="18.5" cy="18" r="2.4"/></svg>Reqs</div>
     <div class="tab" data-panel="ge"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.5 12.5l2.5 2.5 4.5-5.5"/></svg>GE</div>
     <div class="tab" data-panel="pick"><svg viewBox="0 0 24 24"><path d="M4 5h16l-6.2 7.2V18l-3.6-1.8v-4z"/></svg>Pick</div>
     <div class="tab" data-panel="app"><svg viewBox="0 0 24 24"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/></svg>App<span class="n red" id="nApp" style="display:none"></span></div>
@@ -731,6 +810,38 @@
   </div>
 
   <!-- ============ GE ============ -->
+  <!-- ============ REQS ============ -->
+  <div class="panel" id="panel-reqs">
+    <div class="card">
+      <h3>Departures board</h3>
+      <div class="hint">Every UC business-family major you could realistically land, checked against your live plan. Tap a campus to flag it as a target — flagged ones sort to the top.</div>
+      <div class="rq-targets" id="rqTargets"></div>
+    </div>
+
+    <div id="rqList"></div>
+
+    <div class="card">
+      <h3>Scholars → TAP — most urgent item</h3>
+      <div id="rqScholars"></div>
+    </div>
+
+    <div class="card">
+      <h3>The floor — true for every UC</h3>
+      <div class="hint" style="margin-bottom:8px">Miss any of these and the major prep stops mattering. Green = your plan already satisfies it, red = act now, grey = can't be auto-checked, confirm with a counselor.</div>
+      <div id="rqFloor"></div>
+    </div>
+
+    <div class="card clps closed">
+      <h3>Reddit advice — fact-checked</h3>
+      <div class="clps-body" id="rqChecks"></div>
+    </div>
+
+    <div class="card">
+      <h3>Verify before you act</h3>
+      <div class="hint">This tab is a map built from official sources in August 2026 — campus admission pages, the UC TAG matrix, and SMC's Scholars pages. Requirements change every cycle. <b>assist.org</b> plus an SMC counselor is the only certification that counts, and Haas/Merage/UCLA advisors are the tiebreaker when two people tell you different things.</div>
+    </div>
+  </div>
+
   <div class="panel" id="panel-ge">
     <div class="card">
       <h3>Cal-GETC general education</h3>
@@ -740,6 +851,7 @@
     <div id="geList"></div>
   </div>
 
+  <!-- ============ UCS ============ -->
   <!-- ============ PICK ============ -->
   <div class="panel" id="panel-pick">
     <div class="pk-gap">
@@ -815,6 +927,19 @@
       <div id="appChecklist"></div>
     </div>
 
+    <div class="card clps closed">
+      <h3>EC rules — from people who got in</h3>
+      <div class="clps-body hint">
+        Start at SMC — no high-school-only items (HS-started-and-<i>continuing</i> is fine) · 20 slots ≠ 20 entries: ~8 real ones beat a padded list, readers smell fluff · <b>your businesses ARE the list</b> — SMMZOLO + Mikye Media with revenue, client counts, uptime · jobs count, and "worked 20 hrs/wk at a 3.5+" is its own story · 1–2 clubs max, take a board seat · Scholars, honors, Dean's List all count as entries · numbers beat adjectives ("4 events, 200+ attendees") · hours/week = honest estimate, not forensics · every big EC should feed a PIQ — the EC box is the headline, the PIQ is the story.
+      </div>
+    </div>
+    <div class="card clps closed">
+      <h3>PIQ rules — don't tell, show</h3>
+      <div class="clps-body hint">
+        The one law: <b>evidence over claims</b> — "I'm hardworking" is noise; "I failed the first exam, went to every office hour, finished top of the class" is proof · 4 answers × 350 words; every word earns its place · simple words, active voice, "I" statements · no humor, irony, clichés, acronyms, or philosophy-mode · never tell the same story twice · all prompts weigh the same — pick what fits you · it's about YOU, not anyone else · transfer PIQs ≠ freshman essays: they just want to know who they're admitting · spellcheck 4 separate passes · write the EC list first, then the PIQs · the co-pilot can pressure-test any draft line-by-line for show-vs-tell.
+      </div>
+    </div>
+
     <div class="card">
       <h3>Personal Insight Questions</h3>
       <div class="hint" style="margin-bottom:10px"><b>Why they matter:</b> at 3.4+, thousands of applicants look identical on paper — PIQs are where you stop being a GPA. Transfers answer the required prompt + 3 others, 350 words each. Track each from outline → final. Your SMMZOLO / Mikye Media story is the required prompt basically writing itself: real revenue, real customers, self-taught frontend, and now formal business training to scale it.</div>
@@ -859,7 +984,7 @@
     <div class="card">
       <h3>Strategy: TAG & backups</h3>
       <div class="hint">
-        <b>The TAG question:</b> Business Admin has no TAG, but Business Economics at UCI does (needs 3.4 GPA + econ and calc with B or better — verify current-year rules). Catch: your TAG major must match your primary major on the UC app, so TAG'ing Business Econ means applying to <i>that</i> at UCI, not Business Admin. One or the other at UCI — decide with a counselor by Sep 2027.<br><br>
+        <b>The TAG question (updated from UC's own matrix):</b> UCI is out — Business Admin never had TAG, and for Fall 2028 UCI also cut Business Economics, Economics, and Quantitative Economics from TAG. Your one TAG (Sep 1–30, 2027) now chooses between <b>Davis Managerial Econ</b> (3.2 by end of Summer 27), <b>UCSB pre-Econ&Accounting</b> (3.4, pre-major guaranteed only), <b>UCR Business</b> (2.8), or <b>Merced</b> (open). Full breakdown lives in the UCs tab — decide with a counselor from your real GPA next summer.<br><br>
         <b>Spread the risk:</b> One UC app covers all campuses — adding more is cheap. Consider UCLA (Business Econ), UCR/UCSB (Econ), and a CSU app (CSULB/CSUF business are strong + ADT-friendly). Fee waivers cover up to 4 UC campuses if eligible.<br><br>
         <b>Your angle:</b> a transfer applicant running two real businesses with revenue is rare. Grades get you past the filter; the story wins the review.
       </div>
@@ -872,7 +997,7 @@
           <dt>ASSIST</dt><dd>The official CA database showing exactly which SMC courses count at which UC, course-for-course. The source of truth for your plan.</dd>
           <dt>Articulation</dt><dd>"This SMC course = that UCI course." If it's not articulated on ASSIST, assume it doesn't count.</dd>
           <dt>Cal-GETC</dt><dd>The general-ed package (replaced IGETC in Fall 2025). Complete it and GE is settled at every UC.</dd>
-          <dt>TAG</dt><dd>Transfer Admission Guarantee — guaranteed UC admission if you hit set numbers. Business Admin doesn't offer it; Business Econ does.</dd>
+          <dt>TAG</dt><dd>Transfer Admission Guarantee — a written guarantee at ONE UC, filed Sep 1–30 the fall before transfer. For Fall 2028 nothing business-adjacent at UCI qualifies anymore; the live options are Davis ManEcon (3.2), UCSB pre-Econ&Acct (3.4), UCR Business (2.8), Merced (open).</dd>
           <dt>TAU</dt><dd>Transfer Academic Update — in January you log your fall grades + spring classes into your submitted UC app. Miss it and your app dies quietly.</dd>
           <dt>PIQ</dt><dd>Personal Insight Questions — the UC "essays." Short answers, 350 words, transfers do 4.</dd>
           <dt>Merage</dt><dd>The Paul Merage School of Business — UCI's business school, runs its own transfer advising on top of UC admissions.</dd>
@@ -888,7 +1013,7 @@
         2. Full Cal-GETC or minimum GE + major prep for Merage?<br>
         3. Which second English comp course counts, and does it fit Winter 2027 (Jan 4 – Feb 11)?<br>
         4. On track for 60 UC-transferable units by end of Spring 2028 (Jun 13)?<br>
-        5. TAG Business Econ vs straight Business Admin app — which is smarter for my GPA?<br>
+        5. Which TAG should I file in Sep 2027 for my real GPA — Davis, UCSB, UCR, or none?<br>
         6. Do any of my courses double-count for Cal-GETC areas + major prep?
       </div>
     </div>
@@ -986,8 +1111,16 @@ const PIQ_STATUSES = ["outline", "draft", "revision", "final"];
 const PIQ_VAL = { outline: 0.25, draft: 0.5, revision: 0.75, final: 1 };
 
 const APP_CHECKS = [
-  { id: "counselor", text: "Meet with SMC transfer counselor (bring the checklist questions)", when: "ASAP — then once per term", due: null },
-  { id: "tagdecide", text: "Decide: TAG Business Econ vs straight Business Admin application", when: "By Sep 2027 (TAG window: Sep 1–30)", due: "2027-09-30" },
+  { id: "scholars", text: "Apply to SMC Scholars Program (UCLA TAP pathway)", when: "NOW — must start by Fall 2026 to certify", due: "2026-08-31" },
+  { id: "gradedist", text: "Check SMC grade distributions + RateMyProfessors before every enrollment", when: "Each term, the week before your appointment", due: null },
+  { id: "tagfile", text: "File your one UC TAG (Davis / UCSB / UCR) in UC TAP", when: "Sep 1–30, 2027 — window closes hard", due: "2027-09-30" },
+  { id: "haassupp", text: "Haas Supplemental Application (only if applying to Berkeley)", when: "By Jan 31, 2028", due: "2028-01-31" },
+  { id: "finaltrans", text: "Send final official SMC transcripts to your campus", when: "By ~Jul 1, 2028", due: "2028-07-01" },
+  { id: "scholars", text: "Apply to SMC Scholars Program — the UCLA TAP lever", when: "NOW, before Fall 2026 starts; swap into Scholars sections", due: "2026-08-28" },
+  { id: "counselor", text: "Meet a counselor every 3–4 weeks — rotate 2–3, plus Scholars + UC reps", when: "Same question to two people; compare answers", due: null },
+  { id: "profs", text: "Grade-distribution + RateMyProfessors check before every enrollment", when: "Every term — tool links in the UCs tab", due: null },
+  { id: "scholarsunits", text: "Finish 15 units of Scholars-section courses (2 full semesters)", when: "Fall 26 + Spring 27 — winter/summer don't count", due: "2027-06-16" },
+  { id: "tagdecide", text: "Pick your ONE TAG campus: Davis ManEcon (3.2) vs UCSB pre-Econ&Acct (3.4) vs UCR Business (2.8)", when: "UCI killed BizEcon TAG for Fall 2028 — file Sep 1–30, 2027", due: "2027-09-30" },
   { id: "merage", text: "Register for Merage transfer advising + submit their google form", when: "~Jun 2027 — watch merage.uci.edu", due: "2027-06-15" },
   { id: "ucacct", text: "Create UC application account, start filling it out", when: "Aug 2027", due: "2027-08-31" },
   { id: "piqs", text: "Draft all 4 PIQs (required + 3)", when: "Aug–Oct 2027", due: "2027-10-31" },
@@ -995,12 +1128,15 @@ const APP_CHECKS = [
   { id: "feewaiver", text: "Check fee waiver eligibility (covers up to 4 UC campuses)", when: "Before submitting", due: "2027-11-15" },
   { id: "submit", text: "Submit UC application", when: "Oct 1 – Nov 30, 2027 — don't wait for the last day", due: "2027-11-30" },
   { id: "fafsa", text: "FAFSA or CADAA + Cal Grant", when: "By Mar 2, 2028 priority deadline", due: "2028-03-02" },
+  { id: "tapcert", text: "TAP certification form + mandatory Scholars UC-app workshop", when: "Fall 2027 via Scholars office — before the UC deadline", due: "2027-11-15" },
   { id: "tau", text: "Transfer Academic Update (fall grades + spring courses)", when: "By Jan 31, 2028", due: "2028-01-31" },
+  { id: "haassupp", text: "Haas supplemental — only if applying Berkeley (essay, record, video interview)", when: "Appears in MAP@Berkeley early Jan; due Jan 31, 2028", due: "2028-01-31" },
   { id: "transcripts", text: "Send final official transcripts after committing", when: "Jul 2028", due: "2028-07-01" },
 ];
 
 /* merged SMC district calendar + UC process timeline */
 const TIMELINE = [
+  { date: "2026-08-15", label: "NOW — before Fall 26", src: "smc", what: "Apply to SMC Scholars Program", note: "The single highest-leverage move available to you. TAP certification needs 15 Scholars units across two FULL semesters — for a Fall 2027 application that means Fall 26 + Spring 27. Miss this window and UCLA TAP is off the table forever. scholars@smc.edu" },
   { date: "2026-08-31", label: "Aug 31, 2026", src: "smc", what: "Fall 2026 begins", note: "Regular session Aug 31 – Dec 22. Your first four requirement grades start here." },
   { date: "2026-09-13", label: "Sep 13, 2026", src: "smc", what: "Fall refund deadline", note: "Last day to drop fall classes with a refund (per your Corsair schedule)." },
   { date: "2026-11-01", label: "~Nov 2026", src: "smc", what: "Winter + Spring 2027 enrollment opens", note: "Appointment dates post on Corsair Connect — enroll the minute yours opens; English comp and calc sections fill fast." },
@@ -1012,17 +1148,22 @@ const TIMELINE = [
   { date: "2027-06-21", label: "Jun 21 – Jul 30, 2027", src: "smc", what: "Summer 2027 sessions", note: "Optional catch-up window (6-week to Jul 30, 8-week to Aug 13) if spring didn't go to plan." },
   { date: "2027-08-01", label: "Aug 2027", src: "uc", what: "UC app opens for editing", note: "Create the account, start PIQ drafts in the App tab. Everything you write now is stress you skip in November." },
   { date: "2027-08-30", label: "Aug 30, 2027", src: "smc", what: "Fall 2027 begins", note: "Calc 2 + Stats while running the application. Runs to Dec 21." },
-  { date: "2027-09-01", label: "Sep 1–30, 2027", src: "uc", what: "UCI TAG window (Business Econ route only)", note: "TAG major must match your primary UC app major — the decision has to be made before this window." },
+  { date: "2027-09-01", label: "Sep 1–30, 2027", src: "uc", what: "TAG filing window — ONE campus", note: "UCI removed BizEcon/Econ/QuantEcon from TAG for Fall 2028. Live options: Davis ManEcon (3.2 by end of Summer 27), UCSB pre-Econ&Acct (3.4), UCR Business (2.8), Merced. TAG major must match your app major at that campus." },
   { date: "2027-10-01", label: "Oct 1, 2027", src: "uc", what: "UC application submission opens", note: "Window: Oct 1 – Nov 30." },
-  { date: "2027-11-30", label: "Nov 30, 2027", src: "uc", what: "UC APPLICATION DEADLINE", note: "Hard stop for Fall 2028. Submit by mid-November — the site melts on the last days." },
+  { date: "2027-11-15", label: "~Nov 2027", src: "uc", what: "TAP certification form due (Scholars office)", note: "Mandatory Scholars UC-app workshop + cert form before the UC deadline. No form = no TAP, regardless of units." },
+  { date: "2027-11-30", label: "Nov 30, 2027", src: "uc", what: "UC APPLICATION DEADLINE", note: "Hard stop for Fall 2028. Some recent cycles extended to Dec 1–2 — never plan on it. Submit by mid-November; the site melts on the last days." },
   { date: "2027-12-14", label: "Dec 14–21, 2027", src: "smc", what: "Fall finals → the grades UCI checks", note: "These grades go straight into your January TAU. Finish strong." },
   { date: "2028-01-04", label: "Jan 4 – Feb 10, 2028", src: "smc", what: "Winter 2028 session", note: "Light load. The real assignment this month is the TAU." },
-  { date: "2028-01-31", label: "Jan 31, 2028", src: "uc", what: "Transfer Academic Update due", note: "Log fall grades + planned spring courses in your submitted app. Skipping this can void the application." },
+  { date: "2028-01-31", label: "Jan 31, 2028", src: "uc", what: "TAU due + Haas supplemental due", note: "TAU: fall grades + spring courses into the submitted app — skipping can void it. Berkeley applicants: the Haas supplemental (essay, self-reported record, video interview) is due the same day." },
   { date: "2028-02-14", label: "Feb 14, 2028", src: "smc", what: "Spring 2028 begins — final term", note: "Runs to Jun 13 (finals Jun 6–13, break Apr 10–14). Everything must be complete when it ends." },
   { date: "2028-03-02", label: "Mar 2, 2028", src: "uc", what: "FAFSA / CADAA + Cal Grant priority deadline", note: "File even if you doubt you qualify — Cal Grant and UC Blue & Gold both need it." },
   { date: "2028-04-15", label: "Mar–Apr 2028", src: "uc", what: "Decisions arrive", note: "UC transfer decisions typically land through March and April." },
   { date: "2028-06-06", label: "Jun 6–13, 2028", src: "smc", what: "Spring finals — the finish line", note: "60 units, 7 major prep courses, both English comps, GE: all done here." },
   { date: "2028-09-20", label: "Late Sep 2028", src: "uc", what: "UCI Fall quarter begins", note: "UCI runs quarters starting late September (Fall 2027 started Sep 20 — expect similar). Enrollment windows post in UCI StudentAccess after you commit." },
+  { date: "2027-09-01", label: "Sep 1–30, 2027", src: "uc", what: "UC TAG window — file ONE guarantee", note: "Your safety net: UC Davis Managerial Econ (3.2), UCSB Econ & Accounting (3.4), or UCR Business Admin (2.8). One TAG total, and the TAG major must match your primary UC app major. Decide in August 2027 off your real GPA." },
+  { date: "2027-10-15", label: "Oct–Nov 2027", src: "smc", what: "Scholars TAP certification form", note: "Submit the TAP cert form to the Scholars Program Leader during the UC application window — a mandatory Scholars UC-app workshop covers it. No form, no TAP, no matter how many Scholars units you finished." },
+  { date: "2028-01-31", label: "Jan 31, 2028", src: "uc", what: "Haas Supplemental Application due (if applying to Berkeley)", note: "Separate from the UC app: extra essay, resume, self-reported academic record, and a video interview. Miss it and your Berkeley business application is dead regardless of grades." },
+  { date: "2028-07-01", label: "~Jul 1, 2028", src: "uc", what: "Final official transcripts to your campus", note: "The last technicality that kills real admits every year. Order them the week spring grades post." },
 ];
 
 const DEFAULT_META = {
@@ -1032,6 +1173,13 @@ const DEFAULT_META = {
     { id: "l1", title: "ASSIST — SMC → UCI BusAdmin agreement", url: "https://assist.org", note: "Re-check each academic year" },
     { id: "l2", title: "Merage transfer page", url: "https://merage.uci.edu/programs/undergraduate/transfer-students.html", note: "Advising form posts ~June" },
     { id: "l3", title: "Corsair Connect", url: "https://www.smc.edu", note: "Enrollment appointments + registration" },
+    { id: "l4", title: "SMC grade distributions (per professor)", url: "https://admin.smc.edu/administration/institutional-research/grade-distribution.php", note: "Who actually gives A's — check before every enrollment" },
+    { id: "l5", title: "RateMyProfessors", url: "https://www.ratemyprofessors.com", note: "Read skeptically; look for patterns, not one-star rants" },
+    { id: "l6", title: "SMC Scholars Program", url: "https://www.smc.edu/student-support/academic-support/counseling/special-support-programs/scholars/", note: "TAP certification for UCLA — apply immediately" },
+    { id: "l7", title: "UC TAP (file your TAG here)", url: "https://uctap.universityofcalifornia.edu", note: "TAG window Sep 1–30, 2027 — one campus only" },
+    { id: "l8", title: "CVC — cross-enroll online at any CA college", url: "https://cvc.edu", note: "Backup when an SMC section is full or missing" },
+    { id: "l9", title: "UCLA Business Economics transfer prep", url: "https://admission.ucla.edu/apply/transfer/deciding-on-major/major-preparation-the-college/requirements-for-business-economics", note: "Direct-admit only — prep by end of Fall 2027" },
+    { id: "l10", title: "Haas transfer admissions", url: "https://haas.berkeley.edu/undergrad/admissions/application-process/transfer-students/", note: "Supplemental app due Jan 31" },
   ],
   acts: [
     { id: "a1", name: "SMMZOLO", role: "Founder & Operator", cat: "Business", hrs: "", weeks: "", desc: "Run a social media marketing panel — built the entire frontend myself, handle payments, support, and service fulfillment." },
@@ -1048,11 +1196,13 @@ const OLD_META_KEY = "uci-transfer-meta-v3";
 
 function migrateMeta(m) {
   m.ge = m.ge || {};
+  m.targets = m.targets || ["uci", "ucla"];
   m.appChecks = m.appChecks || {};
   m.sim = m.sim || {};
   m.goals = m.goals || [];
   m.links = m.links || JSON.parse(JSON.stringify(DEFAULT_META.links));
   m.celebrated = m.celebrated || false;
+  m.targets = m.targets || ["uci", "ucla"];
   const piqs = {};
   Object.keys(m.piqs || {}).forEach(k => {
     const v = m.piqs[k];
@@ -1216,6 +1366,12 @@ function strength() {
 function insights() {
   const out = [];
   const now = new Date();
+  if (!meta.appChecks["scholars"]) {
+    out.push({ level: "red", tab: "reqs", text: "SMC Scholars application not marked done — UCLA TAP needs 15 Scholars units across Fall 26 + Spring 27.", fix: "Apply now at smc.edu/scholars and take Scholars sections of courses already in your plan." });
+  }
+  if (!meta.appChecks["tagfile"] && daysUntil("2027-09-30") > 0) {
+    out.push({ level: "blue", tab: "reqs", text: "No TAG filed yet — Davis (3.2), UCSB (3.4) and UCR (2.8) all guarantee a business-family admit.", fix: "Window is Sep 1–30, 2027. One TAG only, and it must match your primary app major." });
+  }
   const prep = majorPrepDone();
   const { gpa, gradedUnits } = gpaData();
 
@@ -1275,6 +1431,7 @@ function insights() {
 
   if (meta.acts.length < 3) out.push({ level: "blue", tab: "app", text: "Only " + meta.acts.length + " activities logged — the UC app holds up to 20 entries.", fix: "Add work, projects, volunteering — SMC clubs count too." });
 
+  if (!meta.appChecks["scholars"]) out.push({ level: "amber", tab: "ucs", text: "Scholars/TAP not started — the single biggest UCLA lever on the board.", fix: "Apply to SMC Scholars before Fall 2026 begins; breakdown in the UCs tab." });
   if (Object.keys(meta.sim).some(k => meta.sim[k])) out.push({ level: "blue", tab: "stats", text: "Grade simulator is active — projected numbers include hypothetical grades." });
 
   if (prep.done >= prep.total) out.push({ level: "green", tab: "stats", text: "All 7 major prep courses complete. That's the hard part." });
@@ -1284,7 +1441,7 @@ function insights() {
 }
 
 /* ================= render ================= */
-function renderAll() { renderHeader(); renderHero(); renderInsights(); renderRoad(); renderStats(); renderGe(); renderPick(); renderApp(); renderDates(); maybeCelebrate(); }
+function renderAll() { renderHeader(); renderHero(); renderInsights(); renderRoad(); renderStats(); renderGe(); renderReqs(); renderPick(); renderApp(); renderDates(); maybeCelebrate(); }
 
 const TOTAL_MI = 52; /* SMC → UCI down the 405, close enough */
 
@@ -1966,7 +2123,7 @@ function buildReport() {
       <li>Full Cal-GETC or minimum GE + major prep for Merage?</li>
       <li>Which second English comp course counts, and does it fit Winter 2027 (Jan 4 – Feb 11)?</li>
       <li>Am I on track for 60 UC-transferable units by end of Spring 2028 (Jun 13)?</li>
-      <li>TAG Business Econ vs straight Business Admin application — which is smarter for my numbers?</li>
+      <li>Which TAG (Davis 3.2 / UCSB 3.4 / UCR 2.8) should I file in Sep 2027 for my numbers?</li>
       <li>Do any of my courses double-count for Cal-GETC areas and major prep?</li>
     </ul>`;
   window.print();
@@ -1983,6 +2140,10 @@ function buildSearchIndex() {
   meta.acts.forEach(a => idx.push({ kind: "Activity", title: a.name, snip: a.role + (a.desc ? " · " + a.desc.slice(0, 70) : ""), tab: "app", text: (a.name + " " + a.role + " " + a.desc).toLowerCase() }));
   meta.links.forEach(l => idx.push({ kind: "Link", title: l.title, snip: l.note || l.url || "", tab: "app", text: (l.title + " " + (l.note || "") + " " + (l.url || "")).toLowerCase() }));
   meta.goals.forEach(g => idx.push({ kind: "Goal", title: g.title, snip: g.progress + "% complete", tab: "stats", text: g.title.toLowerCase() }));
+  CAMPUSES.forEach(c => idx.push({ kind: "Campus", title: c.campus + " — " + c.major, snip: c.notes[0].slice(0, 90), tab: "ucs", text: (c.campus + " " + c.major + " " + c.tier + " " + c.notes.join(" ")).toLowerCase() }));
+  RCHECKS.forEach(r => idx.push({ kind: "Fact-check", title: r.claim, snip: r.d.slice(0, 90), tab: "ucs", text: (r.claim + " " + r.d).toLowerCase() }));
+  CAMPUSES.forEach(cp => idx.push({ kind: "Campus", title: cp.campus + " — " + cp.major, snip: cp.tier + " · " + cp.gpa.comp, tab: "reqs", text: (cp.campus + " " + cp.major + " " + cp.notes.join(" ")).toLowerCase() }));
+  RCHECKS.forEach(r => idx.push({ kind: "Fact-check", title: r.claim, snip: r.d.slice(0, 90), tab: "reqs", text: (r.claim + " " + r.d).toLowerCase() }));
   PICKS.forEach(p => idx.push({ kind: "Pick", title: p.c + " — " + p.n, snip: TIER_LABEL[p.tier] + " · " + p.u + "u · " + p.why.slice(0, 80), tab: "pick", text: (p.c + " " + p.n + " " + p.s + " " + p.why).toLowerCase() }));
   return idx;
 }
@@ -2181,7 +2342,19 @@ HIS LIVE STATE:
 - Cal-GETC areas still open: ${gaps}
 - Course plan:\n${plan}
 
-KEY RULES: 7 major-prep courses (MATH 7, MATH 8, 2x ECON, STAT C1000, ACCTG 1, ACCTG 2) need C or better; both English comps done by spring before transfer; 60 semester units by end of Spring 2028; UC app Oct 1–Nov 30 2027; TAU by Jan 31 2028; CSU-only courses transfer ZERO units to UC; Area 4 needs two disciplines; one science must include a lab; KIN PE capped at 4 units.
+KEY RULES: 7 major-prep courses (MATH 7, MATH 8, 2x ECON, STAT C1000, ACCTG 1, ACCTG 2) need C or better; both English comps done by spring before transfer; 60 semester units by end of Spring 2028; UC app Oct 1–Nov 30 2027 (some cycles extend to Dec 1–2, never plan on it); TAU by Jan 31 2028; CSU-only courses transfer ZERO units to UC; Area 4 needs two disciplines; one science must include a lab; KIN PE capped at 4 units.
+
+CAMPUS BOARD (verified vs UC sources Aug 2026 — certify on assist.org):\n${CAMPUSES.map(c => `- ${c.campus} · ${c.major} · ${c.tier}${c.tag ? " · TAG " + (c.tag.gpa || "open") : " · no TAG"} · ${c.notes[0]}`).join("\n")}
+
+TAG FALL 2028 REALITY (UC matrix): UCI excludes Business Econ, Econ, Quant Econ (Business Admin never had TAG). One TAG only, filed Sep 1–30 2027, major must match the app: Davis ManEcon 3.2 by end of Summer 2027 / UCSB 3.4 pre-major only / UCR Business 2.8 / Merced open. Fine print: ≤80 total units, ≤19 units final spring, no grade below C after filing.
+SCHOLARS/TAP: 15 units of Scholars sections over two FULL semesters (Fall 26 + Spring 27), ≥9 units at SMC, cert form + mandatory workshop fall 2027; TAP = priority review at UCLA L&S + alternate major, historically ~70–80% admit for certified, NOT guaranteed.
+UCSD: Business Econ B.S. closed to new students starting Fall 2028; pivot = Econ + Rady minor (needs MATH 11). Haas: supplemental due Jan 31 2028 (essay, record, video); prereqs C- or better, ≤5 yrs old; Cal-GETC not used.
+
+CAMPUS REQUIREMENTS (verified Aug 2026 — always tell him to confirm on assist.org):
+${CAMPUSES.map(c => `${c.campus} / ${c.major} [${c.tier}] — ${c.tag ? "TAG " + (c.tag.gpa || "open") : "NO TAG"}${c.tap ? ", TAP via Scholars" : ""}, GPA: ${c.gpa.comp}. Prep: ${c.req.map(r => r.c).join("; ") || "n/a"}. ${c.notes.join(" ")}`).join("\n")}
+
+UNIVERSAL FLOOR: 60 UC-transferable units by Spring 2028; two English comps; one math/QR; four more courses across 2+ areas; C or better in prep; ≤14 P/NP units; Fall 2028 entry only (no spring transfer at UCLA/UCI/Berkeley); final transcripts ~July 2028.
+SCHOLARS/TAP: 15 Scholars units across two FULL semesters (Fall 26 + Spring 27), C+, cert form fall 2027 — the biggest UCLA lever and it expires if not started now.
 
 RANKED FALL 2026 CATALOG (pre-analyzed):\n${ranked}`;
 }
@@ -2212,6 +2385,187 @@ async function askAI(q) {
   }
   document.getElementById("chatSend").disabled = false;
   log.scrollTop = log.scrollHeight;
+}
+
+/* ================= requirements hub (verified Aug 2026) ================= */
+/* Sources: admission.ucla.edu, haas.berkeley.edu, ucdavis.edu, admissions.ucsd.edu,
+   admissions.sa.ucsb.edu, admissions.ucr.edu, UC TAG matrix, smc.edu Scholars pages.
+   Always certify final picks on assist.org + with a counselor. */
+const CAMPUSES = [
+  { id: "uci", campus: "UC Irvine", major: "Business Administration — Merage", tier: "reach/match",
+    tag: null, gpa: { floor: 3.0, comp: "3.4+" },
+    req: [
+      { c: "MATH 7 (Calc 1)", t: ["MATH 7"] }, { c: "MATH 8 (Calc 2)", t: ["MATH 8"] },
+      { c: "Micro (ECON C2001)", t: ["ECON C2001", "ECON 1"] }, { c: "Macro (ECON C2002)", t: ["ECON C2002", "SECOND ECON", "ECON 2"] },
+      { c: "STAT C1000", t: ["STAT"] }, { c: "ACCTG 1", t: ["ACCTG 1"] }, { c: "ACCTG 2", t: ["ACCTG 2"] },
+    ],
+    notes: ["Your home target — the whole Road tab is built around these 7 (C or better each).", "TAG reality (UC's own matrix for your cycle): Business Admin was never TAG-able — and for FALL 2028 admission UCI ALSO removed Business Economics, Economics, and Quantitative Economics from TAG. There is no UCI guarantee path left. UCI is a straight application on merit.", "TAU update due Jan 31, 2028."] },
+
+  { id: "ucla", campus: "UCLA", major: "Business Economics — L&S", tier: "reach",
+    tag: null, tap: true, gpa: { floor: null, comp: "3.8–4.0 realistic" },
+    req: [
+      { c: "Micro", t: ["ECON C2001", "ECON 1"] }, { c: "Macro", t: ["ECON C2002", "SECOND ECON", "ECON 2"] },
+      { c: "Calc year pt 1", t: ["MATH 7"] }, { c: "Calc year pt 2", t: ["MATH 8"] },
+      { c: "Intro financial accounting", t: ["ACCTG 1"] }, { c: "Intro managerial accounting", t: ["ACCTG 2"] },
+    ],
+    notes: ["Official prep list (admission.ucla.edu): micro, macro, one year of calculus, financial accounting, managerial accounting — your plan covers 100% of it.", "STRONGLY encouraged to finish all prep by END OF FALL 2027 — your plan does (last one is MATH 8, Fall 27).", "Direct admit only — you cannot switch into BizEcon after arriving. Demand far exceeds space.", "No TAG at UCLA. The lever is TAP via SMC Scholars: priority review for L&S (BizEcon qualifies) + alternate-major consideration. historically reported ~70–80% admit for TAP-certified overall (hot majors like BizEcon run tougher — still a massive edge)."] },
+
+  { id: "haas", campus: "UC Berkeley", major: "Business Administration — Haas (Spieker)", tier: "big reach",
+    tag: null, gpa: { floor: 3.0, comp: "3.8+ realistic" },
+    req: [
+      { c: "UGBA 10 equivalent (Principles of Business)", t: ["BUS 1"], warn: "Check assist.org — SMC's BUS 1 may NOT articulate to UGBA 10. If there's no SMC equivalent, the standard move is taking the articulated course online at another CC via cvc.edu." },
+      { c: "Calc pt 1", t: ["MATH 7"] }, { c: "Calc pt 2", t: ["MATH 8"] }, { c: "Statistics", t: ["STAT"] },
+      { c: "Micro", t: ["ECON C2001", "ECON 1"] }, { c: "Macro", t: ["ECON C2002", "SECOND ECON", "ECON 2"] },
+      { c: "Reading & Comp A", t: ["ENGL C1000"] }, { c: "Reading & Comp B", t: ["SECOND ENGLISH", "ENGL C1001"] },
+    ],
+    notes: ["Two-year Spieker program still takes CC transfers. Extra work: Haas Supplemental Application due Jan 31, 2028 — essay, resume, self-reported record, video interview.", "Prereqs: C- or better, ≤5 years old, done by end of Spring 2028. Cal-GETC is NOT accepted or required — Haas uses L&S breadth (for graduation, not admission).", "3.0 is the eligibility floor; admits run ~3.8+. Treat as a lottery ticket on top of a solid plan, not the plan."] },
+
+  { id: "ucsd", campus: "UC San Diego", major: "Business Econ B.S. — CLOSED to new students Fall 2028", tier: "pivot: Econ + Rady minor",
+    tag: null, gpa: { floor: null, comp: "3.5+ for econ" },
+    req: [
+      { c: "Micro (their ECON 1)", t: ["ECON C2001", "ECON 1"] }, { c: "Macro (their ECON 3)", t: ["ECON C2002", "SECOND ECON", "ECON 2"] },
+      { c: "Calc (10A)", t: ["MATH 7"] }, { c: "Calc (10B)", t: ["MATH 8"] },
+      { c: "MATH 11 — multivariable (their 10C, required for econ upper-division)", t: ["MATH 11"], soft: true },
+    ],
+    notes: ["Straight from UCSD: the Business Economics B.S. stops accepting NEW students starting Fall 2028 — your exact entry term. A successor major is being developed; watch economics.ucsd.edu.", "The live pivot: UCSD Economics B.A./B.S. + a Rady minor (accounting, finance, marketing, business analytics…). Their upper-division econ core requires the THIRD calc course — SMC MATH 11 — so a real UCSD run means adding MATH 11 in Winter/Spring 28.", "No TAG at UCSD, and no Business Administration bachelor's exists there at all — Rady does minors + collaborative majors only."] },
+
+  { id: "davis", campus: "UC Davis", major: "Managerial Economics", tier: "TAG safety",
+    tag: { gpa: 3.2, when: "TAG window Sep 1–30, 2027" }, gpa: { floor: 2.8, comp: "3.2 = guaranteed via TAG" },
+    req: [
+      { c: "Micro", t: ["ECON C2001", "ECON 1"] }, { c: "Macro", t: ["ECON C2002", "SECOND ECON", "ECON 2"] },
+      { c: "Calc series pt 1", t: ["MATH 7"] }, { c: "Calc series pt 2", t: ["MATH 8"], warn: "Davis lists the ENTIRE calc series (their 19ABC) — verify on assist whether MATH 7+8 fully satisfies it from SMC or MATH 11 is needed." },
+      { c: "Financial accounting", t: ["ACCTG 1"] }, { c: "Managerial accounting", t: ["ACCTG 2"] }, { c: "Statistics", t: ["STAT"] },
+    ],
+    notes: ["THE headline: selective major but TAG-ELIGIBLE at 3.2 (confirmed on the current Davis TAG sheet) — a written GUARANTEE while you shoot for UCI/UCLA. Fine print: the 3.2 must exist by END OF SUMMER 2027 (only Fall 26 + Win/Spr 27 grades count toward it), held through enrollment, no grade below C after filing, ≤19 units left for your final spring, ≤80 total units. File via UC TAP, Sep 1–30, 2027 — one TAG total.", "Prep C- or better; selective-major criteria = full calc series + both econ + stats. Ask a Davis TAG advisor how Fall-2027 STAT C1000 timing plays with the criteria, and check ASSIST on whether MATH 7+8 alone satisfies their calc series or MATH 11 is needed.", "Davis also just launched a separate Business major (first transfer cohort Fall 2027) — NOT TAG-eligible; check assist if curious."] },
+
+  { id: "ucsb", campus: "UC Santa Barbara", major: "Economics & Accounting", tier: "match + TAG",
+    tag: { gpa: 3.4, when: "TAG window Sep 1–30, 2027" }, gpa: { floor: null, comp: "2.75 in the 4 screening courses; TAG at 3.40 overall" },
+    req: [
+      { c: "Micro", t: ["ECON C2001", "ECON 1"] }, { c: "Macro", t: ["ECON C2002", "SECOND ECON", "ECON 2"] },
+      { c: "Calc 1", t: ["MATH 7"] }, { c: "Calc 2", t: ["MATH 8"] },
+    ],
+    notes: ["Screening: those 4 courses, 2.75+ among them, nothing below C. AP econ doesn't count — real courses only (you're taking real ones).", "TAG at 3.40 by end of Fall 2027 — but the UC matrix catch: for majors WITH a pre-major (this one), TAG guarantees the PRE-major only. You still hit the 2.75 screening bar at UCSB to enter the full major. A guarantee with an asterisk.", "The accounting angle: after arrival the full major wants their Econ 3A/3B — which articulate from ACCTG 1/2. Your plan front-loads it. Strong CPA/Big-4 pipeline school."] },
+
+  { id: "ucr", campus: "UC Riverside", major: "Business Administration — School of Business", tier: "TAG safety",
+    tag: { gpa: 2.8, when: "TAG window Sep 1–30, 2027" }, gpa: { floor: 2.7, comp: "TAG at 2.8 (School of Business, current UC matrix)" },
+    req: [
+      { c: "Micro", t: ["ECON C2001", "ECON 1"] }, { c: "Macro", t: ["ECON C2002", "SECOND ECON", "ECON 2"] },
+      { c: "Financial accounting", t: ["ACCTG 1"] }, { c: "Managerial accounting", t: ["ACCTG 2"] },
+      { c: "Statistics", t: ["STAT"] }, { c: "Calculus", t: ["MATH 7"] },
+      { c: "UCR-specific 1–2 of the 7 (often info systems / business law)", t: ["CIS", "BUS 5"], soft: true, warn: "Pull the exact 7-course list for SMC → UCR on assist; the non-overlap is usually a computer-info-systems course." },
+    ],
+    notes: ["A real AACSB business school with a TAG at 2.8 — the guaranteed business-degree floor under your whole plan.", "7 lower-division prep courses per assist, each C or better, 2.5+ across them; Cal-GETC 'highly recommended' for the School of Business — you're tracking it anyway.", "TAG via UC TAP Sep 1–30, 2027 (one TAG total across all campuses — Davis 3.2 vs UCSB 3.4 vs UCR 2.8 is a September 2027 decision based on your real GPA)."] },
+
+  { id: "ucm", campus: "UC Merced", major: "Management & Business Economics", tier: "deep safety",
+    tag: { gpa: null, when: "All majors TAG-open" }, gpa: { floor: null, comp: "UC floor (2.4) + TAG-open" },
+    req: [], notes: ["Every major is TAG-open — the deepest backstop in the system. If the plan holds you'll never need it, but 'nothing left out' means it's on the board."] },
+];
+
+const FLOOR = [
+  { id: "tagfine", text: "TAG fine print (if you file one): ≤80 total UC-transferable units, ≤19 units in the final spring, no grade below C after filing", auto: () => null, detail: () => "Applies only to the ONE TAG you file Sep 1–30, 2027 — per-campus bars are on the cards above." },
+  { id: "units60", text: "60 UC-transferable semester units by end of Spring 2028", auto: () => pkUnitGap().total >= 60, detail: () => `Plan currently totals ${pkUnitGap().total} — Pick tab closes the gap.` },
+  { id: "eng2", text: "Two transferable English composition courses (7-course pattern)", auto: () => courses.filter(c => c.cat === "english").length >= 2, detail: () => "ENGL C1000 + your Winter 27 comp course. Both must be C or better, done by Spring 2028." },
+  { id: "math1", text: "One transferable math/QR course (7-course pattern)", auto: () => courses.some(c => /MATH|STAT/i.test(c.name)), detail: () => "MATH 7 / STAT C1000 both clear it — double-counts with major prep." },
+  { id: "four", text: "Four more courses from ≥2 of: arts/humanities, social-behavioral, physical/bio sciences", auto: () => null, detail: () => "Your ECONs + AHIS + Pick-tab GE fillers cover this — confirm the spread with a counselor." },
+  { id: "gpafloor", text: "GPA above the absolute UC floor (2.4 CA resident)", auto: () => { const g = gpaData().gpa; return g === null ? null : g >= 2.4; }, detail: () => "The floor gets you read, not admitted — your real targets are per-campus above." },
+  { id: "cgrade", text: "All 7-course-pattern + major prep courses C or better", auto: () => !courses.some(c => c.status === "done" && c.grade && GRADES[c.grade] < 2.0 && c.cat !== "opt"), detail: () => "One below-C grade = that course stops counting. The Road tab flags these in red." },
+  { id: "pnp", text: "No more than 14 units taken Pass/No Pass", auto: () => null, detail: () => "You're on letter grades anyway — just don't panic-switch anything to P/NP without asking first." },
+  { id: "fallonly", text: "Fall 2028 entry only — UCLA, UCI, Berkeley and most UCs don't do spring transfer", auto: () => null, detail: () => "Everything lands on the Oct 1 – Nov 30, 2027 window (some recent cycles extended to Dec 1–2 — never plan on it). No second window." },
+  { id: "finaltx", text: "Final official transcripts to your campus by ~July 1, 2028", auto: () => null, detail: () => "The last technicality that kills admits every year. It's in the App checklist." },
+];
+
+const RCHECKS = [
+  { v: "false", claim: "UCI TAG is the backdoor for business/econ transfers", d: "Was — not anymore. UC's own TAG matrix: for Fall 2028 admission, UCI drops Business Economics, Economics, and Quantitative Economics from TAG (Business Admin never had it). Your guarantee options now live at Davis (ManEcon 3.2), UCSB (pre-Econ&Acct 3.4), UCR (Business 2.8), Merced (open)." },
+  { v: "true",  claim: "UCs don't see your high-school GPA when you transfer", d: "Confirmed — the transfer app has no HS section. Two years at SMC = clean slate. Your record starts Fall 2026." },
+  { v: "true",  claim: "Join SMC Scholars ASAP", d: "The most urgent item in the whole file FOR YOU: TAP certification needs 15 units of Scholars-section courses across two FULL semesters (fall + spring, winter/summer don't count), C or better, done by end of Fall 2027. Applying Fall 2027 means your two semesters are Fall 26 + Spring 27 — so you apply to Scholars NOW and take Scholars sections of courses already in your plan." },
+  { v: "true",  claim: "TAP-certified applicants get in to UCLA at ~70%+", d: "SMC's own program target is an 80%+ admit rate for TAP-certified students. It's priority review for L&S (Business Econ qualifies) + an alternate-major shot + TAP scholarships. Still major-dependent — BizEcon runs hotter than average." },
+  { v: "mixed", claim: "You need a 3.2 high-school GPA for the honors/Scholars program", d: "Garbled. HS record is only one entry route — as a current college student you qualify off your SMC GPA. Ask the Scholars office (scholars@smc.edu) for the current college-GPA route." },
+  { v: "false", claim: "TAP gives you 3 attempts at UCLA", d: "No. TAP = priority consideration + ONE alternate-major consideration on the same application. Not multiple tries." },
+  { v: "mixed", claim: "Complete IGETC before you transfer — it's required", d: "Two problems: (1) You started Fall 2026 → you're on Cal-GETC, not IGETC (the post says this itself in the corrections). (2) It is NOT an admission requirement at UCLA/UCI/UCSD — and Haas doesn't accept it at all. It's valuable (clears GE at most campuses; UCR Business TAG 'highly recommends' it), but when GE and major prep compete for a slot, major prep wins. The GE checklist below tracks Cal-GETC." },
+  { v: "true",  claim: "GPA — especially prereq GPA — is the #1 factor; finish prereqs by fall of application year", d: "Confirmed everywhere: UCLA says 'strongly encouraged by end of fall,' Merage weighs the core sequence, UCSB screens on exactly 4 courses. Your plan finishes every UCLA/UCI prereq by end of Fall 2027. Protect it." },
+  { v: "true",  claim: "assist.org is the source of truth", d: "Yes. Everything in this app is a map; assist.org + a counselor is the certification. Check it every semester — articulations change." },
+  { v: "true",  claim: "Pick professors with SMC grade distributions + RateMyProfessors", d: "SMC publishes real per-professor grade data: admin.smc.edu → Institutional Research → Grade Distribution. Cross-reference with RMP, read reviews skeptically. Links saved in your App-tab vault." },
+  { v: "true",  claim: "ECs are the least important part; ~8 real ones beat 20 padded; jobs count; quantify everything", d: "Matches how UCs read transfers. Running SMMZOLO + Mikye Media while holding a 3.5+ IS the story — revenue numbers, client counts, uptime. 'Don't tell, show' with digits." },
+  { v: "true",  claim: "PIQs: don't tell, show · simple words · active voice · 4×350 · no clichés · about YOU", d: "All solid. Your App tab has the drafts + word counters; the co-pilot can pressure-test 'show vs tell' line by line." },
+  { v: "mixed", claim: "UCSD is a 60%+ admit for this major", d: "That was about poli sci. Admit rates swing wildly BY MAJOR — UCSD BizEcon is a screened econ-dept major, healthier odds than UCLA BizEcon but not 60% territory. Never borrow another major's admit rate." },
+  { v: "true",  claim: "Use multiple counselors + UC reps; counselors make mistakes", d: "Verified culture-wide. Rotation: general counselor + Scholars counselor + Merage advising (June 2027) + UC reps at SMC transfer fairs. Same question to two people, compare answers." },
+  { v: "true",  claim: "Enroll the second your appointment opens, drop later if needed", d: "Yes — requirement sections (English comp, calc) fill first. Holding a seat is free; missing one costs a semester." },
+  { v: "true",  claim: "Winter session = one class max", d: "Already baked into your Road — Winter 27 is the second English comp, solo, full send." },
+  { v: "true",  claim: "cvc.edu for online courses at other CCs", d: "California Virtual Campus — cross-enroll online at any CC when an SMC section is full, and the standard fix if SMC lacks a Haas UGBA-10 equivalent." },
+  { v: "true",  claim: "Transfer students perform as well as or better than juniors who started as freshmen", d: "UC's own outcome data backs this. You're not sneaking in the side door — you're taking the proven route." },
+];
+
+function reqStatus(tokens) {
+  const up = t => t.toUpperCase();
+  const hit = courses.find(c => tokens.some(t => c.name.toUpperCase().includes(up(t))));
+  if (!hit) return { s: "missing", label: "not in plan" };
+  if (hit.status === "done") return GRADES[hit.grade] >= 2.0 ? { s: "done", label: hit.grade } : { s: "fail", label: hit.grade + " — retake" };
+  if (hit.status === "progress") return { s: "taking", label: "taking" };
+  return { s: "planned", label: TERMS.find(t => t.id === hit.term).short };
+}
+function renderReqs() {
+  meta.targets = meta.targets || ["uci", "ucla"];
+  const tg = document.getElementById("rqTargets");
+  tg.innerHTML = CAMPUSES.map(c => `<div class="rq-t ${meta.targets.includes(c.id) ? "on" : ""}" data-id="${c.id}">${esc(c.campus.replace("UC ", "").replace("UC Santa Barbara", "UCSB"))}</div>`).join("");
+  tg.querySelectorAll(".rq-t").forEach(el => el.addEventListener("click", () => {
+    const id = el.dataset.id;
+    meta.targets = meta.targets.includes(id) ? meta.targets.filter(x => x !== id) : [...meta.targets, id];
+    save(); renderReqs();
+  }));
+
+  const { gpa } = gpaData();
+  const order = [...CAMPUSES].sort((a, b) => (meta.targets.includes(b.id) ? 1 : 0) - (meta.targets.includes(a.id) ? 1 : 0));
+  document.getElementById("rqList").innerHTML = order.map(cp => {
+    const hard = cp.req.filter(r => !r.soft);
+    const done = hard.filter(r => reqStatus(r.t).s === "done").length;
+    const inPlan = hard.filter(r => ["done", "taking", "planned"].includes(reqStatus(r.t).s)).length;
+    const pct = hard.length ? inPlan / hard.length : 1;
+    const gTarget = cp.tag && cp.tag.gpa ? cp.tag.gpa : (cp.gpa.floor || null);
+    const gChip = gpa === null ? "" :
+      `<span class="rq-chip ${gTarget === null ? "" : gpa >= (cp.id === "ucla" || cp.id === "haas" ? 3.7 : gTarget) ? "ok" : gpa >= (gTarget || 0) ? "mid" : "bad"}">you: ${gpa.toFixed(2)}</span>`;
+    return `
+    <div class="rq-card ${meta.targets.includes(cp.id) ? "target" : ""}">
+      <div class="rq-head">
+        <div>
+          <div class="rq-campus">${esc(cp.campus)}</div>
+          <div class="rq-major">${esc(cp.major)}</div>
+        </div>
+        <div class="rq-ring">${ringSvg(pct)}</div>
+      </div>
+      <div class="rq-chips">
+        <span class="rq-chip tier">${esc(cp.tier)}</span>
+        ${cp.tag ? `<span class="rq-chip tag">TAG ${cp.tag.gpa ? "@ " + cp.tag.gpa.toFixed(1) : "open"}</span>` : `<span class="rq-chip">no TAG</span>`}
+        ${cp.tap ? `<span class="rq-chip tag">TAP via Scholars</span>` : ""}
+        <span class="rq-chip">${esc(cp.gpa.comp)}</span>
+        ${gChip}
+      </div>
+      ${cp.req.length ? `<div class="rq-reqs">${cp.req.map(r => {
+        const st = reqStatus(r.t);
+        return `<div class="rq-req ${st.s} ${r.soft ? "soft" : ""}"><span class="rq-dot"></span><span class="rq-name">${esc(r.c)}</span><span class="rq-st">${esc(st.label)}</span>${r.warn ? `<div class="rq-warn">⚠ ${esc(r.warn)}</div>` : ""}</div>`;
+      }).join("")}</div>` : ""}
+      <div class="rq-notes">${cp.notes.map(n => `<div class="rq-note">${esc(n)}</div>`).join("")}</div>
+    </div>`;
+  }).join("");
+
+  document.getElementById("rqFloor").innerHTML = FLOOR.map(f => {
+    const a = f.auto();
+    const cls = a === true ? "ok" : a === false ? "bad" : "info";
+    const mark = a === true ? "✓" : a === false ? "!" : "•";
+    return `<div class="rq-floor ${cls}"><span class="rq-fmark">${mark}</span><div><div class="rq-ftext">${esc(f.text)}</div><div class="rq-fdetail">${esc(f.detail())}</div></div></div>`;
+  }).join("");
+
+  const sch = !!meta.appChecks["scholars"];
+  document.getElementById("rqScholars").innerHTML = `
+    <div class="rq-floor ${sch ? "ok" : "bad"}"><span class="rq-fmark">${sch ? "✓" : "!"}</span><div>
+      <div class="rq-ftext">SMC Scholars → UCLA TAP certification</div>
+      <div class="rq-fdetail">15 units of Scholars-section courses across two FULL semesters (Fall 26 + Spring 27 — winter/summer don't count), C or better, ≥3 courses (9 units) at SMC, cert form + mandatory workshop fall 2027 via the Scholars office. Competitive line ≈3.5 UC GPA — confirm current cert criteria at scholars@smc.edu. ${sch ? "Marked applied in your App checklist." : "NOT started — apply before Fall 2026 begins and swap your enrolled courses to Scholars sections where offered. Check it off in the App tab when done."}</div>
+    </div></div>`;
+
+  document.getElementById("rqChecks").innerHTML = RCHECKS.map(r => `
+    <div class="rq-claim">
+      <span class="rq-v ${r.v}">${r.v === "true" ? "TRUE" : r.v === "false" ? "FALSE" : "DEPENDS"}</span>
+      <div><div class="rq-ctext">“${esc(r.claim)}”</div><div class="rq-cdetail">${esc(r.d)}</div></div>
+    </div>`).join("");
 }
 
 /* ================= wiring ================= */
