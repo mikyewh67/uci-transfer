@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0b0f12">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="405 South">
+  <meta name="description" content="405 South — SMC to UC transfer command center">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" href="icon-192.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <title>405 South — Transfer Command</title>
+</head>
+<body>
+  <div id="appShell">
+    <header class="app-header">
+      <div class="header-inner">
+        <button class="brand" id="brandBtn" aria-label="Go to Today">
+          <img src="icon-192.png" alt="" class="brand-icon">
+          <span class="brand-copy">
+            <span class="eyebrow">SMC → UC · FALL 2028</span>
+            <strong>405 South</strong>
+          </span>
+        </button>
+        <div class="header-actions">
+          <button class="icon-button" id="searchBtn" aria-label="Search and commands" title="Search">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>
+          </button>
+          <button class="icon-button" id="settingsBtn" aria-label="Settings" title="Settings">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z"/><path d="M19 13.5v-3l-2-.7-.6-1.4.9-1.9-2.1-2.1-1.9.9-1.4-.6L11.2 3h-3l-.7 1.7-1.4.6-1.9-.9L2.1 6.5l.9 1.9-.6 1.4-1.7.7v3l1.7.7.6 1.4-.9 1.9 2.1 2.1 1.9-.9 1.4.6.7 1.7h3l.7-1.7 1.4-.6 1.9.9 2.1-2.1-.9-1.9.6-1.4 2-.7Z"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="destination-sign" id="destinationSign">
+        <div>
+          <span class="sign-small">PRIMARY DESTINATION</span>
+          <strong id="destinationName">UC IRVINE</strong>
+          <span id="destinationMajor">Business Administration · Fall 2028</span>
+        </div>
+        <div class="sign-right">
+          <span class="sign-small">AFTER FALL</span>
+          <strong id="remainingAfterFall">43</strong>
+          <span>UC units to 60</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="main" id="main">
+      <section class="screen active" id="screen-today" data-screen="today" aria-labelledby="todayTitle">
+        <div class="screen-head">
+          <div>
+            <span class="section-kicker">TODAY</span>
+            <h1 id="todayTitle">Transfer command</h1>
+          </div>
+          <button class="text-button" id="calendarExportBtn">Export dates</button>
+        </div>
+        <div id="todayContent"></div>
+      </section>
+
+      <section class="screen" id="screen-plan" data-screen="plan" aria-labelledby="planTitle">
+        <div class="screen-head">
+          <div>
+            <span class="section-kicker">PLAN</span>
+            <h1 id="planTitle">Fall 2026 → Spring 2028</h1>
+          </div>
+          <button class="text-button" id="optimizeBtn">Optimize</button>
+        </div>
+        <div class="plan-toolbar">
+          <div class="segmented" id="planMode">
+            <button data-mode="route" class="active">Route</button>
+            <button data-mode="matrix">Matrix</button>
+            <button data-mode="critical">Critical path</button>
+          </div>
+          <button class="subtle-button" id="snapshotBtn">Save snapshot</button>
+        </div>
+        <div id="planContent"></div>
+      </section>
+
+      <section class="screen" id="screen-requirements" data-screen="requirements" aria-labelledby="requirementsTitle">
+        <div class="screen-head">
+          <div>
+            <span class="section-kicker">REQUIREMENTS</span>
+            <h1 id="requirementsTitle">What every class is doing</h1>
+          </div>
+        </div>
+        <div class="segmented full" id="reqMode">
+          <button data-mode="schools" class="active">Schools</button>
+          <button data-mode="ge">Cal-GETC</button>
+          <button data-mode="sources">Sources</button>
+        </div>
+        <div id="requirementsContent"></div>
+      </section>
+
+      <section class="screen" id="screen-apply" data-screen="apply" aria-labelledby="applyTitle">
+        <div class="screen-head">
+          <div>
+            <span class="section-kicker">APPLY</span>
+            <h1 id="applyTitle">Application runway</h1>
+          </div>
+        </div>
+        <div class="segmented full" id="applyMode">
+          <button data-mode="timeline" class="active">Timeline</button>
+          <button data-mode="campuses">Campuses</button>
+          <button data-mode="tau">TAU</button>
+        </div>
+        <div id="applyContent"></div>
+      </section>
+
+      <section class="screen" id="screen-playbook" data-screen="playbook" aria-labelledby="playbookTitle">
+        <div class="screen-head">
+          <div>
+            <span class="section-kicker">PLAYBOOK</span>
+            <h1 id="playbookTitle">Execution, not guesses</h1>
+          </div>
+          <button class="text-button" id="counselorReportBtn">Counselor report</button>
+        </div>
+        <div id="playbookContent"></div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Primary navigation">
+      <button class="nav-item active" data-target="today">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.5 12 5l8 6.5V20H4v-8.5Z"/><path d="M9 20v-6h6v6"/></svg><span>Today</span>
+      </button>
+      <button class="nav-item" data-target="plan">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3v18M18 3v18"/><path d="M6 7h8l4 4-4 4H6"/></svg><span>Plan</span>
+      </button>
+      <button class="nav-item" data-target="requirements">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v16H5z"/><path d="m8 9 1.5 1.5L12 8M8 15h8"/></svg><span>Requirements</span>
+      </button>
+      <button class="nav-item" data-target="apply">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v16H5z"/><path d="M8 2v4m8-4v4M8 11h8M8 15h5"/></svg><span>Apply</span>
+      </button>
+      <button class="nav-item" data-target="playbook">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v17H6.5A2.5 2.5 0 0 0 4 22V5.5ZM20 5.5A2.5 2.5 0 0 0 17.5 3H13v17h4.5A2.5 2.5 0 0 1 20 22V5.5Z"/></svg><span>Playbook</span>
+      </button>
+    </nav>
+  </div>
+
+  <div class="overlay" id="courseOverlay" aria-hidden="true">
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="courseSheetTitle">
+      <div class="sheet-handle"></div>
+      <div id="courseSheetContent"></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="settingsOverlay" aria-hidden="true">
+    <div class="sheet large" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+      <div class="sheet-handle"></div>
+      <div class="sheet-head"><div><span class="section-kicker">SETTINGS</span><h2 id="settingsTitle">Plan controls</h2></div><button class="icon-button light" data-close="settingsOverlay" aria-label="Close">×</button></div>
+      <div id="settingsContent"></div>
+    </div>
+  </div>
+
+  <div class="overlay command" id="commandOverlay" aria-hidden="true">
+    <div class="command-box" role="dialog" aria-modal="true" aria-label="Search and commands">
+      <div class="command-input-row">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>
+        <input id="commandInput" autocomplete="off" placeholder="Search MATH 7, UCI, Area 5C, move…">
+        <button data-close="commandOverlay" aria-label="Close">Esc</button>
+      </div>
+      <div id="commandResults" class="command-results"></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="optimizerOverlay" aria-hidden="true">
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="optimizerTitle">
+      <div class="sheet-handle"></div>
+      <div class="sheet-head"><div><span class="section-kicker">PLAN OPTIMIZER</span><h2 id="optimizerTitle">Safer route check</h2></div><button class="icon-button light" data-close="optimizerOverlay" aria-label="Close">×</button></div>
+      <div id="optimizerContent"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="update-banner" id="updateBanner" hidden>New app version available. <button id="reloadAppBtn">Refresh</button></div>
+  <input id="importFile" type="file" accept="application/json" hidden>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
