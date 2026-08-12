@@ -1,0 +1,227 @@
+:root{
+  --asphalt:#0b0f12;--asphalt-2:#11171c;--asphalt-3:#182027;
+  --panel:#f5f5f2;--card:#ffffff;--card-2:#f0f1ed;--line:#dfe2dc;
+  --ink:#12181d;--muted:#687078;--muted-2:#8e959b;
+  --green:#0d7249;--green-2:#0a5b3b;--green-soft:#e4f0ea;
+  --amber:#b68a3a;--amber-soft:#f3ead8;--blue:#2d638f;--blue-soft:#e5edf5;
+  --focus:#d4ae5b;--white:#f7faf8;--shadow:0 12px 32px rgba(3,8,12,.12);
+  --radius:18px;--ease:cubic-bezier(.2,.8,.25,1)
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{background:var(--asphalt);scroll-behavior:smooth}
+body{margin:0;background:var(--panel);color:var(--ink);font-family:"Archivo",system-ui,-apple-system,Segoe UI,sans-serif;padding-bottom:94px;min-height:100vh}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid rgba(212,174,91,.58);outline-offset:2px}
+svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.app-header{background:var(--asphalt);color:var(--white);padding:max(12px,env(safe-area-inset-top)) 14px 18px;border-bottom:1px solid rgba(255,255,255,.08)}
+.header-inner,.main{width:min(1080px,100%);margin:0 auto}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:11px;color:inherit;background:none;border:0;padding:0;text-align:left}
+.brand-icon{width:46px;height:46px;border-radius:12px;object-fit:cover}
+.brand-copy{display:flex;flex-direction:column;gap:2px}.brand-copy strong{font-size:1rem;letter-spacing:-.02em}.eyebrow,.section-kicker,.micro{font-family:"JetBrains Mono",monospace;font-size:.59rem;letter-spacing:.11em;text-transform:uppercase}.eyebrow{color:#c9d0d4}
+.header-actions{display:flex;gap:7px}.icon-button{width:42px;height:42px;border-radius:13px;border:1px solid rgba(255,255,255,.14);background:#13191e;color:#f4f7f5;display:grid;place-items:center;padding:0}.icon-button svg{width:19px;height:19px}.icon-button.light{color:var(--ink);background:var(--card);border-color:var(--line);font-size:1.35rem}
+.destination-sign{width:min(1080px,100%);margin:14px auto 0;background:var(--green);border:2px solid var(--white);border-radius:14px;padding:13px 15px;display:flex;align-items:center;justify-content:space-between;gap:14px;box-shadow:0 5px 0 rgba(255,255,255,.06)}
+.destination-sign>div{min-width:0}.destination-sign strong{display:block;font-size:1.22rem;letter-spacing:.01em}.destination-sign span:not(.sign-small){display:block;font-size:.68rem;opacity:.82;margin-top:2px}.sign-small{font-family:"JetBrains Mono",monospace;font-size:.54rem;letter-spacing:.12em;opacity:.72}.sign-right{text-align:right;white-space:nowrap}.sign-right strong{font-family:"JetBrains Mono",monospace;font-size:1.55rem}
+.main{padding:18px 14px 24px}.screen{display:none}.screen.active{display:block;animation:screenIn .24s var(--ease)}@keyframes screenIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.screen-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:0 0 14px}.section-kicker{color:var(--green);font-weight:700}.screen-head h1,.sheet-head h2{margin:4px 0 0;font-size:clamp(1.28rem,3.6vw,1.7rem);letter-spacing:-.045em;line-height:1.05}.text-button,.subtle-button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:9px 11px;font-size:.72rem;font-weight:700;min-height:40px}.subtle-button{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:15px;box-shadow:0 1px 0 rgba(255,255,255,.7);margin-bottom:12px}.card.dark{background:var(--asphalt-2);border-color:#263038;color:var(--white)}.card.accent{border-left:4px solid var(--green)}
+.card-title-row{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.card h2,.card h3,.card h4{margin:0;letter-spacing:-.025em}.card h2{font-size:1.05rem}.card h3{font-size:.9rem}.card p{margin:6px 0 0;color:var(--muted);font-size:.76rem;line-height:1.55}.card.dark p{color:#aeb8bf}
+.hero-status{background:var(--asphalt);color:var(--white);border:1px solid #242e35;border-radius:22px;padding:18px;margin-bottom:12px;position:relative;overflow:hidden}.hero-status::after{content:"";position:absolute;left:18px;right:18px;bottom:0;height:2px;background:repeating-linear-gradient(90deg,var(--amber) 0 18px,transparent 18px 30px);opacity:.75}.hero-status .micro{color:#d7bf8b}.hero-main{display:flex;justify-content:space-between;gap:18px;align-items:flex-end;margin-top:8px}.hero-main strong{font-size:clamp(1.55rem,6vw,2.25rem);line-height:.95;letter-spacing:-.055em}.hero-main .deadline-count{font-family:"JetBrains Mono",monospace;font-size:1.65rem;letter-spacing:-.04em;text-align:right}.hero-sub{margin-top:10px;color:#b6c0c6;font-size:.76rem;line-height:1.5}
+.unit-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}.unit-cell{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:11px 8px;text-align:center}.unit-cell strong{font-family:"JetBrains Mono",monospace;font-size:1.05rem;display:block}.unit-cell span{font-size:.56rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-top:3px;display:block}.unit-cell.primary{background:var(--green-soft);border-color:#c8dfd3}.unit-cell.primary strong{color:var(--green)}
+.health-list{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:15px;overflow:hidden}.health-row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;background:var(--card);padding:11px 12px}.health-label{font-size:.78rem;font-weight:650}.health-meta{font-size:.66rem;color:var(--muted);margin-top:2px}.status-pill,.tag{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:4px 8px;font-family:"JetBrains Mono",monospace;font-size:.54rem;font-weight:700;letter-spacing:.03em;white-space:nowrap}.status-pill.ok,.tag.green{background:var(--green-soft);color:var(--green)}.status-pill.watch,.tag.amber{background:var(--amber-soft);color:#7f5e1f}.status-pill.info,.tag.blue{background:var(--blue-soft);color:var(--blue)}.status-pill.neutral,.tag{background:var(--card-2);color:var(--muted)}
+.action-list{display:grid;gap:8px}.action-row{display:flex;gap:11px;padding:11px;border:1px solid var(--line);border-radius:14px;background:var(--card);align-items:flex-start}.action-index{width:25px;height:25px;border-radius:8px;background:var(--asphalt);color:var(--white);display:grid;place-items:center;font:700 .62rem "JetBrains Mono";flex:0 0 auto}.action-body strong{font-size:.78rem}.action-body span{display:block;color:var(--muted);font-size:.69rem;line-height:1.45;margin-top:2px}
+.plan-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.segmented{display:flex;gap:3px;background:#e8eae5;border:1px solid var(--line);border-radius:13px;padding:3px;overflow:auto}.segmented.full{width:100%;margin-bottom:12px}.segmented button{border:0;background:transparent;color:var(--muted);padding:8px 10px;border-radius:9px;font-size:.66rem;font-weight:700;white-space:nowrap;min-height:36px}.segmented.full button{flex:1}.segmented button.active{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.route{position:relative;padding-left:38px}.route::before{content:"";position:absolute;left:14px;top:12px;bottom:18px;width:10px;border-radius:10px;background:var(--asphalt)}.route::after{content:"";position:absolute;left:18px;top:18px;bottom:24px;width:2px;background:repeating-linear-gradient(180deg,var(--amber) 0 12px,transparent 12px 23px)}
+.term{position:relative;margin-bottom:13px}.term-node{position:absolute;left:-31px;top:20px;width:16px;height:16px;border-radius:50%;border:3px solid var(--amber);background:var(--panel);z-index:2}.term.done .term-node{background:var(--green);border-color:var(--green)}.term.current .term-node{background:var(--amber)}
+.term-card{border:1px solid var(--line);background:var(--card);border-radius:18px;overflow:hidden}.term-head{padding:13px 14px;background:var(--green);color:var(--white);display:flex;justify-content:space-between;align-items:center;gap:12px}.term.done .term-head{background:var(--green-2)}.term.future .term-head{background:var(--asphalt-2)}.term-head h3{font-size:.92rem;margin:0}.term-meta{font-size:.61rem;opacity:.8;margin-top:3px}.term-right{text-align:right}.term-units{font:700 .85rem "JetBrains Mono"}.term-status{font-size:.53rem;text-transform:uppercase;letter-spacing:.08em;opacity:.8;margin-top:3px}.term-body{padding:5px 12px 10px}
+.course-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;padding:10px 1px;border-bottom:1px solid var(--line);align-items:center;cursor:pointer}.course-row:last-child{border-bottom:0}.course-main{min-width:0}.course-code{font:700 .71rem "JetBrains Mono"}.course-title{font-size:.72rem;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.course-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px}.course-side{text-align:right}.course-side strong{font:700 .73rem "JetBrains Mono"}.course-side span{display:block;font-size:.56rem;color:var(--muted);margin-top:3px}.lock-icon{display:inline-block;width:11px;height:11px;margin-left:3px;vertical-align:-1px}
+.matrix-wrap{overflow:auto;border:1px solid var(--line);border-radius:16px;background:var(--card)}.matrix{width:100%;border-collapse:collapse;min-width:680px}.matrix th,.matrix td{padding:10px 11px;border-bottom:1px solid var(--line);font-size:.68rem;text-align:left}.matrix th{font:700 .58rem "JetBrains Mono";text-transform:uppercase;letter-spacing:.05em;color:var(--muted);background:var(--card-2);position:sticky;top:0}.matrix td.center{text-align:center}.matrix tr:last-child td{border-bottom:0}.check{color:var(--green);font-weight:800}.dash{color:#a0a6aa}.critical-chain{display:flex;gap:0;align-items:stretch;overflow:auto;padding-bottom:5px}.critical-node{min-width:145px;border:1px solid var(--line);background:var(--card);border-radius:15px;padding:12px;position:relative}.critical-node:not(:last-child){margin-right:28px}.critical-node:not(:last-child)::after{content:"→";position:absolute;right:-23px;top:50%;transform:translateY(-50%);color:var(--amber);font-weight:800}.critical-node strong{font:700 .74rem "JetBrains Mono"}.critical-node span{display:block;font-size:.64rem;color:var(--muted);margin-top:4px}
+.school-grid{display:grid;gap:12px}.school-card{border:1px solid var(--line);border-radius:18px;background:var(--card);overflow:hidden}.school-top{padding:14px 15px;display:flex;justify-content:space-between;gap:12px;align-items:center}.school-card.primary .school-top{background:var(--green);color:var(--white)}.school-name{font-size:1rem;font-weight:800}.school-major{font-size:.67rem;color:var(--muted);margin-top:2px}.school-card.primary .school-major{color:rgba(255,255,255,.76)}.school-summary{font:700 .7rem "JetBrains Mono";text-align:right}.school-body{padding:3px 14px 12px}.req-row{display:grid;grid-template-columns:1fr auto;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);align-items:center}.req-row:last-child{border-bottom:0}.req-row strong{font-size:.73rem}.req-row span{font-size:.61rem;color:var(--muted)}
+.ge-summary{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}.ge-number{background:var(--asphalt);color:var(--white);border-radius:18px;padding:15px}.ge-number strong{font:700 1.6rem "JetBrains Mono"}.ge-number span{font-size:.62rem;color:#b7c0c5;display:block;margin-top:3px}.ge-list{display:grid;gap:8px}.ge-row{border:1px solid var(--line);background:var(--card);border-radius:15px;padding:11px 12px;display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center}.ge-code{font:700 .67rem "JetBrains Mono";width:35px}.ge-row strong{font-size:.73rem}.ge-row small{font-size:.61rem;color:var(--muted);display:block;margin-top:2px}.ge-status{text-align:right}.ge-status b{font:700 .62rem "JetBrains Mono"}.ge-status span{display:block;font-size:.55rem;color:var(--muted);margin-top:3px}.ge-row button{margin-top:6px;border:0;background:none;padding:0;color:var(--blue);font-size:.61rem;font-weight:700}
+.source-card{border:1px solid var(--line);border-radius:15px;background:var(--card);padding:13px;margin-bottom:8px}.source-card h3{font-size:.8rem}.source-meta{font:600 .58rem "JetBrains Mono";color:var(--muted);margin-top:4px}.source-card p{font-size:.68rem}.source-card a{color:var(--blue);font-weight:700;text-decoration:none}
+.timeline{position:relative;padding-left:27px}.timeline::before{content:"";position:absolute;left:7px;top:8px;bottom:8px;width:2px;background:var(--line)}.timeline-item{position:relative;padding:0 0 16px}.timeline-dot{position:absolute;left:-24px;top:3px;width:10px;height:10px;border-radius:50%;background:var(--muted-2);box-shadow:0 0 0 4px var(--panel)}.timeline-item.next .timeline-dot{background:var(--amber)}.timeline-item.done .timeline-dot{background:var(--green)}.timeline-date{font:700 .59rem "JetBrains Mono";color:var(--muted)}.timeline-title{font-size:.78rem;font-weight:700;margin-top:3px}.timeline-note{font-size:.67rem;color:var(--muted);line-height:1.45;margin-top:3px}.timeline-controls{display:flex;gap:5px;margin-top:6px}.timeline-controls button{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:5px 7px;font-size:.57rem;color:var(--muted)}
+.tau-box{background:var(--asphalt);color:var(--white);border-radius:18px;padding:15px}.tau-box h3{margin:0}.tau-box p{color:#aeb8bf}.tau-check{display:flex;gap:9px;align-items:flex-start;padding:9px 0;border-bottom:1px solid #273039}.tau-check:last-child{border-bottom:0}.tau-check input{margin-top:2px;accent-color:var(--green)}.tau-check strong{font-size:.72rem}.tau-check span{display:block;color:#aeb8bf;font-size:.63rem;margin-top:2px}
+.accordion{border:1px solid var(--line);border-radius:16px;background:var(--card);overflow:hidden;margin-bottom:9px}.accordion-head{width:100%;border:0;background:var(--card);display:flex;justify-content:space-between;gap:12px;padding:13px 14px;text-align:left;align-items:center}.accordion-head strong{font-size:.8rem}.accordion-head span{font-size:.62rem;color:var(--muted)}.accordion-body{display:none;padding:0 14px 13px}.accordion.open .accordion-body{display:block}.play-tip{display:flex;gap:9px;padding:8px 0;border-top:1px solid var(--line);font-size:.7rem;line-height:1.5}.play-tip::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--green);margin-top:6px;flex:0 0 auto}.counselor-log{display:grid;gap:7px}.log-row{border:1px solid var(--line);border-radius:12px;padding:10px;background:var(--card-2)}.log-row strong{font-size:.68rem}.log-row p{font-size:.65rem;margin:3px 0 0}
+.bottom-nav{position:fixed;left:50%;bottom:max(8px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:40;width:min(760px,calc(100% - 18px));display:grid;grid-template-columns:repeat(5,1fr);gap:3px;padding:7px;background:rgba(11,15,18,.96);border:1px solid #273037;border-radius:23px;box-shadow:0 15px 40px rgba(0,0,0,.32)}.nav-item{position:relative;border:0;background:transparent;color:#75808a;min-height:57px;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:4px 1px;font:600 .51rem "JetBrains Mono"}.nav-item svg{width:20px;height:20px}.nav-item.active{background:#13201a;color:#dfeee6}.nav-item.active::before{content:"";position:absolute;top:4px;width:22px;height:2px;border-radius:3px;background:#d9e7df}
+.overlay{position:fixed;inset:0;z-index:80;background:rgba(5,8,10,.62);display:none;align-items:flex-end;justify-content:center;padding:12px}.overlay.open{display:flex}.sheet{width:min(650px,100%);max-height:min(88vh,820px);overflow:auto;background:var(--panel);border-radius:24px 24px 18px 18px;padding:9px 14px 18px;box-shadow:0 28px 70px rgba(0,0,0,.35)}.sheet.large{width:min(760px,100%)}.sheet-handle{width:42px;height:4px;border-radius:6px;background:#c7cbc7;margin:2px auto 12px}.sheet-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px}.sheet-section{border-top:1px solid var(--line);padding-top:13px;margin-top:13px}.sheet-section h3{font-size:.8rem;margin:0 0 8px}.detail-title{font-size:1.15rem;margin:0}.detail-sub{font:600 .62rem "JetBrains Mono";color:var(--muted);margin-top:4px}.detail-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.detail-cell{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px}.detail-cell span{font-size:.56rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}.detail-cell strong{font-size:.72rem;display:block;margin-top:3px}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}.field{display:grid;gap:5px;margin-bottom:9px}.field label{font-size:.62rem;color:var(--muted);font-weight:700}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:11px;background:var(--card);color:var(--ink);padding:10px;font-size:.75rem;min-height:42px}.field textarea{min-height:76px;resize:vertical}.button-row{display:flex;gap:8px;flex-wrap:wrap}.primary-button,.secondary-button,.danger-button{border:0;border-radius:12px;padding:10px 12px;font-size:.69rem;font-weight:800;min-height:42px}.primary-button{background:var(--green);color:white}.secondary-button{background:var(--card);border:1px solid var(--line);color:var(--ink)}.danger-button{background:var(--amber-soft);color:#6c521f}
+.command{align-items:flex-start;padding-top:max(14px,env(safe-area-inset-top))}.command-box{width:min(680px,100%);background:var(--panel);border-radius:18px;overflow:hidden;box-shadow:0 25px 70px rgba(0,0,0,.35)}.command-input-row{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:9px;padding:10px;border-bottom:1px solid var(--line)}.command-input-row svg{width:19px;color:var(--muted)}.command-input-row input{border:0;background:transparent;font-size:.85rem;outline:none;min-width:0}.command-input-row button{border:0;background:var(--card-2);border-radius:8px;color:var(--muted);font-size:.58rem;padding:5px 7px}.command-results{max-height:65vh;overflow:auto;padding:7px}.command-result{width:100%;border:0;background:transparent;border-radius:12px;padding:10px;text-align:left;display:grid;grid-template-columns:1fr auto;gap:10px}.command-result:hover{background:var(--card)}.command-result strong{font-size:.74rem}.command-result span{display:block;font-size:.62rem;color:var(--muted);margin-top:2px}.command-result em{font:600 .56rem "JetBrains Mono";color:var(--green);font-style:normal}
+.toast{position:fixed;z-index:100;left:50%;bottom:90px;transform:translate(-50%,18px);background:var(--asphalt);color:var(--white);border-radius:999px;padding:10px 15px;font-size:.68rem;opacity:0;pointer-events:none;transition:.2s var(--ease);white-space:nowrap;max-width:calc(100% - 24px);overflow:hidden;text-overflow:ellipsis}.toast.show{opacity:1;transform:translate(-50%,0)}.update-banner{position:fixed;z-index:110;top:max(8px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);background:var(--amber-soft);color:#5c461b;border:1px solid #dfc995;border-radius:12px;padding:9px 12px;font-size:.66rem;box-shadow:var(--shadow)}.update-banner button{border:0;background:none;color:inherit;font-weight:800}
+.empty{border:1px dashed var(--line);border-radius:15px;padding:18px;text-align:center;color:var(--muted);font-size:.72rem}.note{border-left:3px solid var(--amber);padding:8px 10px;background:var(--amber-soft);border-radius:0 10px 10px 0;font-size:.67rem;color:#665020;line-height:1.45}.mono{font-family:"JetBrains Mono",monospace}.muted{color:var(--muted)}.spacer-8{height:8px}.spacer-12{height:12px}
+@media(min-width:760px){
+  .main{padding-top:24px}.school-grid{grid-template-columns:1fr 1fr}.unit-strip{grid-template-columns:repeat(4,1fr)}.ge-list{grid-template-columns:1fr 1fr}.source-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.source-card{margin-bottom:0}.route{padding-left:48px}.route::before{left:18px}.route::after{left:22px}.term-node{left:-37px}.term-body{display:grid;grid-template-columns:1fr 1fr;column-gap:14px}.course-row:nth-child(odd):last-child{grid-column:1/-1}.detail-grid{grid-template-columns:repeat(4,1fr)}
+}
+@media(max-width:420px){.destination-sign{padding:11px 12px}.destination-sign strong{font-size:1.05rem}.sign-right strong{font-size:1.28rem}.unit-strip{gap:5px}.unit-cell{padding:9px 4px}.unit-cell strong{font-size:.92rem}.nav-item{font-size:.45rem}.screen-head h1{font-size:1.25rem}.plan-toolbar{align-items:stretch;flex-direction:column}.subtle-button{align-self:flex-end}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+@media print{.app-header,.bottom-nav,.header-actions,.text-button,.plan-toolbar,.overlay,.toast,.update-banner{display:none!important}body{background:#fff;padding:0}.main{width:100%;padding:0}.screen{display:block!important;page-break-after:always}.card,.term-card,.school-card{box-shadow:none;break-inside:avoid}}
+
+
+/* ================= v4.1 iPhone-first polish ================= */
+html{
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+  overscroll-behavior-y:none;
+}
+body{
+  min-height:100dvh;
+  padding-bottom:calc(94px + env(safe-area-inset-bottom));
+  overflow-x:hidden;
+}
+button,a,[role="button"]{touch-action:manipulation}
+button,.text-button,.subtle-button,.primary-button,.secondary-button,.danger-button{min-height:44px}
+.icon-button{width:44px;height:44px;flex:0 0 44px}
+.theme-icon{display:none}
+html[data-effective-theme="light"] .theme-icon-moon{display:block}
+html[data-effective-theme="dark"] .theme-icon-sun{display:block}
+
+/* Theme modes: dark keeps the road/header identity but makes the whole app genuinely dark. */
+html[data-theme="dark"],html[data-theme="system"][data-effective-theme="dark"]{
+  --panel:#090d11;--card:#111820;--card-2:#171f28;--line:#27313b;
+  --ink:#eef3f6;--muted:#9da8b1;--muted-2:#74808a;
+  --green:#187a54;--green-2:#105d42;--green-soft:#13291f;
+  --amber:#d4a54d;--amber-soft:#302619;--blue:#72a8d2;--blue-soft:#152637;
+  --white:#f7faf8;--shadow:0 12px 32px rgba(0,0,0,.26)
+}
+html[data-theme="dark"] body,html[data-theme="system"][data-effective-theme="dark"] body{color-scheme:dark}
+html[data-theme="light"] body,html[data-theme="system"][data-effective-theme="light"] body{color-scheme:light}
+html[data-theme="dark"] .segmented,html[data-theme="system"][data-effective-theme="dark"] .segmented{background:#0b1015}
+html[data-theme="dark"] .term-node,html[data-theme="system"][data-effective-theme="dark"] .term-node{background:var(--panel)}
+html[data-theme="dark"] .card,html[data-theme="system"][data-effective-theme="dark"] .card{box-shadow:none}
+html[data-theme="dark"] .icon-button.light,html[data-theme="system"][data-effective-theme="dark"] .icon-button.light{background:var(--card);color:var(--ink);border-color:var(--line)}
+html[data-theme="dark"] input,html[data-theme="dark"] select,html[data-theme="dark"] textarea,
+html[data-theme="system"][data-effective-theme="dark"] input,html[data-theme="system"][data-effective-theme="dark"] select,html[data-theme="system"][data-effective-theme="dark"] textarea{color-scheme:dark}
+
+.screen-head{flex-wrap:wrap;align-items:flex-start}
+.main{padding-bottom:32px}
+
+/* Playbook headings: title and description are separate lines, never jammed together. */
+.accordion-head{align-items:center;min-height:58px}
+.accordion-copy{display:grid;gap:4px;min-width:0;flex:1}
+.accordion-copy strong{display:block;font-size:.8rem;line-height:1.2;color:var(--ink)}
+.accordion-copy small{display:block;font-size:.64rem;line-height:1.35;color:var(--muted);font-weight:500}
+.accordion-state{flex:0 0 auto;font:700 .55rem "JetBrains Mono",monospace;color:var(--muted);letter-spacing:.05em}
+
+/* Overlays use the live visual viewport so the iOS keyboard cannot trap the sheet. */
+.overlay{
+  height:var(--vvh,100dvh);
+  min-height:0;
+  padding:max(8px,env(safe-area-inset-top)) 8px max(8px,env(safe-area-inset-bottom));
+  overscroll-behavior:contain;
+}
+.sheet{
+  width:min(650px,100%);
+  max-height:calc(var(--vvh,100dvh) - max(16px,env(safe-area-inset-top)) - max(10px,env(safe-area-inset-bottom)));
+  overflow-y:auto;
+  overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  scroll-padding-bottom:32px;
+  padding-bottom:calc(18px + env(safe-area-inset-bottom));
+}
+.sheet.large{width:min(760px,100%)}
+.sheet-helper{margin:5px 0 0;color:var(--muted);font-size:.66rem;line-height:1.45;max-width:520px}
+body.overlay-locked{position:fixed;width:100%;overflow:hidden}
+body.keyboard-open .bottom-nav{opacity:0;pointer-events:none;transform:translate(-50%,18px)}
+
+/* Search / command palette */
+.command{
+  align-items:flex-start;
+  padding:max(8px,env(safe-area-inset-top)) 8px max(8px,env(safe-area-inset-bottom));
+}
+.command-box{
+  width:min(680px,100%);
+  max-height:calc(var(--vvh,100dvh) - max(16px,env(safe-area-inset-top)) - max(12px,env(safe-area-inset-bottom)));
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  border-radius:18px;
+}
+.command-input-row{position:sticky;top:0;z-index:2;flex:0 0 auto;background:var(--panel);padding:9px}
+.command-input-row input{
+  font-size:16px !important;
+  line-height:1.25;
+  min-height:44px;
+  padding:9px 0;
+  color:var(--ink);
+}
+.command-close{
+  min-width:54px;
+  min-height:44px;
+  padding:0 10px !important;
+  border-radius:11px !important;
+  font-size:.68rem !important;
+  font-weight:800;
+}
+.command-results{
+  flex:1 1 auto;
+  min-height:0;
+  max-height:none;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  padding:7px 7px calc(14px + env(safe-area-inset-bottom));
+}
+.command-result{min-height:56px;touch-action:manipulation}
+.command-result:active{background:var(--card)}
+
+/* Report stays inside the app. Printing creates the iPhone PDF path instead of an .html download. */
+.report-sheet{display:flex;flex-direction:column}
+.report-head{flex:0 0 auto}
+.report-preview{display:grid;gap:12px;min-height:0}
+.report-section{border:1px solid var(--line);border-radius:14px;background:var(--card);padding:13px}
+.report-section h3{margin:0 0 8px;font-size:.82rem}
+.report-section p,.report-section li{font-size:.69rem;line-height:1.55;color:var(--muted)}
+.report-section ul,.report-section ol{padding-left:19px;margin:7px 0 0}
+.report-kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.report-kpi{border:1px solid var(--line);border-radius:11px;background:var(--card-2);padding:9px}
+.report-kpi span{display:block;font-size:.56rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.report-kpi strong{display:block;margin-top:3px;font:700 .84rem "JetBrains Mono",monospace}
+.report-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:11px}
+.report-table{border-collapse:collapse;width:100%;min-width:520px;background:var(--card)}
+.report-table th,.report-table td{padding:8px;border-bottom:1px solid var(--line);font-size:.64rem;text-align:left;vertical-align:top}
+.report-table th{font:.7rem "JetBrains Mono",monospace;color:var(--muted);background:var(--card-2)}
+.report-table tr:last-child td{border-bottom:0}
+.report-actions{position:sticky;bottom:0;display:grid;grid-template-columns:1fr 1.15fr;gap:8px;padding:10px 0 calc(2px + env(safe-area-inset-bottom));background:linear-gradient(180deg,transparent,var(--panel) 18%)}
+.print-report{display:none}
+
+/* 16px form controls stop iOS Safari/PWA from auto-zooming when the keyboard opens. */
+@media(max-width:760px){
+  input,select,textarea,.field input,.field select,.field textarea{font-size:16px !important}
+  input,select,textarea{min-height:44px}
+  .field textarea{min-height:96px}
+  .form-row{grid-template-columns:1fr}
+  .detail-grid{grid-template-columns:1fr 1fr}
+  .text-button,.subtle-button{min-height:44px}
+  .bottom-nav{bottom:max(5px,env(safe-area-inset-bottom));width:calc(100% - 12px);padding:6px;border-radius:21px;transition:.18s var(--ease)}
+  .nav-item{min-height:58px;font-size:.49rem}
+  .main{padding-left:12px;padding-right:12px}
+  .sheet{border-radius:22px 22px 14px 14px}
+  .screen-head>.text-button{margin-left:auto}
+}
+@media(max-width:390px){
+  .brand-copy .eyebrow{display:none}
+  .brand-icon{width:42px;height:42px}
+  .brand{gap:8px}
+  .header-actions{gap:5px}
+  .icon-button{width:42px;height:42px;flex-basis:42px}
+  .destination-sign{gap:8px}
+  .destination-sign strong{font-size:1rem}
+  .destination-sign span:not(.sign-small){font-size:.62rem}
+  .sign-right strong{font-size:1.18rem}
+  .report-actions{grid-template-columns:1fr}
+}
+
+@media print{
+  html,body{background:#fff!important;color:#111!important;padding:0!important;margin:0!important}
+  #appShell,.overlay,.toast,.update-banner{display:none!important}
+  #printReport{display:block!important;color:#111!important;background:#fff!important;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:18px}
+  #printReport h1{font-size:20pt;margin:0 0 4px}
+  #printReport .print-meta{font-size:9pt;color:#555;margin-bottom:18px}
+  #printReport h2{font-size:12pt;margin:18px 0 7px;padding-bottom:4px;border-bottom:1px solid #bbb}
+  #printReport p,#printReport li{font-size:9.5pt;line-height:1.45}
+  #printReport table{width:100%;border-collapse:collapse;font-size:8.5pt}
+  #printReport th,#printReport td{border:1px solid #ccc;padding:5px 6px;text-align:left;vertical-align:top}
+}
+
+/* Fixed overlays track the visible iPhone viewport, including keyboard shifts. */
+.overlay{inset:auto 0 auto 0;top:var(--vvtop,0px)}
